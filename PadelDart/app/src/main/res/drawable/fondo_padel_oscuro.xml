@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/fondo_padel_tiled" />
+
+    <item>
+        <color android:color="#99121212" />
+    </item>
+</layer-list>

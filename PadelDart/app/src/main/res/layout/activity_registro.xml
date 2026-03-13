@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#232222"
+    android:background="@drawable/fondo_padel_oscuro"
+    android:padding="24dp"
     android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,11 +16,13 @@
             android:id="@+id/tvTituloRegistro"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Crea tu Perfil Padel Dart"
-            android:textColor="#FFFFFF"
-            android:textSize="26sp"
+            android:layout_marginTop="32dp"
+            android:text="Registrate en PadelDart"
+            android:textColor="#B2F814"
+            android:textSize="29dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.493"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,7 +32,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="1. DATOS PERSONALES"
-            android:textColor="#00E676"
+            android:textSize="25dp"
+
+            android:textColor="#EDFFAC"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvTituloRegistro" />
@@ -47,8 +52,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:hint="Nombre"
-                android:textColorHint="#A0A0A0"
-                app:boxStrokeColor="#00E676">
+                android:textColorHint="#EDFFAC"
+                app:boxStrokeColor="@color/borde_padel">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etNombre"
@@ -64,8 +69,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:hint="Apellidos"
-                android:textColorHint="#A0A0A0"
-                app:boxStrokeColor="#00E676">
+                android:textColorHint="#EDFFAC"
+                app:boxStrokeColor="@color/borde_padel">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etApellidos"
@@ -81,8 +86,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:hint="DNI / NIE"
-                android:textColorHint="#A0A0A0"
-                app:boxStrokeColor="#00E676">
+                android:textColorHint="#EDFFAC"
+                app:boxStrokeColor="@color/borde_padel">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etDni"
@@ -98,8 +103,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:hint="Correo electrónico"
-                android:textColorHint="#A0A0A0"
-                app:boxStrokeColor="#00E676">
+                android:textColorHint="#EDFFAC"
+                app:boxStrokeColor="@color/borde_padel">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etCorreoReg"
@@ -115,10 +120,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:hint="Contraseña"
-                android:textColorHint="#A0A0A0"
-                app:boxStrokeColor="#00E676"
+                android:textColorHint="#EDFFAC"
+                app:boxStrokeColor="@color/borde_padel"
                 app:passwordToggleEnabled="true"
-                app:passwordToggleTint="#A0A0A0">
+                app:passwordToggleTint="#B2F814">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etPassReg"
@@ -134,10 +139,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:hint="Repetir contraseña"
-                android:textColorHint="#A0A0A0"
-                app:boxStrokeColor="#00E676"
+                android:textColorHint="#EDFFAC"
+                app:boxStrokeColor="@color/borde_padel"
                 app:passwordToggleEnabled="true"
-                app:passwordToggleTint="#A0A0A0">
+                app:passwordToggleTint="#B2F814">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etPassReg2"
@@ -153,8 +158,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:hint="Dirección Completa"
-                android:textColorHint="#A0A0A0"
-                app:boxStrokeColor="#00E676">
+                android:textColorHint="#EDFFAC"
+                app:boxStrokeColor="@color/borde_padel">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etDireccion"
@@ -170,8 +175,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:hint="Código Postal (CP)"
-                android:textColorHint="#A0A0A0"
-                app:boxStrokeColor="#00E676">
+                android:textColorHint="#EDFFAC"
+                app:boxStrokeColor="@color/borde_padel">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etCP"
@@ -187,8 +192,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:hint="Método de Pago Preferido"
-                android:textColorHint="#A0A0A0"
-                app:boxStrokeColor="#00E676">
+                android:textColorHint="#EDFFAC"
+                app:boxStrokeColor="@color/borde_padel">
 
                 <AutoCompleteTextView
                     android:id="@+id/dropdownPago"
@@ -205,7 +210,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:text="2. PERFIL DE PÁDEL"
-            android:textColor="#00E676"
+            android:textColor="#EDFFAC"
+            android:textSize="25dp"
+
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/llPersonales" />
@@ -228,7 +235,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nivel Inicial"
-                    android:textColor="#FFFFFF"
+                    android:textColor="#EDFFAC"
                     android:textSize="16sp" />
 
                 <ImageView
@@ -237,7 +244,7 @@
                     android:layout_height="24dp"
                     android:layout_marginStart="8dp"
                     android:src="@android:drawable/ic_dialog_info"
-                    app:tint="#00E676" />
+                    app:tint="#B2F814" />
             </LinearLayout>
 
             <LinearLayout
@@ -251,7 +258,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0.0"
-                    android:textColor="#A0A0A0"
+                    android:textColor="#EDFFAC"
                     android:textStyle="bold" />
 
                 <com.google.android.material.slider.Slider
@@ -263,15 +270,15 @@
                     android:value="3.5"
                     android:valueFrom="0.0"
                     android:valueTo="7.0"
-                    app:thumbColor="#00E676"
-                    app:trackColorActive="#00E676"
-                    app:trackColorInactive="#333333" />
+                    app:thumbColor="#B2F814"
+                    app:trackColorActive="#B2F814"
+                    app:trackColorInactive="#EDFFAC" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="7.0"
-                    android:textColor="#A0A0A0"
+                    android:textColor="#EDFFAC"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -288,10 +295,10 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:text="-"
-                    android:textColor="#FFFFFF"
+                    android:textColor="#EDFFAC"
                     android:textSize="24sp"
                     app:cornerRadius="8dp"
-                    app:strokeColor="#333333" />
+                    app:strokeColor="#B2F814" />
 
                 <TextView
                     android:id="@+id/tvValorNivel"
@@ -299,7 +306,7 @@
                     android:layout_height="wrap_content"
                     android:text="Nivel: 3.50"
                     android:textAlignment="center"
-                    android:textColor="#00E676"
+                    android:textColor="#EDFFAC"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -309,10 +316,10 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:text="+"
-                    android:textColor="#FFFFFF"
+                    android:textColor="#EDFFAC"
                     android:textSize="24sp"
                     app:cornerRadius="8dp"
-                    app:strokeColor="#333333" />
+                    app:strokeColor="#B2F814" />
             </LinearLayout>
 
             <TextView
@@ -320,7 +327,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Posición en la pista:"
-                android:textColor="#FFFFFF" />
+                android:textColor="#EDFFAC" />
 
             <RadioGroup
                 android:id="@+id/rgPosicionPadel"
@@ -332,18 +339,18 @@
                     android:id="@+id/rbDrive"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:buttonTint="#00E676"
+                    android:buttonTint="#EDFFAC"
                     android:text="Drive (Derecha)"
-                    android:textColor="#A0A0A0" />
+                    android:textColor="#B2F814" />
 
                 <RadioButton
                     android:id="@+id/rbReves"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:buttonTint="#00E676"
+                    android:buttonTint="#EDFFAC"
                     android:text="Revés (Izquierda)"
-                    android:textColor="#A0A0A0" />
+                    android:textColor="#B2F814" />
             </RadioGroup>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -352,15 +359,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:hint="Pista o Club Favorito"
-                android:textColorHint="#A0A0A0"
-                app:boxStrokeColor="#00E676">
+                android:textColorHint="#EDFFAC"
+                app:boxStrokeColor="@color/borde_padel">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etPista"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="#EDFFAC" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -369,8 +376,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
+            android:textSize="25dp"
             android:text="3. PERFIL DE DARDOS"
-            android:textColor="#00E676"
+            android:textColor="#FF848E"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/llPadel" />
@@ -387,9 +395,10 @@
                 android:id="@+id/cbTieneDiana"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:buttonTint="#00E676"
+                android:buttonTint="#088C00"
+                android:textSize="16dp"
                 android:text="¿Tienes diana propia en casa?"
-                android:textColor="#FFFFFF" />
+                android:textColor="#DC0101" />
 
             <RadioGroup
                 android:id="@+id/rgTipoDiana"
@@ -402,25 +411,30 @@
                     android:id="@+id/rbDianaPelo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:buttonTint="#00E676"
+                    android:buttonTint="#088C00"
+                    android:textSize="16dp"
+
                     android:text="Diana de Pelo (Clásica)"
-                    android:textColor="#A0A0A0" />
+                    android:textColor="#DC0101" />
 
                 <RadioButton
                     android:id="@+id/rbDianaElectronica"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:buttonTint="#00E676"
+                    android:buttonTint="#088C00"
+                    android:textSize="16dp"
                     android:text="Diana Electrónica"
-                    android:textColor="#A0A0A0" />
+                    android:textColor="#DC0101" />
 
                 <RadioButton
                     android:id="@+id/rbDianaAmbas"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:buttonTint="#00E676"
+                    android:buttonTint="#088C00"
+                    android:textSize="16dp"
+
                     android:text="Tengo de las dos"
-                    android:textColor="#A0A0A0" />
+                    android:textColor="#DC0101" />
             </RadioGroup>
         </LinearLayout>
 
@@ -431,10 +445,10 @@
             android:layout_marginTop="40dp"
             android:layout_marginBottom="32dp"
             android:text="CREAR CUENTA DEFINITIVA"
-            android:textColor="#121212"
+            android:textColor="#0D0D0C"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:backgroundTint="#00E676"
+            app:backgroundTint="#B2F814"
             app:cornerRadius="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

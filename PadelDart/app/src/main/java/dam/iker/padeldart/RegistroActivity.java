@@ -79,7 +79,17 @@ public class RegistroActivity extends AppCompatActivity {
         ivInfoNivel.setOnClickListener(v -> {
             new AlertDialog.Builder(this)
                     .setTitle("Niveles de Pádel")
-                    .setMessage("1.0 - 2.0: Iniciación\n2.5 - 3.5: Intermedio Bajo\n4.0 - 4.5: Intermedio Alto\n5.0 - 5.5: Avanzado\n6.0 - 7.0: Profesional")
+                    .setMessage("Nivel 1.0: Acabas de empezar y no tienes experiencia previa. " +
+                            "\nNivel 1.5: Has tenido tus primeras clases, pero te cuesta mantener la pelota en juego. " +
+                            "\nNivel 2.0: Empiezas a entender conceptos básicos, pero tus golpes, sobre todo el revés, son poco controlados. " +
+                            "\nNivel 2.5: Mejoras la derecha, empiezas a usar el revés aunque aún con errores. Tus voleas de derecha son más fiables. " +
+                            "\nNivel 3.0: Derecha sólida, revés aceptable. Buenas voleas de derecha. Empiezas a dominar el globo y los rebotes lentos. " +
+                            "\nNivel: 3.5: Golpes más potentes y variados. Mejor volea en red y posicionamiento. Bandejas decentes. " +
+                            "\nNivel 4.0: Excelente derecha y revés. Saque agresivo, voleas profundas y empiezas a probarte en el remate. " +
+                            "\nNivel 4.5: Buen control y colocación en la mayoría de golpes. Saques seguros y bajadas de pared eficaces. " +
+                            "\nNivel 5.0: Dominio completo de derecha y de revés. Remates y voleas agresivas. " +
+                            "\nNivel 5.5: Mismo nivel técnico pero con mayor capacidad de anticipación, consistencia y lectura táctica del partido. " +
+                            "\nNivel 6.0 y 7.0: Jugadores federados o de circuito. Entrenan a diario, compiten en torneos regionales (nivel 6.0) o internacionales (nivel 7.0). Dominan todos los aspectos técnicos, físicos y tácticos del pádel.")
                     .setPositiveButton("Entendido", (dialog, which) -> dialog.dismiss()).show();
         });
 
@@ -120,10 +130,12 @@ public class RegistroActivity extends AppCompatActivity {
 
             // CÁLCULO INTELIGENTE DE CATEGORÍA
             String categoriaCalculada;
-            if (nivelPuntaje >= 6.0) categoriaCalculada = "Profesional";
-            else if (nivelPuntaje >= 5.0) categoriaCalculada = "Avanzado";
-            else if (nivelPuntaje >= 4.0) categoriaCalculada = "Intermedio Alto";
-            else if (nivelPuntaje >= 2.5) categoriaCalculada = "Intermedio Bajo";
+            if (nivelPuntaje >= 6.0) categoriaCalculada = "1ª Categoría";
+            else if (nivelPuntaje >= 5.0) categoriaCalculada = "2ª Categoría";
+            else if (nivelPuntaje >= 4.0) categoriaCalculada = "3ª Categoría";
+            else if (nivelPuntaje >= 3.0) categoriaCalculada = "4ª Categoría";
+            else if (nivelPuntaje >= 2.0) categoriaCalculada = "5ª Categoría";
+            else if (nivelPuntaje >= 1.0) categoriaCalculada = "5ªB Categoría";
             else categoriaCalculada = "Iniciación";
 
             // POSICIÓN PÁDEL
@@ -134,7 +146,7 @@ public class RegistroActivity extends AppCompatActivity {
             // DARDOS DIANA
             String tipoDiana = "";
             if (cbTieneDiana.isChecked()) {
-                if (rbPelo.isChecked()) tipoDiana = "Pelo";
+                if (rbPelo.isChecked()) tipoDiana = "Tradicional";
                 else if (rbElectronica.isChecked()) tipoDiana = "Electrónica";
                 else if (rbAmbas.isChecked()) tipoDiana = "Ambas";
                 else {
