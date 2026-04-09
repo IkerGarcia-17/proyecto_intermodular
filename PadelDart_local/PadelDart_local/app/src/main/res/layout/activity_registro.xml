@@ -1,0 +1,1027 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/fondo_padel_oscuro">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingHorizontal="16dp">
+
+        <TextView
+            android:id="@+id/btnVolverLoginGlobal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:padding="8dp"
+            android:text="✕ Cancelar registro"
+            android:textColor="#ECFBB5"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground" />
+    </RelativeLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/layoutPaso1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:visibility="visible">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="24dp">
+
+                <TextView
+                    android:id="@+id/tvPaso1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="PASO 1 DE 4"
+                    android:textColor="#ECFBB5"
+                    android:textSize="12sp"
+                    android:letterSpacing="0.15"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/progressBar1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:progress="25"
+                    app:indicatorColor="#94D500"
+                    app:trackColor="#2A2A2A"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvPaso1" />
+
+                <TextView
+                    android:id="@+id/tvTitulo1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    android:text="Datos personales"
+                    android:textColor="#B2F814"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/progressBar1" />
+
+                <TextView
+                    android:id="@+id/tvSubtitulo1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Información básica de tu cuenta"
+                    android:textColor="#ECFBB5"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvTitulo1" />
+
+                <LinearLayout
+                    android:id="@+id/llCampos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="24dp"
+                    app:layout_constraintTop_toBottomOf="@id/tvSubtitulo1">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nombre"
+                        android:textColorHint="#EDFFAC"
+                        app:boxStrokeColor="@color/borde_padel"
+                        app:hintTextColor="#94D500">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etNombre"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPersonName"
+                            android:textColor="#FFFFFF" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:hint="Apellidos"
+                        android:textColorHint="#EDFFAC"
+                        app:boxStrokeColor="@color/borde_padel"
+                        app:hintTextColor="#94D500">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etApellidos"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPersonName"
+                            android:textColor="#FFFFFF" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:hint="DNI / NIE"
+                        android:textColorHint="#EDFFAC"
+                        app:boxStrokeColor="@color/borde_padel"
+                        app:hintTextColor="#94D500">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etDni"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:textColor="#FFFFFF" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:hint="Correo electrónico"
+                        android:textColorHint="#EDFFAC"
+                        app:boxStrokeColor="@color/borde_padel"
+                        app:hintTextColor="#94D500">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etCorreo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textEmailAddress"
+                            android:textColor="#FFFFFF" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:hint="Contraseña"
+                        android:textColorHint="#EDFFAC"
+                        app:boxStrokeColor="@color/borde_padel"
+                        app:hintTextColor="#94D500"
+                        app:passwordToggleEnabled="true"
+                        app:passwordToggleTint="#B2F814">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etPass"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPassword"
+                            android:textColor="#FFFFFF" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="4dp"
+                        android:paddingStart="8dp">
+                        <TextView android:id="@+id/tvRuleLength" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="✗ Entre 8 y 16 caracteres" android:textColor="#A0A0A0" android:textSize="12sp" />
+                        <TextView android:id="@+id/tvRuleUpper" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="✗ Al menos una mayúscula" android:textColor="#A0A0A0" android:textSize="12sp" />
+                        <TextView android:id="@+id/tvRuleNumber" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="✗ Al menos un número" android:textColor="#A0A0A0" android:textSize="12sp" />
+                        <TextView android:id="@+id/tvRuleSpecial" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="✗ Al menos un carácter especial" android:textColor="#A0A0A0" android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:hint="Repetir contraseña"
+                        android:textColorHint="#EDFFAC"
+                        app:boxStrokeColor="@color/borde_padel"
+                        app:hintTextColor="#94D500"
+                        app:passwordToggleEnabled="true"
+                        app:passwordToggleTint="#B2F814">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etPass2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPassword"
+                            android:textColor="#FFFFFF" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/tvPassMatch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:paddingStart="8dp"
+                        android:text="✗ Las contraseñas no coinciden"
+                        android:textColor="#FF848E"
+                        android:textSize="12sp"
+                        android:visibility="gone" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:hint="Dirección completa"
+                        android:textColorHint="#EDFFAC"
+                        app:boxStrokeColor="@color/borde_padel"
+                        app:hintTextColor="#94D500">
+                        <AutoCompleteTextView
+                            android:id="@+id/etDireccion"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPostalAddress"
+                            android:textColor="#FFFFFF" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:hint="Código Postal"
+                        android:textColorHint="#EDFFAC"
+                        app:boxStrokeColor="@color/borde_padel"
+                        app:hintTextColor="#94D500">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etCP"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:textColor="#FFFFFF" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llBotones1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginBottom="32dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/llCampos">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnAtras1"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:text="← Login"
+                        android:textColor="#EDFFAC"
+                        app:cornerRadius="10dp"
+                        app:strokeColor="#94D500" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSiguiente1"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="Siguiente →"
+                        android:textColor="#0D0D0C"
+                        android:textStyle="bold"
+                        app:backgroundTint="#94D500"
+                        app:cornerRadius="10dp" />
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/layoutPaso2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:visibility="gone">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="24dp">
+
+                <TextView
+                    android:id="@+id/tvPaso2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="PASO 2 DE 4"
+                    android:textColor="#ECFBB5"
+                    android:textSize="12sp"
+                    android:letterSpacing="0.15"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/progressBar2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:progress="50"
+                    app:indicatorColor="#94D500"
+                    app:trackColor="#2A2A2A"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvPaso2" />
+
+                <TextView
+                    android:id="@+id/tvTitulo2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    android:text="Perfil de pádel"
+                    android:textColor="#B2F814"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/progressBar2" />
+
+                <TextView
+                    android:id="@+id/tvSubtitulo2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Cuéntanos cómo juegas"
+                    android:textColor="#ECFBB5"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvTitulo2" />
+
+                <LinearLayout
+                    android:id="@+id/llPadel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="24dp"
+                    app:layout_constraintTop_toBottomOf="@id/tvSubtitulo2">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Nivel inicial"
+                            android:textColor="#EDFFAC"
+                            android:textSize="16sp" />
+                        <ImageView
+                            android:id="@+id/ivInfoNivel"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_marginStart="8dp"
+                            android:src="@android:drawable/ic_dialog_info"
+                            app:tint="#B2F814" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0.0"
+                            android:textColor="#EDFFAC"
+                            android:textStyle="bold" />
+                        <com.google.android.material.slider.Slider
+                            android:id="@+id/sliderNivel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:stepSize="0.01"
+                            android:value="3.5"
+                            android:valueFrom="0.0"
+                            android:valueTo="7.0"
+                            app:thumbColor="#B2F814"
+                            app:trackColorActive="#B2F814"
+                            app:trackColorInactive="#EDFFAC" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="7.0"
+                            android:textColor="#EDFFAC"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnRestar"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:text="−"
+                            android:textColor="#EDFFAC"
+                            android:textSize="22sp"
+                            app:cornerRadius="8dp"
+                            app:strokeColor="#B2F814" />
+                        <TextView
+                            android:id="@+id/tvValorNivel"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:text="Nivel: 3.50"
+                            android:textAlignment="center"
+                            android:textColor="#B2F814"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnSumar"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:text="+"
+                            android:textColor="#EDFFAC"
+                            android:textSize="22sp"
+                            app:cornerRadius="8dp"
+                            app:strokeColor="#B2F814" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="Posición en pista"
+                        android:textColor="#EDFFAC"
+                        android:textSize="16sp" />
+
+                    <RadioGroup
+                        android:id="@+id/rgPosicion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:orientation="horizontal">
+                        <RadioButton
+                            android:id="@+id/rbDrive"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:buttonTint="#EDFFAC"
+                            android:text="Drive (Derecha)"
+                            android:textColor="#B2F814" />
+                        <RadioButton
+                            android:id="@+id/rbReves"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:buttonTint="#EDFFAC"
+                            android:text="Revés (Izquierda)"
+                            android:textColor="#B2F814" />
+                    </RadioGroup>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:hint="Provincia"
+                        android:textColorHint="#EDFFAC"
+                        app:boxStrokeColor="@color/borde_padel"
+                        app:hintTextColor="#94D500">
+                        <AutoCompleteTextView
+                            android:id="@+id/dropdownProvincia"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="none"
+                            android:textColor="#FFFFFF" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:hint="Pista o Club favorito"
+                        android:textColorHint="#EDFFAC"
+                        app:boxStrokeColor="@color/borde_padel"
+                        app:hintTextColor="#94D500">
+                        <AutoCompleteTextView
+                            android:id="@+id/dropdownClub"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="none"
+                            android:enabled="false"
+                            android:textColor="#FFFFFF" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnVerMapa"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:text="📍 Ver en Maps"
+                        android:textColor="#B2F814"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llBotones2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginBottom="32dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/llPadel">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnAtras2"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:text="← Atrás"
+                        android:textColor="#EDFFAC"
+                        app:cornerRadius="10dp"
+                        app:strokeColor="#94D500" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSiguiente2"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="Siguiente →"
+                        android:textColor="#0D0D0C"
+                        android:textStyle="bold"
+                        app:backgroundTint="#94D500"
+                        app:cornerRadius="10dp" />
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/layoutPaso3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:visibility="gone">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="24dp">
+
+                <TextView
+                    android:id="@+id/tvPaso3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="PASO 3 DE 4"
+                    android:textColor="#ECFBB5"
+                    android:textSize="12sp"
+                    android:letterSpacing="0.15"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/progressBar3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:progress="75"
+                    app:indicatorColor="#FF848E"
+                    app:trackColor="#2A2A2A"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvPaso3" />
+
+                <TextView
+                    android:id="@+id/tvTitulo3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    android:text="Perfil de dardos"
+                    android:textColor="#FF848E"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/progressBar3" />
+
+                <TextView
+                    android:id="@+id/tvSubtitulo3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Cuéntanos sobre tus dardos"
+                    android:textColor="#ECFBB5"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvTitulo3" />
+
+                <View
+                    android:id="@+id/divider3"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="20dp"
+                    android:background="#FF848E"
+                    android:alpha="0.3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvSubtitulo3" />
+
+                <TextView
+                    android:id="@+id/tvPreguntaDiana"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    android:text="¿Tienes diana propia en casa?"
+                    android:textColor="#DC0101"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider3" />
+
+                <CheckBox
+                    android:id="@+id/cbTieneDiana"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:buttonTint="#088C00"
+                    android:text="Sí, tengo diana en casa"
+                    android:textColor="#DC0101"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvPreguntaDiana" />
+
+                <LinearLayout
+                    android:id="@+id/llTipoDiana"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="16dp"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cbTieneDiana">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="¿Qué tipo de diana tienes?"
+                        android:textColor="#DC0101"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <RadioGroup
+                        android:id="@+id/rgTipoDiana"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp">
+
+                        <RadioButton
+                            android:id="@+id/rbPelo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:buttonTint="#088C00"
+                            android:text="Diana de pelo (clásica)"
+                            android:textColor="#DC0101"
+                            android:textSize="15sp" />
+
+                        <RadioButton
+                            android:id="@+id/rbElectronica"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:buttonTint="#088C00"
+                            android:text="Diana electrónica"
+                            android:textColor="#DC0101"
+                            android:textSize="15sp" />
+
+                        <RadioButton
+                            android:id="@+id/rbAmbas"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:buttonTint="#088C00"
+                            android:text="Tengo de las dos"
+                            android:textColor="#DC0101"
+                            android:textSize="15sp" />
+                    </RadioGroup>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llBotones3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:layout_marginTop="48dp"
+                    android:layout_marginBottom="32dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/llTipoDiana"
+                    app:layout_constraintVertical_bias="1.0">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnAtras3"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:text="← Atrás"
+                        android:textColor="#EDFFAC"
+                        app:cornerRadius="10dp"
+                        app:strokeColor="#94D500" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSiguiente3"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="Siguiente →"
+                        android:textColor="#0D0D0C"
+                        android:textStyle="bold"
+                        app:backgroundTint="#DC0101"
+                        app:cornerRadius="10dp" />
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/layoutPaso4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:visibility="gone">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="24dp">
+
+                <TextView
+                    android:id="@+id/tvPaso4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="PASO 4 DE 4"
+                    android:textColor="#ECFBB5"
+                    android:textSize="12sp"
+                    android:letterSpacing="0.15"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/progressBar4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:progress="100"
+                    app:indicatorColor="#94D500"
+                    app:trackColor="#2A2A2A"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvPaso4" />
+
+                <TextView
+                    android:id="@+id/tvTitulo4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    android:text="Método de pago"
+                    android:textColor="#B2F814"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/progressBar4" />
+
+                <TextView
+                    android:id="@+id/tvSubtitulo4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="¿Cómo prefieres pagar?"
+                    android:textColor="#ECFBB5"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvTitulo4" />
+
+                <LinearLayout
+                    android:id="@+id/llOpciones4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="36dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    app:layout_constraintTop_toBottomOf="@id/tvSubtitulo4"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <RadioGroup
+                        android:id="@+id/rgPago"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/cardTarjeta"
+                            android:layout_width="match_parent"
+                            android:layout_height="72dp"
+                            android:layout_marginBottom="12dp"
+                            app:cardBackgroundColor="#1E1E1E"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="0dp"
+                            app:strokeColor="#2A2A2A"
+                            app:strokeWidth="1dp">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:paddingStart="20dp"
+                                android:paddingEnd="20dp"
+                                android:orientation="horizontal">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                    android:text="💳" android:textSize="24sp" />
+                                <TextView
+                                    android:layout_width="0dp" android:layout_height="wrap_content"
+                                    android:layout_weight="1" android:layout_marginStart="16dp"
+                                    android:text="Tarjeta bancaria" android:textColor="#FFFFFF" android:textSize="16sp" />
+                                <RadioButton
+                                    android:id="@+id/rbTarjeta"
+                                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                    android:buttonTint="#94D500" android:checked="true" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/cardPaypal"
+                            android:layout_width="match_parent"
+                            android:layout_height="72dp"
+                            android:layout_marginBottom="12dp"
+                            app:cardBackgroundColor="#1E1E1E"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="0dp"
+                            app:strokeColor="#2A2A2A"
+                            app:strokeWidth="1dp">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:paddingStart="20dp"
+                                android:paddingEnd="20dp"
+                                android:orientation="horizontal">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                    android:text="🅿️" android:textSize="24sp" />
+                                <TextView
+                                    android:layout_width="0dp" android:layout_height="wrap_content"
+                                    android:layout_weight="1" android:layout_marginStart="16dp"
+                                    android:text="PayPal" android:textColor="#FFFFFF" android:textSize="16sp" />
+                                <RadioButton
+                                    android:id="@+id/rbPaypal"
+                                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                    android:buttonTint="#94D500" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/cardBizum"
+                            android:layout_width="match_parent"
+                            android:layout_height="72dp"
+                            android:layout_marginBottom="12dp"
+                            app:cardBackgroundColor="#1E1E1E"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="0dp"
+                            app:strokeColor="#2A2A2A"
+                            app:strokeWidth="1dp">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:paddingStart="20dp"
+                                android:paddingEnd="20dp"
+                                android:orientation="horizontal">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                    android:text="📱" android:textSize="24sp" />
+                                <TextView
+                                    android:layout_width="0dp" android:layout_height="wrap_content"
+                                    android:layout_weight="1" android:layout_marginStart="16dp"
+                                    android:text="Bizum" android:textColor="#FFFFFF" android:textSize="16sp" />
+                                <RadioButton
+                                    android:id="@+id/rbBizum"
+                                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                    android:buttonTint="#94D500" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/cardEfectivo"
+                            android:layout_width="match_parent"
+                            android:layout_height="72dp"
+                            app:cardBackgroundColor="#1E1E1E"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="0dp"
+                            app:strokeColor="#2A2A2A"
+                            app:strokeWidth="1dp">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:paddingStart="20dp"
+                                android:paddingEnd="20dp"
+                                android:orientation="horizontal">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                    android:text="💵" android:textSize="24sp" />
+                                <TextView
+                                    android:layout_width="0dp" android:layout_height="wrap_content"
+                                    android:layout_weight="1" android:layout_marginStart="16dp"
+                                    android:text="Efectivo" android:textColor="#FFFFFF" android:textSize="16sp" />
+                                <RadioButton
+                                    android:id="@+id/rbEfectivo"
+                                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                    android:buttonTint="#94D500" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                    </RadioGroup>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llBotones4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:layout_marginTop="48dp"
+                    android:layout_marginBottom="32dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/llOpciones4"
+                    app:layout_constraintVertical_bias="1.0">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnAtras4"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:text="← Atrás"
+                        android:textColor="#EDFFAC"
+                        app:cornerRadius="10dp"
+                        app:strokeColor="#94D500" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnCrearCuenta"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="¡Crear cuenta!"
+                        android:textColor="#0D0D0C"
+                        android:textStyle="bold"
+                        app:backgroundTint="#94D500"
+                        app:cornerRadius="10dp" />
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </FrameLayout>
+</LinearLayout>
