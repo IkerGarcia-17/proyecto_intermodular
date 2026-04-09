@@ -1,84 +1,61 @@
-\# 🎾🎯 Proyecto PadelDart: Estado Actual y Hoja de Ruta
+# 🎾🎯 Proyecto PadelDart: Gestión, Estadísticas y Aprendizaje
 
+> **Trabajo Fin de Grado (DAM)** desarrollado por Iker García Martínez.
 
+---
 
-> \[cite\_start]\*\*Trabajo Fin de Grado\*\* desarrollado por Iker García Martínez\[cite: 41, 59]. 
+## 📖 ¿Qué es PadelDart? (Descripción del Proyecto)
 
-> \[cite\_start]PadelDart es una aplicación que fusiona el mundo del pádel y los dardos\[cite: 1, 30]. \[cite\_start]Aunque la aplicación se encuentra en una fase temprana ("muy verde"), ya cuenta con una base sólida, elegante y práctica, con mucho margen para convertirse en una herramienta profesional\[cite: 21, 22, 222, 223].
+**PadelDart** es una aplicación integral orientada principalmente a jugadores de pádel (con un módulo secundario dedicado a los dardos). Su objetivo principal es centralizar en una sola plataforma herramientas que habitualmente se encuentran dispersas en diferentes aplicaciones. 
 
+La aplicación no solo busca ser una herramienta de gestión, sino una plataforma de **mejora deportiva y comunidad**. Entre sus características principales destacan:
+* **Gestión de Partidos y Marcador en Vivo:** Permite crear partidos, invitar a otros jugadores y llevar la puntuación en tiempo real a través de un marcador digital intuitivo.
+* **Estadísticas Avanzadas (Radar Charts):** Los usuarios pueden registrar sus golpes, victorias y derrotas. El sistema generará gráficos (tipo radar) para que el jugador visualice rápidamente sus fortalezas y debilidades en la pista.
+* **Matchmaking y Comunidad:** Incorpora un buscador para encontrar jugadores de un nivel similar en la misma zona geográfica, fomentando la creación de partidas equilibradas.
+* **Recursos de Aprendizaje:** En base a las estadísticas y los "puntos débiles" detectados, la app sugerirá recursos multimedia y vídeos para ayudar al usuario a mejorar su técnica.
+* **Tecnologías:** Desarrollada de forma nativa en **Java** para dispositivos Android, con vistas a utilizar una arquitectura basada en **Firebase** (Firestore, Auth) para la gestión en la nube.
 
+---
 
-\---
+## 📱 1. Estado Actual de la Aplicación (Puntos Finalizados)
 
+Actualmente, el esqueleto principal de la aplicación, centrado en la recopilación de datos, la experiencia de usuario inicial y la base de datos local, se encuentra operativo:
 
+### 🔐 Inicio de Sesión y Autenticación
+* **Pantalla de Login:** Se ha diseñado con una estética inmersiva utilizando los colores característicos de las pelotas de pádel. Cuenta con un inicio de sesión estándar que verifica las credenciales del usuario contra la base de datos.
+* **Recuperar Contraseña:** Se ha implementado la interfaz y la navegación de esta pantalla. La funcionalidad (en proceso) permitirá al usuario introducir su correo electrónico para recibir un enlace seguro de restablecimiento de contraseña.
 
-\## 📱 1. Estado Actual de la Aplicación (Puntos Finalizados)
+### 📝 Registro de Usuario Detallado (4 Fases)
+Se ha diseñado un flujo de registro muy completo y escalonado para no saturar al usuario, vital para recopilar los datos necesarios para el *matchmaking*:
+1. **Datos Personales y Seguridad:** Recopila información básica (nombre, DNI, correo, dirección). Destaca la validación dinámica de la contraseña: se muestran los requisitos de seguridad (mayúsculas, números, caracteres especiales) que cambian de color conforme el usuario los va cumpliendo.
+2. **Perfil de Pádel:** Es el núcleo de la app. Solicita la posición preferida en pista (Drive o Revés) y el nivel del jugador (incluyendo un botón de información para guiarle). Además, utiliza un sistema de clave-valor para filtrar clubes favoritos en función de la provincia seleccionada.
+3. **Perfil de Dardos:** Un módulo adicional donde el usuario indica si dispone de diana propia en casa y qué tipo de tecnología utiliza (pelo tradicional o electrónica).
+4. **Preferencias de Pago:** Permite seleccionar métodos como Tarjeta, PayPal, Bizum o Efectivo. Este paso prepara la infraestructura para futuros módulos de la app, como la reserva de pistas, el pago a profesores o un mercado de segunda mano.
 
+### 💾 Base de Datos y Consumo de APIs
+* **Base de Datos Local Provisional:** Para agilizar las pruebas y el desarrollo actual, se ha implementado una base de datos local que almacena todos los datos del registro y categoriza a los jugadores según su nivel.
+* **API de Localización (OpenStreetMap):** Se ha integrado la API de *Nominatim* mediante un hilo secundario en Java. Esto permite que, al escribir el nombre de una calle, el sistema busque direcciones en España y autocomplete el Código Postal automáticamente, mejorando enormemente la experiencia de usuario.
 
+---
 
-\[cite\_start]Actualmente, el esqueleto principal de autenticación y recopilación de datos está operativo\[cite: 235]. Se han completado las siguientes funcionalidades:
+## 🚀 2. Hoja de Ruta (A corto plazo - 3 Semanas)
 
+Para las próximas semanas de desarrollo, el trabajo se centrará en la navegación y la jugabilidad:
 
+1. **Integración de Autenticación de Terceros:** Implementar el inicio de sesión rápido mediante Google y Apple (iOS).
+2. **Refinamiento de UI/UX:** Añadir campos faltantes (como el teléfono) en el registro y mejorar el diseño visual del paso de dardos.
+3. **Navegación Principal:** Diseñar la pantalla principal (Home) e incorporar un menú lateral (Navigation Drawer) que permita viajar fluidamente entre el Perfil, los Partidos, el Marcador y las Estadísticas.
+4. **Módulo Activo de Dardos:** Desarrollar la lógica de puntuación para los dardos y permitir la creación de partidas locales contra otro amigo o contra una Inteligencia Artificial.
+5. **Gestión de Perfil de Usuario:** Creación de la pantalla de Ajustes para poder visualizar y editar la información introducida durante el registro.
+6. **Investigación de Chat:** Comenzar el diseño de un sistema de mensajería interna utilizando la base de datos provisional.
 
-\### 🔐 Inicio de Sesión y Autenticación
+---
 
-\* \[cite\_start]Se ha implementado una pantalla de \*\*Login\*\* con una estética basada en los colores de las pelotas de pádel\[cite: 10, 55].
+## 🔮 3. Mejoras Futuras (A largo plazo)
 
-\* \[cite\_start]Verifica si el usuario ya está registrado en la base de datos mediante un inicio de sesión estándar\[cite: 10, 55].
+Una vez completada la estructura principal para el TFG, la aplicación tiene el siguiente margen de expansión:
 
-\* \[cite\_start]La pantalla de \*\*Recuperar Contraseña\*\* ya tiene la interfaz de diseño y la navegación integradas\[cite: 14, 160, 235]. \[cite\_start]Su objetivo será enviar un enlace de restablecimiento al correo del usuario\[cite: 14, 160].
-
-
-
-\### 📝 Registro de Usuario (Completado en 4 Pasos)
-
-\[cite\_start]Se ha dedicado gran parte del tiempo al flujo de registro para que sea lo más completo posible\[cite: 12, 82, 83]:
-
-1\. \[cite\_start]\*\*Datos Personales:\*\* Recopila nombre, apellidos, DNI, correo electrónico y dirección\[cite: 12, 68, 69, 70, 71, 78]. \[cite\_start]La contraseña cuenta con validaciones de seguridad que se colorean al cumplirse los requisitos\[cite: 12, 73, 74, 75, 76, 85].
-
-2\. \[cite\_start]\*\*Perfil de Pádel:\*\* Pide al usuario su nivel de juego (con guía de ayuda), posición en pista (Drive/Revés), provincia y club favorito mediante un sistema de listas\[cite: 12, 98, 100, 103, 104, 105, 109, 110, 111].
-
-3\. \[cite\_start]\*\*Perfil de Dardos:\*\* Recoge información sobre si el usuario dispone de diana propia en casa y qué tipo de material utiliza (pelo o electrónica)\[cite: 12, 119, 120, 122, 131].
-
-4\. \[cite\_start]\*\*Método de Pago:\*\* Permite seleccionar preferencias como Tarjeta, PayPal, Bizum o Efectivo, preparando la app para futuros servicios de mercado de segunda mano o reserva de pistas\[cite: 12, 141, 142, 145, 146, 147].
-
-
-
-\### 💾 Base de Datos y APIs
-
-\* \[cite\_start]\*\*Base de Datos Local:\*\* Se ha implementado una base de datos local provisional para realizar pruebas y almacenar los registros de los usuarios (datos personales, nivel de pádel, categorías, etc.)\[cite: 16, 17, 192, 193, 235].
-
-\* \[cite\_start]\*\*API de Localización:\*\* Se ha integrado la API de \*OpenStreetMap\* (Nominatim) para buscar calles en España\[cite: 19, 204, 208, 220]. \[cite\_start]Esto permite que el Código Postal se autocomplete al buscar una dirección, facilitando el registro\[cite: 12, 86, 87].
-
-
-
-\---
-
-
-
-\## 🚀 2. Puntos Futuros (Hoja de Ruta a 3 Semanas)
-
-
-
-\[cite\_start]Para las próximas 3 semanas, el desarrollo se centrará en expandir las funcionalidades principales y mejorar la experiencia de usuario\[cite: 235]:
-
-
-
-\* \[cite\_start]\*\*Integración de terceros:\*\* Implementar la funcionalidad de Inicio de Sesión rápido utilizando Google y Apple (iOS)\[cite: 10, 56, 235].
-
-\* \[cite\_start]\*\*Refinamiento del Registro:\*\* Añadir el campo de teléfono (actualmente faltante) y mejorar la estética general del paso correspondiente al Perfil de Dardos\[cite: 84, 236].
-
-\* \[cite\_start]\*\*Navegación Principal:\*\* Diseñar y programar la pantalla principal de acceso inicial, incorporando un menú lateral para navegar por las distintas secciones de la aplicación\[cite: 237].
-
-\* \[cite\_start]\*\*Módulo de Dardos:\*\* Iniciar y finalizar el apartado de dardos\[cite: 238]. \[cite\_start]Esto incluirá el sistema de puntuación y la posibilidad de crear partidas contra la Inteligencia Artificial o contra un amigo en modo local\[cite: 238].
-
-\* \[cite\_start]\*\*Gestión de Perfil:\*\* Crear la pantalla de Ajustes y el Perfil de Usuario para que se puedan editar y modificar los datos previamente registrados\[cite: 239].
-
-\* \[cite\_start]\*\*Comunicación:\*\* Comenzar la investigación y el desarrollo de un sistema de chat funcional, operando de manera provisional con la base de datos local\[cite: 240].
-
-
-
-\---
-
-\[cite\_start]\*Documentación estructurada con la ayuda de GeminiAI y diseños conceptualizados en Figma\*\[cite: 24, 25, 230, 231].
-
+* **Sistema de Reseñas:** Los usuarios podrán valorar a sus compañeros o rivales tras los partidos, evaluando tanto su nivel real como su deportividad.
+* **Integración con Wearables:** Sincronización con pulseras de actividad (como la Padel Band o Apple Watch) para volcar estadísticas directamente a la app.
+* **Análisis Gráfico y Vídeos:** Implementación de la librería de gráficos para los *Radar Charts* y conexión con una base de datos de vídeos explicativos para corregir errores frecuentes.
+* **Bolsa de Empleo/Clases:** Una sección de anuncios donde academias y profesores particulares puedan ofertar vacantes o clases para los usuarios de la plataforma.
