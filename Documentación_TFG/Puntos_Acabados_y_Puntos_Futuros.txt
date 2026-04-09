@@ -1,0 +1,15 @@
+PUNTOS FINALIZADOS -->
+
+1. Pantalla LOGIN
+2. Pantalla REGISTRO 
+3. Pantalla RECUPERAR CONTRASEÑA (LA NAVEGACIÓN)
+4. Base de Datos LOCAL Implementada
+
+PUNTOS POR HACER EN 3 SEMANAS -->
+
+1. Hacer funcionalidad de Inicio de Sesión Google e iOS.
+2. Finalizar algún campo en Pantalla REGISTRO (Como el Teléfono) y estética de Paso de Dardos.
+3. Crear la Pantalla Principal de Acceso Inicial con un Menú Lateral de Navegación a distintos lugares de la App.
+4. Empezar y Acabar el apartado de los Dardos (El sistema de puntos y la creación de partidas contra IA o contra otro amigo en Local).
+5. Hacer la Pantalla de Ajustes y la de Perfil donde poder editar algún campo.
+6. Empezar a Investigar sobre como hacer el chat y su funcionalidad de momento con la BD LOCAL.
