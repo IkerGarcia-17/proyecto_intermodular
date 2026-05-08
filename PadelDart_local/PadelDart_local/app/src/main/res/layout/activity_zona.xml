@@ -53,23 +53,27 @@
                 android:textStyle="bold"
                 android:layout_marginStart="8dp" />
 
-            <!-- Botón selector de provincia: muestra la provincia actual y al
-                 pulsarlo despliega un AlertDialog con todas las provincias españolas.
-                 El icono de flecha abajo indica visualmente que es un desplegable. -->
+            <!-- Selector de provincia: muestra el nombre de la provincia activa.
+                 ZonaActivity actualiza el texto dinámicamente al cambiar provincia.
+                 El icono ▾ indica visualmente que es un desplegable seleccionable. -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnCambiarProvincia"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="38dp"
-                android:text="Cambiar"
+                android:text="📍 ..."
                 android:textColor="@color/verde_lima"
-                android:textSize="12sp"
+                android:textSize="11sp"
+                android:maxWidth="140dp"
+                android:ellipsize="end"
+                android:singleLine="true"
                 app:strokeColor="@color/verde_lima"
                 app:cornerRadius="19dp"
                 app:icon="@android:drawable/arrow_down_float"
                 app:iconTint="@color/verde_lima"
-                app:iconSize="14dp"
-                app:iconPadding="4dp" />
+                app:iconSize="12dp"
+                app:iconPadding="4dp"
+                app:iconGravity="end" />
 
         </LinearLayout>
 
@@ -106,7 +110,8 @@
                     app:cornerRadius="18dp"
                     android:layout_marginEnd="8dp" />
 
-                <!-- Filtro "Partida": muestra solo anuncios de tipo PARTIDA -->
+                <!-- Filtro "Partida": rojo para distinguirse del verde corporativo.
+                     Es el tipo más importante de anuncio, por eso tiene color propio. -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnFiltroPartida"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
@@ -114,8 +119,8 @@
                     android:layout_height="36dp"
                     android:text="@string/zona_partida"
                     android:textSize="12sp"
-                    android:textColor="#94D500"
-                    app:strokeColor="#94D500"
+                    android:textColor="#FF5252"
+                    app:strokeColor="#FF5252"
                     app:cornerRadius="18dp"
                     android:layout_marginEnd="8dp" />
 

@@ -59,6 +59,9 @@
         <!-- Ajustes de la app: cambio de idioma (ES/EN) -->
         <activity android:name=".SettingsActivity" />
 
+        <!-- Pantalla de amigos: buscar por correo, solicitudes y lista de amigos -->
+        <activity android:name=".FriendsActivity" />
+
     </application>
 
 </manifest>

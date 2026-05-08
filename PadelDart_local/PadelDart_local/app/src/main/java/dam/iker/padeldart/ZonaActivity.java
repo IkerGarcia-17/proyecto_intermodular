@@ -152,11 +152,21 @@ public class ZonaActivity extends BaseDrawerActivity {
     // Provincia: título y selector
     // ─────────────────────────────────────────────────────────────────────────
 
-    // Actualiza el TextView del título con la provincia seleccionada actualmente.
+    // Actualiza el título y el botón selector con la provincia actualmente activa.
     // Se llama al inicio y cada vez que el usuario elige una provincia diferente.
     private void actualizarTituloProvincia() {
+        String nombre = provinciaActual != null ? provinciaActual : "Mi Zona";
+
+        // Título grande de la cabecera: "📌  Madrid"
         if (tvTituloZona != null) {
-            tvTituloZona.setText("📌  " + (provinciaActual != null ? provinciaActual : "Mi Zona"));
+            tvTituloZona.setText("📌  " + nombre);
+        }
+
+        // Botón selector: muestra la provincia activa para que el usuario sepa
+        // qué provincia está viendo en el tablón sin leer el título.
+        MaterialButton btnProv = findViewById(R.id.btnCambiarProvincia);
+        if (btnProv != null) {
+            btnProv.setText("📍 " + nombre);
         }
     }
 
@@ -375,7 +385,8 @@ public class ZonaActivity extends BaseDrawerActivity {
             getString(R.string.zona_rb_ofrecer),
             getString(R.string.zona_rb_solicitar)
         };
-        int[] coloresTipo = {0xFF94D500, 0xFF1E88E5, 0xFFFB8C00, 0xFF8E24AA};
+        // Colores de los radio buttons: PARTIDA en rojo para distinguirse visualmente
+        int[] coloresTipo = {0xFFFF5252, 0xFF1E88E5, 0xFFFB8C00, 0xFF8E24AA};
 
         for (int i = 0; i < tipos.length; i++) {
             RadioButton rb = new RadioButton(this);
@@ -946,12 +957,15 @@ public class ZonaActivity extends BaseDrawerActivity {
         }
     }
 
+    // Colores de los badges por tipo de anuncio.
+    // PARTIDA usa rojo (#FF5252) para distinguirse claramente del verde corporativo
+    // que antes dificultaba diferenciar partidas del resto de anuncios.
     private int colorTipo(String tipo) {
         switch (tipo != null ? tipo : "") {
-            case "PARTIDA":         return 0xFF94D500;
-            case "PALA":            return 0xFF2196F3;
-            case "CLASE_OFRECER":   return 0xFFFF9800;
-            case "CLASE_SOLICITAR": return 0xFF9C27B0;
+            case "PARTIDA":         return 0xFFFF5252; // Rojo: distingue partidas del verde app
+            case "PALA":            return 0xFF2196F3; // Azul
+            case "CLASE_OFRECER":   return 0xFFFF9800; // Naranja
+            case "CLASE_SOLICITAR": return 0xFF9C27B0; // Morado
             default:                return 0xFF666666;
         }
     }

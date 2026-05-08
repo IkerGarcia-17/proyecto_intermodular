@@ -84,6 +84,9 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         LinearLayout itemEditar  = findViewById(R.id.itemEditarPerfil);
         LinearLayout itemAjustes = findViewById(R.id.itemAjustes);
 
+        LinearLayout itemAmigos  = findViewById(R.id.itemAmigos);
+
+        if (itemAmigos  != null) itemAmigos.setOnClickListener(v -> abrirAmigos());
         if (itemEditar  != null) itemEditar.setOnClickListener(v -> abrirEditarPerfil());
         if (itemAjustes != null) itemAjustes.setOnClickListener(v -> abrirAjustes());
 
@@ -144,6 +147,12 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
     }
 
     // ── Navegación desde el drawer ───────────────────────────────────────────
+
+    // Abre FriendsActivity y cierra el drawer
+    private void abrirAmigos() {
+        drawerLayout.closeDrawer(GravityCompat.START);
+        startActivity(new Intent(this, FriendsActivity.class));
+    }
 
     // Abre EditProfileActivity y cierra el drawer
     private void abrirEditarPerfil() {

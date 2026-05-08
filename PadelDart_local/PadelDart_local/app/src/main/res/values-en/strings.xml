@@ -157,6 +157,29 @@
     <string name="dardos_perfecto_desc">Pro level · T20 every dart, perfect finishes</string>
     <string name="dardos_elige_dificultad">Choose difficulty and challenge the AI</string>
 
+    <!-- ── Friends ── -->
+    <string name="drawer_amigos">Friends 👥</string>
+    <string name="friends_titulo">Friends</string>
+    <string name="friends_buscar_label">🔍 Search friend by email</string>
+    <string name="friends_buscar_hint">Email address</string>
+    <string name="friends_buscar_btn">Search</string>
+    <string name="friends_agregar">Add</string>
+    <string name="friends_solicitudes">📨 Pending requests</string>
+    <string name="friends_mis_amigos">👥 My friends</string>
+    <string name="friends_email_vacio">Enter an email to search</string>
+    <string name="friends_no_encontrado">No user found with that email</string>
+    <string name="friends_no_ti_mismo">You cannot add yourself</string>
+    <string name="friends_ya_amigos">Already friends</string>
+    <string name="friends_solicitud_pendiente">Request pending</string>
+    <string name="friends_solicitud_enviada">Request sent!</string>
+    <string name="friends_error_solicitud">Error sending request</string>
+    <string name="friends_aceptar">Accept</string>
+    <string name="friends_rechazar">Reject</string>
+    <string name="friends_aceptado">Now friends!</string>
+    <string name="friends_rechazado">Request rejected</string>
+    <string name="friends_sin_amigos">No friends yet. Search for someone by email!</string>
+    <string name="friends_eliminado">Friendship removed</string>
+
     <!-- ── General ── -->
     <string name="btn_atras">Back</string>
     <string name="btn_guardar">Save</string>

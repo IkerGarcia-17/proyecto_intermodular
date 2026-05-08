@@ -19,7 +19,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Nombre del archivo que se guardará en el almacenamiento interno del móvil.
     // Cada vez que subamos DATABASE_VERSION, Android llama a onUpgrade automáticamente.
     private static final String DATABASE_NAME    = "padeldart.db";
-    private static final int    DATABASE_VERSION = 3;  // v3: añadidos edad y foto_perfil al usuario
+    private static final int    DATABASE_VERSION = 4;  // v4: tabla de amigos/solicitudes
 
     // Nombre de la tabla principal. Solo tenemos una por ahora, que agrupa
     // datos personales, perfil de pádel y perfil de dardos del usuario.
@@ -116,6 +116,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "timestamp   INTEGER NOT NULL" +
                     ");";
 
+    // --- Tabla de amistades / solicitudes de amistad ---
+    // Cada fila representa una relación entre dos usuarios.
+    // estado puede ser "PENDIENTE" (solicitud enviada, no aceptada aún) o "ACEPTADO".
+    // La búsqueda de amigos se hace siempre en ambas direcciones: solicitante↔receptor.
+    public static final String TABLE_AMIGOS = "amigos";
+    private static final String CREATE_TABLE_AMIGOS =
+            "CREATE TABLE " + TABLE_AMIGOS + " (" +
+                    "id             INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "solicitante_id INTEGER NOT NULL, " +  // quien envió la solicitud
+                    "receptor_id    INTEGER NOT NULL, " +  // quien la recibió
+                    "estado         TEXT    NOT NULL DEFAULT 'PENDIENTE', " +
+                    "timestamp      INTEGER NOT NULL" +
+                    ");";
+
     // Instancia única (Singleton): toda la app comparte la misma conexión a la BD
     // para evitar conflictos si varias Activities intentan escribir a la vez.
     private static DatabaseHelper instancia;
@@ -141,9 +155,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_USUARIOS);
         db.execSQL(CREATE_TABLE_MENSAJES);
         db.execSQL(CREATE_TABLE_ANUNCIOS);
+        db.execSQL(CREATE_TABLE_AMIGOS);
     }
 
-    // Se ejecuta cuando DATABASE_VERSION sube. Añadimos solo las tablas nuevas
+    // Se ejecuta cuando DATABASE_VERSION sube. Añadimos solo las tablas/columnas nuevas
     // para no perder los datos de los usuarios ya registrados.
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -156,6 +171,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // v3: añadimos edad y foto de perfil; ALTER TABLE solo admite ADD COLUMN
             db.execSQL("ALTER TABLE " + TABLE_USUARIOS + " ADD COLUMN " + COL_EDAD        + " INTEGER DEFAULT 0");
             db.execSQL("ALTER TABLE " + TABLE_USUARIOS + " ADD COLUMN " + COL_FOTO_PERFIL + " TEXT DEFAULT ''");
+        }
+        if (oldVersion < 4) {
+            // v4: tabla de amistades para la nueva sección "Amigos" del menú lateral
+            db.execSQL(CREATE_TABLE_AMIGOS);
         }
     }
 
@@ -418,5 +437,159 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return anuncios;
+    }
+
+
+    // -----------------------------------------------------------------------
+    //  CRUD - AMIGOS
+    // -----------------------------------------------------------------------
+
+    // Busca un usuario por su correo electrónico y devuelve sus datos básicos.
+    // Devuelve null si no existe ninguna cuenta con ese correo.
+    // Usado en FriendsActivity para buscar a quien agregar como amigo.
+    public Map<String, Object> buscarUsuarioPorEmail(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(
+                TABLE_USUARIOS,
+                new String[]{COL_ID, COL_NOMBRE, COL_APELLIDOS, COL_CATEGORIA,
+                             COL_PROVINCIA, COL_FOTO_PERFIL, COL_EMAIL},
+                COL_EMAIL + " = ?",
+                new String[]{email.trim().toLowerCase()},
+                null, null, null
+        );
+        if (!cursor.moveToFirst()) { cursor.close(); return null; }
+
+        // Construimos el Map con los campos necesarios para mostrar la tarjeta de usuario
+        Map<String, Object> u = new HashMap<>();
+        u.put(COL_ID,          cursor.getLong(0));
+        u.put(COL_NOMBRE,      cursor.getString(1));
+        u.put(COL_APELLIDOS,   cursor.getString(2));
+        u.put(COL_CATEGORIA,   cursor.getString(3));
+        u.put(COL_PROVINCIA,   cursor.getString(4));
+        u.put(COL_FOTO_PERFIL, cursor.getString(5));
+        u.put(COL_EMAIL,       cursor.getString(6));
+        cursor.close();
+        return u;
+    }
+
+    // Devuelve el estado de la relación entre dos usuarios.
+    // Retorna "ACEPTADO", "PENDIENTE" o null si no hay ninguna relación.
+    // Busca en ambas direcciones: A→B y B→A.
+    public String estadoAmistad(long userId, long otroId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql = "SELECT estado FROM " + TABLE_AMIGOS +
+                " WHERE (solicitante_id = ? AND receptor_id = ?)" +
+                "    OR (solicitante_id = ? AND receptor_id = ?)" +
+                " LIMIT 1";
+        Cursor c = db.rawQuery(sql, new String[]{
+                String.valueOf(userId), String.valueOf(otroId),
+                String.valueOf(otroId), String.valueOf(userId)
+        });
+        String estado = null;
+        if (c.moveToFirst()) estado = c.getString(0);
+        c.close();
+        return estado;
+    }
+
+    // Envía una solicitud de amistad de solicitante → receptor.
+    // Devuelve false si ya existe alguna relación entre ellos para evitar duplicados.
+    public boolean enviarSolicitudAmistad(long solicitanteId, long receptorId) {
+        // Primero comprobamos que no exista ya una solicitud o amistad previa
+        if (estadoAmistad(solicitanteId, receptorId) != null) return false;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("solicitante_id", solicitanteId);
+        cv.put("receptor_id",    receptorId);
+        cv.put("estado",         "PENDIENTE");
+        cv.put("timestamp",      System.currentTimeMillis());
+        return db.insert(TABLE_AMIGOS, null, cv) != -1;
+    }
+
+    // Acepta una solicitud pendiente identificada por los IDs de los dos usuarios.
+    // El solicitante original y el receptor pueden estar en cualquier orden.
+    public boolean aceptarSolicitud(long miId, long otroId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("estado", "ACEPTADO");
+        // Actualizamos la fila donde otroId es el solicitante y yo soy el receptor
+        int filas = db.update(TABLE_AMIGOS, cv,
+                "solicitante_id = ? AND receptor_id = ? AND estado = 'PENDIENTE'",
+                new String[]{String.valueOf(otroId), String.valueOf(miId)});
+        return filas > 0;
+    }
+
+    // Elimina la relación de amistad o solicitud entre dos usuarios (en ambas direcciones).
+    public boolean eliminarAmistad(long userId, long otroId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int filas = db.delete(TABLE_AMIGOS,
+                "(solicitante_id = ? AND receptor_id = ?) OR (solicitante_id = ? AND receptor_id = ?)",
+                new String[]{String.valueOf(userId), String.valueOf(otroId),
+                             String.valueOf(otroId), String.valueOf(userId)});
+        return filas > 0;
+    }
+
+    // Devuelve la lista de amigos aceptados del usuario indicado.
+    // Hace JOIN con usuarios para obtener nombre, categoría, provincia y foto en una query.
+    public List<Map<String, Object>> obtenerAmigos(long userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        // La amistad puede estar en cualquier dirección, usamos UNION para cubrir ambas
+        String sql =
+            "SELECT u.id, u.nombre, u.apellidos, u.categoria_actual, u.provincia, u.foto_perfil " +
+            "FROM " + TABLE_AMIGOS + " a " +
+            "JOIN " + TABLE_USUARIOS + " u ON u.id = a.receptor_id " +
+            "WHERE a.solicitante_id = ? AND a.estado = 'ACEPTADO' " +
+            "UNION " +
+            "SELECT u.id, u.nombre, u.apellidos, u.categoria_actual, u.provincia, u.foto_perfil " +
+            "FROM " + TABLE_AMIGOS + " a " +
+            "JOIN " + TABLE_USUARIOS + " u ON u.id = a.solicitante_id " +
+            "WHERE a.receptor_id = ? AND a.estado = 'ACEPTADO' " +
+            "ORDER BY 2 ASC"; // ordenado por nombre
+
+        Cursor c = db.rawQuery(sql, new String[]{
+                String.valueOf(userId), String.valueOf(userId)});
+
+        List<Map<String, Object>> lista = new ArrayList<>();
+        while (c.moveToNext()) {
+            Map<String, Object> u = new HashMap<>();
+            u.put(COL_ID,          c.getLong(0));
+            u.put(COL_NOMBRE,      c.getString(1));
+            u.put(COL_APELLIDOS,   c.getString(2));
+            u.put(COL_CATEGORIA,   c.getString(3));
+            u.put(COL_PROVINCIA,   c.getString(4));
+            u.put(COL_FOTO_PERFIL, c.getString(5));
+            lista.add(u);
+        }
+        c.close();
+        return lista;
+    }
+
+    // Devuelve las solicitudes de amistad PENDIENTES recibidas por el usuario.
+    // Solo muestra las que aún no han sido aceptadas o rechazadas.
+    public List<Map<String, Object>> obtenerSolicitudesPendientes(long receptorId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql =
+            "SELECT a.id, u.id, u.nombre, u.apellidos, u.categoria_actual, u.provincia, u.foto_perfil " +
+            "FROM " + TABLE_AMIGOS + " a " +
+            "JOIN " + TABLE_USUARIOS + " u ON u.id = a.solicitante_id " +
+            "WHERE a.receptor_id = ? AND a.estado = 'PENDIENTE' " +
+            "ORDER BY a.timestamp DESC";
+
+        Cursor c = db.rawQuery(sql, new String[]{String.valueOf(receptorId)});
+
+        List<Map<String, Object>> lista = new ArrayList<>();
+        while (c.moveToNext()) {
+            Map<String, Object> u = new HashMap<>();
+            u.put("solicitud_id",  c.getLong(0));   // ID de la fila en TABLE_AMIGOS
+            u.put(COL_ID,          c.getLong(1));
+            u.put(COL_NOMBRE,      c.getString(2));
+            u.put(COL_APELLIDOS,   c.getString(3));
+            u.put(COL_CATEGORIA,   c.getString(4));
+            u.put(COL_PROVINCIA,   c.getString(5));
+            u.put(COL_FOTO_PERFIL, c.getString(6));
+            lista.add(u);
+        }
+        c.close();
+        return lista;
     }
 }

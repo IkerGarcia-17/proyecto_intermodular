@@ -157,6 +157,29 @@
     <string name="dardos_perfecto_desc">Nivel profesional · T20 cada turno, cierres perfectos</string>
     <string name="dardos_elige_dificultad">Elige la dificultad y desafía a la IA</string>
 
+    <!-- ── Amigos ── -->
+    <string name="drawer_amigos">Amigos 👥</string>
+    <string name="friends_titulo">Amigos</string>
+    <string name="friends_buscar_label">🔍 Buscar amigo por correo</string>
+    <string name="friends_buscar_hint">Correo electrónico</string>
+    <string name="friends_buscar_btn">Buscar</string>
+    <string name="friends_agregar">Añadir</string>
+    <string name="friends_solicitudes">📨 Solicitudes pendientes</string>
+    <string name="friends_mis_amigos">👥 Mis amigos</string>
+    <string name="friends_email_vacio">Escribe un correo para buscar</string>
+    <string name="friends_no_encontrado">No se encontró ningún usuario con ese correo</string>
+    <string name="friends_no_ti_mismo">No puedes añadirte a ti mismo</string>
+    <string name="friends_ya_amigos">Ya sois amigos</string>
+    <string name="friends_solicitud_pendiente">Solicitud pendiente</string>
+    <string name="friends_solicitud_enviada">¡Solicitud enviada!</string>
+    <string name="friends_error_solicitud">Error al enviar la solicitud</string>
+    <string name="friends_aceptar">Aceptar</string>
+    <string name="friends_rechazar">Rechazar</string>
+    <string name="friends_aceptado">¡Amigos ahora!</string>
+    <string name="friends_rechazado">Solicitud rechazada</string>
+    <string name="friends_sin_amigos">Aún no tienes amigos. ¡Busca a alguien por correo!</string>
+    <string name="friends_eliminado">Amistad eliminada</string>
+
     <!-- ── General ── -->
     <string name="btn_atras">Atrás</string>
     <string name="btn_guardar">Guardar</string>

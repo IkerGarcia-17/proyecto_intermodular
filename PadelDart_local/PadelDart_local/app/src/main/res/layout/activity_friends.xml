@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pantalla de Amigos: buscar por correo, gestionar solicitudes y ver lista de amigos.
+     NestedScrollView para que todo el contenido sea desplazable en pantallas pequeñas. -->
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo_oscuro"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- ── Cabecera: botón atrás + título ───────────────────────────────── -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="14dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="16dp"
+            android:background="@color/fondo_tarjeta">
+
+            <!-- Botón atrás estándar de la app: flecha verde lima -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAtrasAmigos"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="←"
+                android:textColor="@color/verde_lima"
+                android:textSize="28sp"
+                android:minWidth="48dp"
+                android:paddingHorizontal="12dp" />
+
+            <!-- Título de la pantalla con emoji representativo -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/friends_titulo"
+                android:textColor="@color/verde_lima_brillante"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginStart="4dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="👥"
+                android:textSize="22sp"
+                android:layout_marginEnd="4dp" />
+
+        </LinearLayout>
+
+        <!-- ── Sección: Buscar amigo por correo ─────────────────────────────── -->
+        <!-- Tarjeta elevada para destacar visualmente la búsqueda de nuevos amigos -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            app:cardBackgroundColor="@color/fondo_tarjeta"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="4dp"
+            app:strokeColor="@color/verde_lima"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Label de la sección con icono de lupa -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/friends_buscar_label"
+                    android:textColor="@color/verde_lima"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.08"
+                    android:layout_marginBottom="10dp" />
+
+                <!-- Campo de correo: teclado email, sin autocorrección -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:boxStrokeColor="@color/verde_lima"
+                    app:hintTextColor="@color/verde_lima_suave"
+                    android:hint="@string/friends_buscar_hint">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etBuscarEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress"
+                        android:textColor="@color/white"
+                        android:imeOptions="actionSearch"
+                        android:singleLine="true" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Botón de búsqueda: verde lima, aparece debajo del campo -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnBuscarAmigo"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/friends_buscar_btn"
+                    android:textColor="@color/fondo_oscuro"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/verde_lima"
+                    app:cornerRadius="10dp"
+                    app:icon="@drawable/ic_perfil_default"
+                    app:iconTint="@color/fondo_oscuro"
+                    app:iconSize="18dp" />
+
+                <!-- Resultado de la búsqueda: se muestra u oculta dinámicamente.
+                     Contiene la tarjeta del usuario encontrado + botón de acción. -->
+                <LinearLayout
+                    android:id="@+id/llResultadoBusqueda"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:layout_marginTop="12dp">
+
+                    <!-- Línea separadora antes del resultado -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/fondo_tarjeta_claro"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- Fila del usuario encontrado: foto/inicial + datos + botón acción -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <!-- Avatar circular: foto si tiene, inicial del nombre si no -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="52dp"
+                            android:layout_height="52dp"
+                            app:cardCornerRadius="26dp"
+                            app:cardElevation="2dp"
+                            app:strokeColor="@color/verde_lima"
+                            app:strokeWidth="1dp"
+                            app:cardBackgroundColor="@color/fondo_tarjeta_claro">
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <!-- Foto del usuario encontrado, oculta por defecto -->
+                                <ImageView
+                                    android:id="@+id/imgFotoResultado"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:scaleType="centerCrop"
+                                    android:visibility="gone"
+                                    android:contentDescription="@string/drawer_perfil" />
+
+                                <!-- Inicial del nombre del usuario encontrado -->
+                                <TextView
+                                    android:id="@+id/tvInicialResultado"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:text="?"
+                                    android:textColor="@color/verde_lima"
+                                    android:textSize="22sp"
+                                    android:textStyle="bold" />
+                            </FrameLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- Nombre, categoría y provincia del usuario encontrado -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:layout_marginStart="12dp">
+
+                            <TextView
+                                android:id="@+id/tvNombreResultado"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvCategoriaResultado"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:textColor="@color/verde_lima_suave"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/tvProvinciaResultado"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="1dp"
+                                android:textColor="@color/texto_gris"
+                                android:textSize="11sp" />
+                        </LinearLayout>
+
+                        <!-- Botón de acción: "Enviar solicitud" / "Ya amigos" / "Pendiente" -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnAccionResultado"
+                            android:layout_width="wrap_content"
+                            android:layout_height="38dp"
+                            android:text="@string/friends_agregar"
+                            android:textColor="@color/fondo_oscuro"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            app:backgroundTint="@color/verde_lima"
+                            app:cornerRadius="19dp"
+                            app:iconSize="14dp"
+                            app:iconPadding="4dp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- ── Sección: Solicitudes pendientes ──────────────────────────────── -->
+        <!-- Se muestra solo si hay solicitudes recibidas sin aceptar -->
+        <LinearLayout
+            android:id="@+id/llSeccionSolicitudes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:paddingHorizontal="12dp">
+
+            <!-- Etiqueta de sección con color naranja para llamar la atención -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/friends_solicitudes"
+                android:textColor="#FF9800"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.08"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp" />
+
+            <!-- Aquí FriendsActivity infla dinámicamente las tarjetas de solicitudes -->
+            <LinearLayout
+                android:id="@+id/llSolicitudes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+        </LinearLayout>
+
+        <!-- ── Sección: Lista de amigos aceptados ───────────────────────────── -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="12dp"
+            android:paddingBottom="24dp">
+
+            <!-- Etiqueta de sección en verde lima corporativo -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/friends_mis_amigos"
+                android:textColor="@color/verde_lima"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.08"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp" />
+
+            <!-- Aquí FriendsActivity infla dinámicamente las tarjetas de amigos -->
+            <LinearLayout
+                android:id="@+id/llAmigos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
