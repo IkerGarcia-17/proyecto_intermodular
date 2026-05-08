@@ -158,7 +158,7 @@
     <string name="dardos_elige_dificultad">Choose difficulty and challenge the AI</string>
 
     <!-- ── Friends ── -->
-    <string name="drawer_amigos">Friends 👥</string>
+    <string name="drawer_amigos">Friends</string>
     <string name="friends_titulo">Friends</string>
     <string name="friends_buscar_label">🔍 Search friend by email</string>
     <string name="friends_buscar_hint">Email address</string>

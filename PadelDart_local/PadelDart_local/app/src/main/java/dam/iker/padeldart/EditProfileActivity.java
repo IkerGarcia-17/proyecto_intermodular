@@ -1,6 +1,8 @@
 package dam.iker.padeldart;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +16,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.Map;
 
 // Pantalla de edición de perfil. Solo permite cambiar datos no sensibles:
@@ -37,12 +42,20 @@ public class EditProfileActivity extends AppCompatActivity {
     // Launcher del selector de imágenes del sistema
     private final ActivityResultLauncher<Intent> pickerLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-                // El usuario seleccionó una imagen de la galería
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                     Uri uri = result.getData().getData();
                     if (uri != null) {
-                        nuevaFotoUri = uri.toString();
-                        actualizarFotoUI(uri);
+                        // Copiamos la imagen a almacenamiento interno para que la URI
+                        // no expire entre sesiones (las URIs picker_get_content se revocan).
+                        String rutaLocal = copiarFotoAAlmacenamientoInterno(uri);
+                        if (rutaLocal != null) {
+                            nuevaFotoUri = rutaLocal;
+                            actualizarFotoUI(Uri.parse(rutaLocal));
+                        } else {
+                            // Fallback: usamos la URI original si la copia falla
+                            nuevaFotoUri = uri.toString();
+                            actualizarFotoUI(uri);
+                        }
                     }
                 }
             });
@@ -115,14 +128,46 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     }
 
-    // Muestra la imagen seleccionada en el círculo de foto y oculta la inicial
+    // Muestra la imagen en el círculo usando BitmapFactory (nunca setImageURI, que puede
+    // lanzar SecurityException en onMeasure si la URI picker fue revocada entre sesiones).
     private void actualizarFotoUI(Uri uri) {
         try {
-            imgFoto.setImageURI(uri);
-            imgFoto.setVisibility(View.VISIBLE);
-            tvInicial.setVisibility(View.GONE);
+            InputStream is = getContentResolver().openInputStream(uri);
+            Bitmap bmp = BitmapFactory.decodeStream(is);
+            if (bmp != null) {
+                imgFoto.setImageBitmap(bmp);
+                imgFoto.setVisibility(View.VISIBLE);
+                tvInicial.setVisibility(View.GONE);
+            }
         } catch (Exception e) {
-            // URI inválida: dejamos el estado anterior
+            // URI inválida o revocada: dejamos el estado anterior
+        }
+    }
+
+    // Copia la imagen seleccionada desde la URI del picker al almacenamiento interno
+    // de la app (filesDir/profile_photos/user_{id}.jpg). Devuelve la URI del fichero
+    // copiado como "file:///..." o null si falla. El fichero interno es permanente y
+    // accesible en cualquier sesión sin necesidad de permisos adicionales.
+    private String copiarFotoAAlmacenamientoInterno(Uri origenUri) {
+        try {
+            File dir = new File(getFilesDir(), "profile_photos");
+            if (!dir.exists()) dir.mkdirs();
+            File destino = new File(dir, "user_" + userId + ".jpg");
+
+            // Decodificamos el bitmap desde la URI del picker y lo guardamos como JPEG
+            InputStream is = getContentResolver().openInputStream(origenUri);
+            Bitmap bmp = BitmapFactory.decodeStream(is);
+            if (bmp == null) return null;
+
+            FileOutputStream fos = new FileOutputStream(destino);
+            bmp.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+            fos.flush();
+            fos.close();
+
+            // Devolvemos la URI del fichero local para guardarla en la BD
+            return destino.toURI().toString();
+        } catch (Exception e) {
+            return null;
         }
     }
 

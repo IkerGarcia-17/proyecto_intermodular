@@ -26,16 +26,21 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnAtrasEdit"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
-                app:icon="@android:drawable/ic_media_previous"
-                app:iconTint="@color/verde_lima"
+                android:padding="0dp"
+                android:text=""
+                app:icon="@drawable/ic_arrow_back"
+                app:iconSize="22dp"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
-                app:cornerRadius="24dp"
+                app:iconTint="@color/verde_lima"
+                app:strokeColor="@color/verde_lima"
+                app:strokeWidth="2dp"
+                app:cornerRadius="22dp"
                 android:backgroundTint="@android:color/transparent"
                 android:contentDescription="@string/btn_atras" />
 

@@ -21,14 +21,23 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAtras"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="←"
-            android:textColor="@color/verde_lima"
-            android:textSize="22sp"
-            android:minWidth="0dp"
-            android:paddingHorizontal="4dp" />
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:padding="0dp"
+            android:text=""
+            app:icon="@drawable/ic_arrow_back"
+            app:iconSize="20dp"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconTint="@color/verde_lima"
+            app:strokeColor="@color/verde_lima"
+            app:strokeWidth="2dp"
+            app:cornerRadius="20dp"
+            android:backgroundTint="@android:color/transparent"
+            android:contentDescription="@string/btn_atras" />
 
         <!-- Avatar circular con la inicial del interlocutor -->
         <com.google.android.material.card.MaterialCardView

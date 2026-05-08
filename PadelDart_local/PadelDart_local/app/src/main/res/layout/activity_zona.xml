@@ -31,14 +31,23 @@
             <!-- Flecha de volver: área de toque mínima 48dp para accesibilidad -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnAtras"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="←"
-                android:textColor="@color/verde_lima"
-                android:textSize="28sp"
-                android:minWidth="0dp"
-                android:paddingHorizontal="8dp" />
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:padding="0dp"
+                android:text=""
+                app:icon="@drawable/ic_arrow_back"
+                app:iconSize="22dp"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconTint="@color/verde_lima"
+                app:strokeColor="@color/verde_lima"
+                app:strokeWidth="2dp"
+                app:cornerRadius="22dp"
+                android:backgroundTint="@android:color/transparent"
+                android:contentDescription="@string/btn_atras" />
 
             <!-- Título con la provincia activa. Se actualiza desde ZonaActivity
                  cada vez que el usuario selecciona una provincia diferente. -->

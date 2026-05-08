@@ -188,13 +188,12 @@
             android:paddingEnd="20dp"
             android:background="?attr/selectableItemBackground">
 
-            <!-- Icono representativo de amigos/personas -->
-            <TextView
+            <!-- Icono de personas en color verde lima corporativo -->
+            <ImageView
                 android:layout_width="22dp"
                 android:layout_height="22dp"
-                android:text="👥"
-                android:textSize="18sp"
-                android:gravity="center"
+                android:src="@drawable/ic_people"
+                app:tint="@color/verde_lima"
                 android:contentDescription="@string/drawer_amigos" />
 
             <TextView
