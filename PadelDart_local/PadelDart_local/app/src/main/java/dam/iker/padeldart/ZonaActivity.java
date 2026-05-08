@@ -179,6 +179,19 @@ public class ZonaActivity extends BaseDrawerActivity {
         });
     }
 
+    // Mapeo de nombres de provincia del app → nombre que usa OpenStreetMap.
+    // Algunas provincias tienen nombre oficial distinto al topónimo local que OSM prioriza.
+    // Solo se incluyen las que difieren; las demás usan el mismo nombre.
+    private static final Map<String, String> NOMBRE_OSM_PROVINCIA = new LinkedHashMap<>();
+    static {
+        NOMBRE_OSM_PROVINCIA.put("La Coruña",  "A Coruña");
+        NOMBRE_OSM_PROVINCIA.put("Gerona",     "Girona");
+        NOMBRE_OSM_PROVINCIA.put("Lérida",     "Lleida");
+        NOMBRE_OSM_PROVINCIA.put("Orense",     "Ourense");
+        NOMBRE_OSM_PROVINCIA.put("Vizcaya",    "Bizkaia");
+        NOMBRE_OSM_PROVINCIA.put("Guipúzcoa", "Gipuzkoa");
+    }
+
     // Provincias españolas ordenadas para el selector
     private static final String[] PROVINCIAS = {
         "Álava","Albacete","Alicante","Almería","Asturias","Ávila",
@@ -471,7 +484,7 @@ public class ZonaActivity extends BaseDrawerActivity {
             // Miniaturas: si hay más de una foto, fila de thumbnails deslizable
             if (fotosArr.length > 1) {
                 HorizontalScrollView hsvThumb = new HorizontalScrollView(this);
-                hsvThumb.setScrollbars(0);
+                hsvThumb.setScrollBarSize(0);
                 LinearLayout.LayoutParams hsvP = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 hsvP.setMargins(dpToPx(14), dpToPx(8), dpToPx(14), 0);
@@ -593,12 +606,14 @@ public class ZonaActivity extends BaseDrawerActivity {
         avatarCard.setStrokeColor(getResources().getColor(R.color.verde_lima, getTheme()));
         avatarCard.setStrokeWidth(dpToPx(1));
 
+        // Frame que apila la inicial (fallback) y la foto real, una sobre la otra
         FrameLayout avatarFrame = new FrameLayout(this);
         avatarFrame.setLayoutParams(new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
         avatarFrame.setBackgroundColor(
                 getResources().getColor(R.color.fondo_tarjeta_claro, getTheme()));
 
+        // Capa 1: inicial del nombre, visible por defecto mientras no hay foto cargada
         TextView tvIni = new TextView(this);
         tvIni.setLayoutParams(new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
@@ -607,6 +622,7 @@ public class ZonaActivity extends BaseDrawerActivity {
         tvIni.setTextColor(getResources().getColor(R.color.verde_lima, getTheme()));
         tvIni.setTextSize(14f); tvIni.setTypeface(null, Typeface.BOLD);
 
+        // Capa 2: foto real del autor; cargarFotoSegura la hace visible si la URI es válida
         ImageView imgFotoAvatar = new ImageView(this);
         imgFotoAvatar.setLayoutParams(new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
@@ -618,7 +634,8 @@ public class ZonaActivity extends BaseDrawerActivity {
         avatarCard.addView(avatarFrame);
         header.addView(avatarCard);
 
-        // Cargamos la foto del autor usando el helper heredado de BaseDrawerActivity
+        // Cargamos la foto del autor usando el helper de BaseDrawerActivity.
+        // Si la URI es inválida o fue revocada, muestra la inicial en su lugar (sin crash).
         if (!fotoAutor.isEmpty()) cargarFotoSegura(imgFotoAvatar, tvIni, fotoAutor);
 
         // Nombre + categoría en columna
@@ -808,17 +825,19 @@ public class ZonaActivity extends BaseDrawerActivity {
         frP.setMargins(0, dpToPx(6), 0, dpToPx(6));
         fotoRow.setLayoutParams(frP);
 
+        // Creamos 3 slots de foto iguales distribuidos con peso 1f cada uno
         for (int slot = 0; slot < 3; slot++) {
-            final int s = slot;
+            final int s = slot;   // captura efectiva para el lambda
             LinearLayout slotLayout = new LinearLayout(this);
             slotLayout.setOrientation(LinearLayout.VERTICAL);
             slotLayout.setGravity(Gravity.CENTER_HORIZONTAL);
+            // Peso 1f: los tres slots se reparten el ancho disponible por igual
             LinearLayout.LayoutParams slP = new LinearLayout.LayoutParams(0,
                     LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
             slP.setMarginEnd(slot < 2 ? dpToPx(8) : 0);
             slotLayout.setLayoutParams(slP);
 
-            // Cuadro de preview con fondo gris
+            // Tarjeta cuadrada de 90dp que actúa de marco para la miniatura
             MaterialCardView previewCard = new MaterialCardView(this);
             LinearLayout.LayoutParams pcP = new LinearLayout.LayoutParams(dpToPx(90), dpToPx(90));
             previewCard.setLayoutParams(pcP);
@@ -826,11 +845,13 @@ public class ZonaActivity extends BaseDrawerActivity {
             previewCard.setCardElevation(dpToPx(2));
             previewCard.setStrokeColor(0xFF333333); previewCard.setStrokeWidth(dpToPx(1));
 
+            // FrameLayout permite superponer el icono ➕ y la imagen de preview
             FrameLayout previewFrame = new FrameLayout(this);
             previewFrame.setLayoutParams(new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
             previewFrame.setBackgroundColor(0xFF1A1A1A);
 
+            // Icono de placeholder: visible hasta que el usuario elige una foto
             TextView tvPlaceholder = new TextView(this);
             tvPlaceholder.setLayoutParams(new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
@@ -839,18 +860,21 @@ public class ZonaActivity extends BaseDrawerActivity {
             tvPlaceholder.setTextSize(24f);
             tvPlaceholder.setTextColor(0xFF555555);
 
+            // ImageView de preview: oculto hasta que se selecciona una foto para este slot
             ImageView imgPrev = new ImageView(this);
             imgPrev.setLayoutParams(new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
             imgPrev.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imgPrev.setVisibility(View.GONE);
+            // Guardamos la referencia en el array para actualizarlo desde el launcher
             imgPreviewsPala[s] = imgPrev;
 
             previewFrame.addView(tvPlaceholder);
             previewFrame.addView(imgPrev);
             previewCard.addView(previewFrame);
 
-            // Al tocar el cuadro se abre el selector de imágenes para ese slot
+            // Al tocar el cuadro, marcamos el slot activo y abrimos el picker de imágenes.
+            // El launcher usa slotFotoActual para saber a qué slot asignar el resultado.
             previewCard.setOnClickListener(v -> {
                 slotFotoActual = s;
                 Intent pick = new Intent(Intent.ACTION_GET_CONTENT);
@@ -887,7 +911,8 @@ public class ZonaActivity extends BaseDrawerActivity {
             String nomPala = etNombre.getText().toString().trim();
             String marca   = marcaSeleccionada[0];
             String modelo  = modeloSeleccionado[0];
-            // El nombre puede ser el modelo si no se especificó uno personalizado
+
+            // Si no se escribió nombre libre, usamos el modelo o la marca como identificador
             String nombreFinal = nomPala.isEmpty()
                     ? (modelo.isEmpty() ? marca : modelo)
                     : nomPala;
@@ -896,26 +921,30 @@ public class ZonaActivity extends BaseDrawerActivity {
                         Toast.LENGTH_SHORT).show();
                 return;
             }
+
+            // Obtenemos el estado seleccionado por su posición en el RadioGroup
             int idxE = rgEstado.indexOfChild(
                     rgEstado.findViewById(rgEstado.getCheckedRadioButtonId()));
             String estadoText = idxE >= 0 ? estados[idxE] : estados[2];
             String descText = etDesc.getText().toString().trim();
 
-            // Construimos la descripción con el nuevo formato de tags para la magic card
+            // Construimos la descripción con el formato de tags @@CLAVE:valor para la magic card.
+            // agregarTarjetaPala() usa extraerTag() para leer cada campo al renderizar.
             StringBuilder sb = new StringBuilder();
             sb.append("@@NOMBRE:").append(nombreFinal).append("\n");
-            if (!marca.isEmpty())  sb.append("@@MARCA:").append(marca).append("\n");
-            if (!modelo.isEmpty()) sb.append("@@MODELO:").append(modelo).append("\n");
+            if (!marca.isEmpty())    sb.append("@@MARCA:").append(marca).append("\n");
+            if (!modelo.isEmpty())   sb.append("@@MODELO:").append(modelo).append("\n");
             sb.append("@@ESTADO:").append(estadoText).append("\n");
             if (!descText.isEmpty()) sb.append("@@DESC:").append(descText).append("\n");
 
-            // Recopilamos las URIs de fotos no nulas, separadas por |
+            // Las URIs de las 3 fotos se separan con "|"; se omiten las que el usuario no rellenó
             StringBuilder fotos = new StringBuilder();
             for (String uri : fotosUrisPala) {
                 if (uri != null) { if (fotos.length() > 0) fotos.append("|"); fotos.append(uri); }
             }
             if (fotos.length() > 0) sb.append("@@FOTOS:").append(fotos);
 
+            // Persistimos en SQLite y actualizamos la lista de anuncios
             long id = db.publicarAnuncio(miId, "PALA", sb.toString(), provinciaActual);
             if (id != -1) {
                 Toast.makeText(this, getString(R.string.zona_publicado), Toast.LENGTH_SHORT).show();
@@ -1121,6 +1150,7 @@ public class ZonaActivity extends BaseDrawerActivity {
         LinearLayout.LayoutParams pP = new LinearLayout.LayoutParams(0, dpToPx(48), 1f);
         pP.setMarginStart(dpToPx(8)); btnPub.setLayoutParams(pP);
         btnPub.setOnClickListener(v -> {
+            // Localidad obligatoria: sin ella no podemos filtrar por provincia
             if (ciudadSel[0].isEmpty()) {
                 Toast.makeText(this, "Selecciona la localidad", Toast.LENGTH_SHORT).show();
                 return;
@@ -1129,20 +1159,24 @@ public class ZonaActivity extends BaseDrawerActivity {
             String jugadores = etJugadores.getText().toString().trim();
             String desc      = etDesc.getText().toString().trim();
 
+            // Construimos el texto del anuncio con emojis de sección para la tarjeta estándar
             StringBuilder sb = new StringBuilder();
             if (!categoria.isEmpty()) sb.append("🏆 ").append(categoria).append("\n");
+            // Si no indicaron jugadores buscados, asumimos 1 por defecto
             sb.append("👥 ").append(jugadores.isEmpty() ? "1" : jugadores)
               .append(" jugador(es) buscado(s)\n");
             sb.append("📍 ").append(ciudadSel[0]).append(", ").append(provinciaActual).append("\n");
             if (!pistaSel[0].isEmpty()) sb.append("🏟️ ").append(pistaSel[0]).append("\n");
 
-            // Recopilamos los miembros añadidos dinámicamente
+            // Iteramos los miembros añadidos dinámicamente.
+            // Cada fila tiene en su tag un EditText[]{nombre, categoria} (ver crearFilaMiembro).
             for (int i = 0; i < llMiembros.getChildCount(); i++) {
                 View fila = llMiembros.getChildAt(i);
                 if (fila.getTag() instanceof EditText[]) {
                     EditText[] fields = (EditText[]) fila.getTag();
                     String nom = fields[0].getText().toString().trim();
                     String cat = fields[1].getText().toString().trim();
+                    // Solo incluimos el miembro si tiene nombre; la categoría es opcional
                     if (!nom.isEmpty()) {
                         sb.append("👤 ").append(nom);
                         if (!cat.isEmpty()) sb.append(" (").append(cat).append(")");
@@ -1349,44 +1383,67 @@ public class ZonaActivity extends BaseDrawerActivity {
             .show();
     }
 
-    // Llama a la API del INE y devuelve la lista de municipios ordenada alfabéticamente.
-    // Se ejecuta en un hilo de fondo; devuelve lista vacía si hay error de red.
+    // Obtiene la lista de municipios de una provincia usando la API Overpass (OpenStreetMap).
+    // En OSM, las provincias tienen admin_level=6 y los municipios admin_level=8.
+    // Se usa Overpass en lugar del INE porque ya está probado en la app (pistas de pádel)
+    // y el endpoint real del INE para municipios por provincia requiere un formato diferente.
+    // Ejecutar en hilo de fondo; devuelve lista vacía si falla la red.
     private List<String> fetchMunicipiosINE(String provincia) {
         List<String> result = new ArrayList<>();
         try {
-            String codigo = CODIGO_INE.get(provincia);
-            if (codigo == null) return result;
-            URL url = new URL("https://servicios.ine.es/wstempus/js/ES/MUNICIPIOS/" + codigo);
+            // Algunos nombres de provincia difieren entre el español oficial y OSM (lenguas cooficiales)
+            String nombreOSM = NOMBRE_OSM_PROVINCIA.getOrDefault(provincia, provincia);
+
+            // Query: relaciones de admin_level 8 (municipios) dentro del área admin_level 6 (provincia)
+            String query = "[out:json][timeout:30];" +
+                    "area[\"name\"=\"" + nombreOSM.replace("\"", "\\\"") + "\"]" +
+                    "[\"admin_level\"=\"6\"]->.p;" +
+                    "rel[\"admin_level\"=\"8\"](area.p);" +
+                    "out tags;";
+            // Codificamos la query en la URL como parámetro data=
+            String urlStr = "https://overpass-api.de/api/interpreter?data=" +
+                    URLEncoder.encode(query, "UTF-8");
+            URL url = new URL(urlStr);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setConnectTimeout(10000); conn.setReadTimeout(15000);
-            conn.setRequestProperty("Accept", "application/json");
+            conn.setConnectTimeout(15000);
+            conn.setReadTimeout(30000);
+            // User-Agent requerido por la política de uso de Overpass API
+            conn.setRequestProperty("User-Agent", "PadelDart-TFG/1.0");
             if (conn.getResponseCode() != 200) return result;
 
+            // Leemos la respuesta completa como texto
             StringBuilder sb = new StringBuilder();
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(conn.getInputStream(), "UTF-8"));
-            String line; while ((line = reader.readLine()) != null) sb.append(line);
+            String line;
+            while ((line = reader.readLine()) != null) sb.append(line);
             reader.close();
 
-            JSONArray arr = new JSONArray(sb.toString());
-            for (int i = 0; i < arr.length(); i++) {
-                JSONObject obj = arr.getJSONObject(i);
-                if (obj.has("NOMBRE")) {
-                    String nombre = obj.getString("NOMBRE").trim();
-                    if (!nombre.isEmpty()) result.add(nombre);
-                }
+            // Parseamos el JSON: cada elemento es una relación con campo "tags"
+            JSONObject response = new JSONObject(sb.toString());
+            JSONArray elements  = response.getJSONArray("elements");
+            for (int i = 0; i < elements.length(); i++) {
+                JSONObject el = elements.getJSONObject(i);
+                if (!el.has("tags")) continue;
+                JSONObject tags = el.getJSONObject("tags");
+                // Preferimos "name:es" (nombre en español) sobre "name" (puede estar en otro idioma)
+                String nombre = tags.optString("name:es", tags.optString("name", "")).trim();
+                if (!nombre.isEmpty() && !result.contains(nombre)) result.add(nombre);
             }
+            // Ordenamos por nombre ignorando mayúsculas/acentos
             Collections.sort(result, (a, b) -> a.compareToIgnoreCase(b));
         } catch (Exception ignored) {}
         return result;
     }
 
-    // Busca instalaciones de pádel en la ciudad mediante la API Overpass (datos de OpenStreetMap).
-    // Devuelve los nombres de los locales encontrados, vacía si error o sin resultados.
+    // Busca instalaciones de pádel en la ciudad mediante la API Overpass (OpenStreetMap).
+    // La query busca todos los nodos/vías/relaciones con tag sport=padel dentro del área urbana.
+    // Se usa "out center" para que cada entidad devuelva un único punto central (no geometría completa).
+    // Devuelve lista vacía si hay error de red o si OSM no tiene datos de esa ciudad.
     private List<String> fetchPistasOverpass(String ciudad) {
         List<String> pistas = new ArrayList<>();
         try {
-            // Query: todas las entidades etiquetadas sport=padel dentro del área con ese nombre
+            // area[name=...] busca el área con ese nombre en OSM (normalmente el municipio)
             String query = "[out:json][timeout:20];" +
                     "area[\"name\"=\"" + ciudad.replace("\"", "\\\"") + "\"]->.a;" +
                     "nwr[\"sport\"=\"padel\"](area.a);" +
@@ -1399,22 +1456,25 @@ public class ZonaActivity extends BaseDrawerActivity {
             conn.setRequestProperty("User-Agent", "PadelDart-TFG/1.0");
             if (conn.getResponseCode() != 200) return pistas;
 
+            // Leemos la respuesta completa antes de parsear el JSON
             StringBuilder sb = new StringBuilder();
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(conn.getInputStream(), "UTF-8"));
-            String line; while ((line = reader.readLine()) != null) sb.append(line);
+            String line;
+            while ((line = reader.readLine()) != null) sb.append(line);
             reader.close();
 
+            // Extraemos el campo "name" de las tags de cada elemento con sport=padel
             JSONObject response = new JSONObject(sb.toString());
             JSONArray elements  = response.getJSONArray("elements");
             for (int i = 0; i < elements.length(); i++) {
                 JSONObject el = elements.getJSONObject(i);
-                if (el.has("tags")) {
-                    JSONObject tags = el.getJSONObject("tags");
-                    if (tags.has("name")) {
-                        String name = tags.getString("name").trim();
-                        if (!name.isEmpty() && !pistas.contains(name)) pistas.add(name);
-                    }
+                if (!el.has("tags")) continue;
+                JSONObject tags = el.getJSONObject("tags");
+                if (tags.has("name")) {
+                    String name = tags.getString("name").trim();
+                    // Evitamos duplicados: algunas pistas aparecen como nodo Y vía en OSM
+                    if (!name.isEmpty() && !pistas.contains(name)) pistas.add(name);
                 }
             }
             Collections.sort(pistas, (a, b) -> a.compareToIgnoreCase(b));
@@ -1490,6 +1550,12 @@ public class ZonaActivity extends BaseDrawerActivity {
     // Helpers de construcción de UI para los formularios
     // ─────────────────────────────────────────────────────────────────────────
 
+    // ─────────────────────────────────────────────────────────────────────────
+    // Helpers de construcción de UI para los formularios
+    // ─────────────────────────────────────────────────────────────────────────
+
+    // Contenedor raíz de todos los diálogos personalizados.
+    // Fondo casi negro con esquinas redondeadas para el tema oscuro de la app.
     private LinearLayout crearDialogLayout() {
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
@@ -1500,6 +1566,7 @@ public class ZonaActivity extends BaseDrawerActivity {
         return layout;
     }
 
+    // Título verde en negrita que aparece en la cabecera de cada diálogo de formulario.
     private TextView crearTituloDialog(String texto) {
         TextView tv = new TextView(this);
         tv.setText(texto);
@@ -1511,6 +1578,7 @@ public class ZonaActivity extends BaseDrawerActivity {
         return tv;
     }
 
+    // Etiqueta secundaria para los campos del formulario (verde lima, 12sp, negrita).
     private TextView crearLabel(String texto) {
         TextView tv = new TextView(this);
         tv.setText(texto);
@@ -1519,6 +1587,7 @@ public class ZonaActivity extends BaseDrawerActivity {
         return tv;
     }
 
+    // Campo de texto con borde redondeado oscuro; numeric=true activa el teclado numérico.
     private EditText crearEditText(String hint, boolean numeric) {
         EditText et = new EditText(this);
         et.setHint(hint);
@@ -1536,10 +1605,12 @@ public class ZonaActivity extends BaseDrawerActivity {
         return et;
     }
 
+    // Campo de texto multilínea para descripciones largas (2–4 líneas visibles).
     private EditText crearEditTextMultiline(String hint) {
         EditText et = new EditText(this);
         et.setHint(hint); et.setHintTextColor(0xFF666666);
         et.setTextColor(getResources().getColor(R.color.white, getTheme()));
+        // Permitimos crecer hasta 4 líneas sin desbordar el diálogo
         et.setMinLines(2); et.setMaxLines(4);
         et.setInputType(android.text.InputType.TYPE_CLASS_TEXT
                 | android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE
@@ -1552,6 +1623,8 @@ public class ZonaActivity extends BaseDrawerActivity {
         return et;
     }
 
+    // Botón principal: fondo verde lima, texto oscuro, esquinas redondeadas.
+    // Usado para la acción afirmativa (Publicar, Siguiente, OK).
     private MaterialButton crearBotonPrimario(String texto) {
         MaterialButton btn = new MaterialButton(this);
         btn.setText(texto); btn.setTextColor(getResources().getColor(R.color.fondo_oscuro, getTheme()));
@@ -1562,6 +1635,8 @@ public class ZonaActivity extends BaseDrawerActivity {
         return btn;
     }
 
+    // Botón secundario: fondo oscuro neutro, texto gris.
+    // Usado para Cancelar o acciones no destructivas alternativas.
     private MaterialButton crearBotonSecundario(String texto) {
         MaterialButton btn = new MaterialButton(this);
         btn.setText(texto); btn.setTextColor(getResources().getColor(R.color.texto_gris, getTheme()));
@@ -1571,6 +1646,8 @@ public class ZonaActivity extends BaseDrawerActivity {
         return btn;
     }
 
+    // Fila horizontal que contiene los dos botones de acción del formulario.
+    // weightSum=2 permite distribuir los botones a partes iguales con weight=1f cada uno.
     private LinearLayout crearFilaBotones() {
         LinearLayout ll = new LinearLayout(this);
         ll.setOrientation(LinearLayout.HORIZONTAL); ll.setWeightSum(2f);
@@ -1580,6 +1657,8 @@ public class ZonaActivity extends BaseDrawerActivity {
         return ll;
     }
 
+    // Muestra el diálogo con fondo transparente para que se vea la forma redondeada del layout.
+    // Sin setBackgroundDrawable(TRANSPARENT) el sistema pinta un rectángulo blanco por encima.
     private AlertDialog mostrarDialog(LinearLayout layout) {
         AlertDialog dialog = new AlertDialog.Builder(this).setView(layout).create();
         dialog.show();
@@ -1588,6 +1667,7 @@ public class ZonaActivity extends BaseDrawerActivity {
         return dialog;
     }
 
+    // Inserta un espacio vertical vacío de altura dp dentro de un LinearLayout vertical.
     private void addSpacer(LinearLayout parent, int dp) {
         View spacer = new View(this);
         spacer.setLayoutParams(new LinearLayout.LayoutParams(
@@ -1595,7 +1675,7 @@ public class ZonaActivity extends BaseDrawerActivity {
         parent.addView(spacer);
     }
 
-    // Chip pequeño de color con texto (para marca/modelo en la magic card)
+    // Chip pequeño de color con texto redondeado (marca/modelo en la magic card de PALA).
     private View crearChip(String texto, int color) {
         TextView tv = new TextView(this);
         tv.setText(texto);
@@ -1608,7 +1688,8 @@ public class ZonaActivity extends BaseDrawerActivity {
         return tv;
     }
 
-    // Helpers para crear tarjetas y sus contenedores internos (evita repetición en agregarTarjetaAnuncio)
+    // Tarjeta estándar con fondo de color de app, esquinas y sombra.
+    // marginBottom permite separar visualmente las tarjetas en el listado.
     private MaterialCardView crearCard(int marginBottom) {
         MaterialCardView card = new MaterialCardView(this);
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
@@ -1619,6 +1700,7 @@ public class ZonaActivity extends BaseDrawerActivity {
         return card;
     }
 
+    // Layout vertical interior de una tarjeta con padding vertical simétrico.
     private LinearLayout crearInnerLayout(int paddingV) {
         LinearLayout inner = new LinearLayout(this);
         inner.setOrientation(LinearLayout.VERTICAL);
@@ -1626,6 +1708,8 @@ public class ZonaActivity extends BaseDrawerActivity {
         return inner;
     }
 
+    // TextView de fecha alineado a la derecha en formato "dd MMM yyyy · HH:mm".
+    // El timestamp es Unix milisegundos tal como lo almacena DatabaseHelper.
     private TextView crearFecha(long timestamp) {
         TextView tvFecha = new TextView(this);
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
@@ -1642,6 +1726,7 @@ public class ZonaActivity extends BaseDrawerActivity {
     // Utilidades de presentación de tarjetas
     // ─────────────────────────────────────────────────────────────────────────
 
+    // Devuelve la etiqueta visible para el badge de tipo de anuncio.
     private String textoTipo(String tipo) {
         switch (tipo != null ? tipo : "") {
             case "PARTIDA":         return "PARTIDA";
@@ -1652,16 +1737,20 @@ public class ZonaActivity extends BaseDrawerActivity {
         }
     }
 
+    // Devuelve el color de fondo del badge según el tipo de anuncio.
+    // Los colores están coordinados con los RadioButtons del selector de tipo.
     private int colorTipo(String tipo) {
         switch (tipo != null ? tipo : "") {
-            case "PARTIDA":         return 0xFFFF5252;
-            case "PALA":            return 0xFF2196F3;
-            case "CLASE_OFRECER":   return 0xFFFF9800;
-            case "CLASE_SOLICITAR": return 0xFF9C27B0;
+            case "PARTIDA":         return 0xFFFF5252;   // rojo
+            case "PALA":            return 0xFF2196F3;   // azul
+            case "CLASE_OFRECER":   return 0xFFFF9800;   // naranja
+            case "CLASE_SOLICITAR": return 0xFF9C27B0;   // morado
             default:                return 0xFF666666;
         }
     }
 
+    // Muestra un mensaje de estado centrado en el área de anuncios
+    // (por ejemplo: "Aún no hay anuncios" o "No hay resultados para este filtro").
     private void mostrarMensaje(String msg) {
         TextView tv = new TextView(this);
         tv.setText(msg);
@@ -1671,10 +1760,12 @@ public class ZonaActivity extends BaseDrawerActivity {
         llAnuncios.addView(tv);
     }
 
+    // Convierte Object a String de forma segura, devolviendo "" si el valor no es String.
     private String strSafe(Object obj) {
         return (obj instanceof String) ? (String) obj : "";
     }
 
+    // Convierte dp a píxeles usando la densidad de pantalla del dispositivo.
     private int dpToPx(int dp) {
         return Math.round(dp * getResources().getDisplayMetrics().density);
     }
