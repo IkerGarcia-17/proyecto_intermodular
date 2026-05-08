@@ -73,8 +73,25 @@ public class SettingsActivity extends AppCompatActivity {
         finish();
     }
 
-    // Lee el idioma guardado; devuelve "es" por defecto si no hay preferencia guardada
+    // Detecta el idioma que está usando la app en este momento.
+    // Primero pregunta a AppCompatDelegate (el que realmente controla el locale activo),
+    // así si el usuario cambió el idioma pero la preferencia quedó desincronizada,
+    // el radio button igualmente refleja lo que se ve en pantalla.
     private String leerIdioma() {
+        // Consultamos el locale activo registrado por AppCompatDelegate
+        LocaleListCompat localesActivos = AppCompatDelegate.getApplicationLocales();
+
+        // Si hay un locale configurado explícitamente, lo usamos como fuente de verdad
+        if (!localesActivos.isEmpty()) {
+            String lang = localesActivos.get(0).getLanguage();
+            // Solo admitimos "es" o "en"; cualquier otro lo tratamos como español
+            if ("en".equals(lang) || "es".equals(lang)) {
+                guardarIdioma(lang); // sincronizamos la preferencia guardada
+                return lang;
+            }
+        }
+
+        // Fallback: preferencia guardada en disco (primera ejecución o locale limpio)
         SharedPreferences prefs = getSharedPreferences(PREFS_SETTINGS, MODE_PRIVATE);
         return prefs.getString(KEY_LANG, "es");
     }

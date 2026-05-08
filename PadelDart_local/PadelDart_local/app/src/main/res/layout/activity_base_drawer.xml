@@ -21,24 +21,26 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <!-- Hamburger en la esquina DERECHA para no tapar el botón "←" de cada pantalla -->
+        <!-- Hamburger en la esquina IZQUIERDA arriba, grande y visible.
+             Posición fija estática: no se mueve con el scroll del contenido.
+             El tamaño 64dp garantiza que se vea claramente y sea fácil de pulsar. -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnHamburguesa"
             style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="top|end"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="top|start"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="6dp"
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:padding="4dp"
             app:icon="@drawable/ic_menu_hamburger"
-            app:iconSize="26dp"
+            app:iconSize="34dp"
             app:iconGravity="textStart"
             app:iconPadding="0dp"
             app:iconTint="@color/verde_lima"
-            app:cornerRadius="24dp"
+            app:cornerRadius="32dp"
             android:backgroundTint="@color/overlay_oscuro"
             android:contentDescription="@string/drawer_perfil" />
     </FrameLayout>

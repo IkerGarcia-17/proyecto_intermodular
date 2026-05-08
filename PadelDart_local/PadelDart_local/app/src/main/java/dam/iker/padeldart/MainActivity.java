@@ -19,6 +19,12 @@ public class MainActivity extends BaseDrawerActivity {
 
     private static final String TAG = "MainActivity";
 
+    // Referencias a las vistas de foto almacenadas como campo para poder
+    // actualizarlas en onResume sin repetir toda la lógica de onCreate.
+    private ImageView imgFotoMain;
+    private TextView  tvInicialMain;
+    private long      userId = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +90,12 @@ public class MainActivity extends BaseDrawerActivity {
             tvCategoria.setText("");
         }
 
+        // Guardamos las vistas de foto como campos para poder recargarlas en onResume
+        // (si el usuario edita el perfil y vuelve, la foto principal se actualiza)
+        this.imgFotoMain   = imgFoto;
+        this.tvInicialMain = tvInicial;
+        this.userId        = userId;
+
         // Tarjeta de Pádel → abre el hub del módulo de pádel
         MaterialCardView cardPadel = findViewById(R.id.cardPadel);
         cardPadel.setOnClickListener(v ->
@@ -94,6 +106,9 @@ public class MainActivity extends BaseDrawerActivity {
         cardDardos.setOnClickListener(v ->
                 startActivity(new Intent(this, DardosActivity.class)));
 
+        // onResume recargará la foto; si el usuario acaba de actualizar el perfil
+        // verá el cambio sin necesidad de cerrar sesión.
+
         // Desde el menú principal el Atrás minimiza la app (no vuelve al login)
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -101,5 +116,40 @@ public class MainActivity extends BaseDrawerActivity {
                 moveTaskToBack(true);
             }
         });
+    }
+
+    // onResume se dispara al volver de EditProfileActivity (u otras).
+    // Recarga la foto de perfil de la pantalla principal y la del drawer
+    // por si el usuario acaba de cambiarla desde el editor de perfil.
+    @Override
+    protected void onResume() {
+        super.onResume(); // BaseDrawerActivity.onResume() refresca ya la cabecera del drawer
+
+        // Recargamos además la foto grande de la pantalla de bienvenida
+        if (userId == -1 || imgFotoMain == null || tvInicialMain == null) return;
+
+        DatabaseHelper db = DatabaseHelper.getInstance(this);
+        java.util.Map<String, Object> usuario = db.obtenerUsuario(userId);
+        if (usuario == null) return;
+
+        // Leemos la URI de foto guardada en la base de datos local
+        String fotoUri = (String) usuario.get(DatabaseHelper.COL_FOTO_PERFIL);
+        if (fotoUri != null && !fotoUri.isEmpty()) {
+            try {
+                // Mostramos la imagen y ocultamos el texto con la inicial
+                imgFotoMain.setImageURI(android.net.Uri.parse(fotoUri));
+                imgFotoMain.setVisibility(View.VISIBLE);
+                tvInicialMain.setVisibility(View.GONE);
+            } catch (Exception e) {
+                // URI inválida o revocada: volvemos a mostrar la inicial
+                Log.w(TAG, "onResume: foto inválida, mostrando inicial");
+                imgFotoMain.setVisibility(View.GONE);
+                tvInicialMain.setVisibility(View.VISIBLE);
+            }
+        } else {
+            // Sin foto: aseguramos que se vea la inicial (podría haberla borrado)
+            imgFotoMain.setVisibility(View.GONE);
+            tvInicialMain.setVisibility(View.VISIBLE);
+        }
     }
 }

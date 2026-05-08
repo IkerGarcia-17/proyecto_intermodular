@@ -34,6 +34,16 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         // el override de abajo se encarga de insertar el drawer.
     }
 
+    // onResume se ejecuta cada vez que esta Activity vuelve al primer plano,
+    // lo que incluye el retorno desde EditProfileActivity.
+    // Así la foto del drawer se refresca automáticamente si el usuario
+    // acaba de actualizar su foto de perfil sin cerrar y reabrir sesión.
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refrescarFotoCabecera();
+    }
+
     // Sobrescribimos setContentView para envolver el layout de la subclase
     // dentro del DrawerLayout definido en activity_base_drawer.xml.
     @Override
@@ -65,14 +75,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         }
 
         // Cargamos los datos del usuario logueado para la cabecera del drawer
-        SessionManager session = SessionManager.getInstance(this);
-        long userId = session.getUsuarioActualId();
-
-        if (userId != -1) {
-            DatabaseHelper db = DatabaseHelper.getInstance(this);
-            Map<String, Object> usuario = db.obtenerUsuario(userId);
-            if (usuario != null) rellenarCabecera(usuario);
-        }
+        refrescarFotoCabecera();
 
         // Cada opción del menú navega a su Activity correspondiente
         LinearLayout itemEditar  = findViewById(R.id.itemEditarPerfil);
@@ -84,6 +87,19 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         // Botón de cerrar sesión en rojo: limpia la sesión y vuelve al Login
         MaterialButton btnLogout = findViewById(R.id.btnCerrarSesionDrawer);
         if (btnLogout != null) btnLogout.setOnClickListener(v -> cerrarSesion());
+    }
+
+    // Método público para que subclases (ej. EditProfileActivity) puedan forzar
+    // un refresco de la cabecera del drawer tras guardar cambios en el perfil.
+    // También se llama desde onResume para mantenerla siempre actualizada.
+    protected void refrescarFotoCabecera() {
+        SessionManager session = SessionManager.getInstance(this);
+        long userId = session.getUsuarioActualId();
+        if (userId == -1) return; // sin sesión activa no hay nada que cargar
+
+        DatabaseHelper db = DatabaseHelper.getInstance(this);
+        Map<String, Object> usuario = db.obtenerUsuario(userId);
+        if (usuario != null) rellenarCabecera(usuario);
     }
 
     // Rellena el header del drawer con la foto, nombre, categoría y edad del usuario.

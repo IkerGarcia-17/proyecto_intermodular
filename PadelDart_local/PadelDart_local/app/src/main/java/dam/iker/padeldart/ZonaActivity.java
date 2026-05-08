@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -26,8 +27,10 @@ import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -41,12 +44,35 @@ public class ZonaActivity extends BaseDrawerActivity {
     private SessionManager session;
 
     private long   miId;
-    private String miProvincia;
+
+    // provinciaActual puede cambiar cuando el usuario usa el selector;
+    // al inicio se inicializa con la provincia guardada en el perfil del usuario.
+    private String provinciaActual;
+
+    // Provincia original del usuario (la que marcó en el registro/edición de perfil).
+    // Se guarda por separado para poder siempre volver a ella como opción por defecto.
+    private String miProvinciaOriginal;
 
     private LinearLayout llAnuncios;
+    private TextView     tvTituloZona;
+
     // Filtro activo: null = todos, "PARTIDA", "PALA", "CLASE_OFRECER", "CLASE_SOLICITAR"
     private String filtroActivo = null;
     private List<Map<String, Object>> todosLosAnuncios;
+
+    // Lista completa de provincias españolas disponibles en el selector.
+    // Ordenadas alfabéticamente para facilitar la búsqueda manual.
+    private static final String[] PROVINCIAS = {
+        "Álava", "Albacete", "Alicante", "Almería", "Asturias", "Ávila",
+        "Badajoz", "Baleares", "Barcelona", "Burgos", "Cáceres", "Cádiz",
+        "Cantabria", "Castellón", "Ciudad Real", "Córdoba", "Cuenca",
+        "Gerona", "Granada", "Guadalajara", "Guipúzcoa", "Huelva", "Huesca",
+        "Jaén", "La Coruña", "La Rioja", "Las Palmas", "León", "Lérida",
+        "Lugo", "Madrid", "Málaga", "Murcia", "Navarra", "Orense", "Palencia",
+        "Pontevedra", "Salamanca", "Santa Cruz de Tenerife", "Segovia",
+        "Sevilla", "Soria", "Tarragona", "Teruel", "Toledo", "Valencia",
+        "Valladolid", "Vizcaya", "Zamora", "Zaragoza"
+    };
 
     // Estado del selector de foto para el formulario de PALA
     private ActivityResultLauncher<Intent> fotoLauncher;
@@ -62,17 +88,29 @@ public class ZonaActivity extends BaseDrawerActivity {
         session = SessionManager.getInstance(this);
         miId    = session.getUsuarioActualId();
 
-        // Obtenemos la provincia del usuario para filtrar y pre-rellenar campos
+        // Obtenemos la provincia del usuario para filtrar y pre-rellenar campos.
+        // Esta provincia es la que el usuario indicó en su perfil y será la primera
+        // que aparezca al entrar; podrá cambiarla sin modificar su perfil.
         Map<String, Object> yo = db.obtenerUsuario(miId);
-        miProvincia = yo != null ? (String) yo.get(DatabaseHelper.COL_PROVINCIA) : null;
+        miProvinciaOriginal = yo != null ? (String) yo.get(DatabaseHelper.COL_PROVINCIA) : null;
+        provinciaActual     = miProvinciaOriginal; // comenzamos en la provincia del usuario
 
-        llAnuncios = findViewById(R.id.llAnuncios);
+        // Buscamos las vistas principales del layout
+        llAnuncios   = findViewById(R.id.llAnuncios);
+        tvTituloZona = findViewById(R.id.tvTituloZona);
+
+        // Botón atrás: cierra esta Activity y vuelve a PadelActivity
         findViewById(R.id.btnAtras).setOnClickListener(v -> finish());
 
-        TextView tvTitulo = findViewById(R.id.tvTituloZona);
-        tvTitulo.setText("📌  " + (miProvincia != null ? miProvincia : "Mi Zona"));
+        // Actualizamos el título con la provincia actualmente seleccionada
+        actualizarTituloProvincia();
 
-        // El lanzador debe registrarse antes de que el usuario lo active (requisito del API)
+        // Botón "Cambiar provincia": muestra un diálogo con todas las provincias.
+        // La provincia del usuario aparece marcada como seleccionada por defecto.
+        findViewById(R.id.btnCambiarProvincia).setOnClickListener(v -> mostrarSelectorProvincia());
+
+        // El lanzador de selección de imagen debe registrarse en onCreate,
+        // antes de cualquier interacción del usuario (requisito del API de AndroidX).
         fotoLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -93,10 +131,51 @@ public class ZonaActivity extends BaseDrawerActivity {
                     }
                 });
 
-        findViewById(R.id.btnNuevoAnuncio).setOnClickListener(v -> mostrarDialogoNuevoAnuncio());
+        // FAB: botón flotante inferior derecha para crear nuevo anuncio
+        ExtendedFloatingActionButton fab = findViewById(R.id.fabNuevoAnuncio);
+        fab.setOnClickListener(v -> mostrarDialogoNuevoAnuncio());
 
         configurarFiltros();
         cargarAnuncios();
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Provincia: título y selector
+    // ─────────────────────────────────────────────────────────────────────────
+
+    // Actualiza el TextView del título con la provincia seleccionada actualmente.
+    // Se llama al inicio y cada vez que el usuario elige una provincia diferente.
+    private void actualizarTituloProvincia() {
+        if (tvTituloZona != null) {
+            tvTituloZona.setText("📌  " + (provinciaActual != null ? provinciaActual : "Mi Zona"));
+        }
+    }
+
+    // Muestra un AlertDialog con la lista completa de provincias españolas.
+    // La provincia actualmente seleccionada aparece marcada al abrir el diálogo.
+    // Al confirmar se recarga el tablón con los anuncios de la nueva provincia.
+    private void mostrarSelectorProvincia() {
+        // Buscamos el índice de la provincia activa para pre-seleccionarla en el diálogo
+        int idxActual = provinciaActual != null
+                ? Arrays.asList(PROVINCIAS).indexOf(provinciaActual) : 0;
+        if (idxActual < 0) idxActual = 0; // si no se encuentra, seleccionamos la primera
+
+        // setSingleChoiceItems muestra radio buttons con una provincia seleccionable
+        final int[] seleccionado = {idxActual};
+        new AlertDialog.Builder(this)
+                .setTitle("📌 Selecciona una provincia")
+                .setSingleChoiceItems(PROVINCIAS, idxActual, (dialog, which) -> {
+                    // Guardamos temporalmente la elección sin aplicarla aún
+                    seleccionado[0] = which;
+                })
+                .setPositiveButton("Ver anuncios", (dialog, which) -> {
+                    // Aplicamos la provincia elegida: actualizamos título y recargamos tablón
+                    provinciaActual = PROVINCIAS[seleccionado[0]];
+                    actualizarTituloProvincia();
+                    cargarAnuncios();
+                })
+                .setNegativeButton("Cancelar", null)
+                .show();
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -122,13 +201,14 @@ public class ZonaActivity extends BaseDrawerActivity {
         mostrarAnunciosFiltrados();
     }
 
-    // Consulta BD y almacena todos los anuncios de la provincia del usuario
+    // Consulta BD y almacena todos los anuncios de la provincia actualmente seleccionada.
+    // Si no hay provincia (perfil incompleto y nunca se seleccionó), muestra aviso.
     private void cargarAnuncios() {
-        if (miProvincia == null || miProvincia.isEmpty()) {
-            mostrarMensaje("No tienes provincia asignada. Actualiza tu perfil.");
+        if (provinciaActual == null || provinciaActual.isEmpty()) {
+            mostrarMensaje("No tienes provincia asignada. Actualiza tu perfil o selecciona una provincia.");
             return;
         }
-        todosLosAnuncios = db.obtenerAnunciosProvincia(miProvincia);
+        todosLosAnuncios = db.obtenerAnunciosProvincia(provinciaActual);
         mostrarAnunciosFiltrados();
     }
 
@@ -452,7 +532,7 @@ public class ZonaActivity extends BaseDrawerActivity {
             if (!desc.isEmpty()) sb.append("\n💬 ").append(desc);
             if (fotoPalaUri != null) sb.append("\n@@FOTO:").append(fotoPalaUri);
 
-            long id = db.publicarAnuncio(miId, "PALA", sb.toString(), miProvincia);
+            long id = db.publicarAnuncio(miId, "PALA", sb.toString(), provinciaActual);
             if (id != -1) {
                 Toast.makeText(this, getString(R.string.zona_publicado), Toast.LENGTH_SHORT).show();
                 if (dialogRef[0] != null) dialogRef[0].dismiss();
@@ -495,7 +575,7 @@ public class ZonaActivity extends BaseDrawerActivity {
         addSpacer(form, 12);
         form.addView(crearLabel(getString(R.string.edit_provincia)));
         EditText etProvincia = crearEditText(getString(R.string.edit_provincia), false);
-        if (miProvincia != null) etProvincia.setText(miProvincia);
+        if (provinciaActual != null) etProvincia.setText(provinciaActual);
         form.addView(etProvincia);
 
         // Precio por hora
@@ -562,7 +642,7 @@ public class ZonaActivity extends BaseDrawerActivity {
             if (!desc.isEmpty()) sb.append("\n💬 ").append(desc);
 
             String tipo = esSolicitar ? "CLASE_SOLICITAR" : "CLASE_OFRECER";
-            long id = db.publicarAnuncio(miId, tipo, sb.toString(), miProvincia);
+            long id = db.publicarAnuncio(miId, tipo, sb.toString(), provinciaActual);
             if (id != -1) {
                 Toast.makeText(this, getString(R.string.zona_publicado), Toast.LENGTH_SHORT).show();
                 if (dialogRef[0] != null) dialogRef[0].dismiss();
@@ -629,7 +709,7 @@ public class ZonaActivity extends BaseDrawerActivity {
         addSpacer(form, 12);
         form.addView(crearLabel(getString(R.string.edit_provincia)));
         EditText etProvincia = crearEditText(getString(R.string.edit_provincia), false);
-        if (miProvincia != null) etProvincia.setText(miProvincia);
+        if (provinciaActual != null) etProvincia.setText(provinciaActual);
         form.addView(etProvincia);
 
         // Pista donde se jugará
@@ -686,7 +766,7 @@ public class ZonaActivity extends BaseDrawerActivity {
             }
             if (!desc.isEmpty()) sb.append("\n💬 ").append(desc);
 
-            long id = db.publicarAnuncio(miId, "PARTIDA", sb.toString(), miProvincia);
+            long id = db.publicarAnuncio(miId, "PARTIDA", sb.toString(), provinciaActual);
             if (id != -1) {
                 Toast.makeText(this, getString(R.string.zona_publicado), Toast.LENGTH_SHORT).show();
                 if (dialogRef[0] != null) dialogRef[0].dismiss();
