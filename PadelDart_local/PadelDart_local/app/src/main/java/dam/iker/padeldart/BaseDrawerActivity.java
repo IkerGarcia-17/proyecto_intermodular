@@ -1,6 +1,8 @@
 package dam.iker.padeldart;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +17,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.button.MaterialButton;
 
+import java.io.InputStream;
 import java.util.Map;
 
 // Clase base para todas las Activities autenticadas.
@@ -131,16 +134,12 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
             tvInicial.setText(String.valueOf(nombre.charAt(0)).toUpperCase());
         }
 
-        // Foto de perfil: si el usuario tiene URI guardada, la mostramos; si no, la inicial
+        // Foto de perfil: cargamos el bitmap manualmente con openInputStream en lugar
+        // de setImageURI, porque setImageURI delega la decodificación al onMeasure y
+        // cualquier SecurityException (URI de picker revocada) crashea fuera del try-catch.
         String fotoUri = strOrDefault(usuario.get(DatabaseHelper.COL_FOTO_PERFIL), "");
         if (!fotoUri.isEmpty() && imgFoto != null && tvInicial != null) {
-            try {
-                imgFoto.setImageURI(Uri.parse(fotoUri));
-                imgFoto.setVisibility(View.VISIBLE);
-                tvInicial.setVisibility(View.GONE);
-            } catch (Exception e) {
-                // URI inválida: dejamos la inicial
-            }
+            cargarFotoSegura(imgFoto, tvInicial, fotoUri);
         }
     }
 
@@ -168,6 +167,34 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
     }
 
     // ── Helpers ──────────────────────────────────────────────────────────────
+
+    // Carga segura de foto de perfil: abre el InputStream manualmente para que
+    // cualquier SecurityException (URI de picker_get_content revocada entre sesiones)
+    // se capture aquí y no crashee durante el onMeasure del ImageView.
+    // Si la carga falla, oculta la imagen y muestra la inicial del nombre.
+    protected void cargarFotoSegura(ImageView imgFoto, TextView tvInicial, String fotoUri) {
+        try {
+            // Abrimos la URI como stream: esto lanza SecurityException si no hay permiso
+            InputStream is = getContentResolver().openInputStream(Uri.parse(fotoUri));
+            Bitmap bmp = BitmapFactory.decodeStream(is);
+
+            // Solo mostramos la imagen si el bitmap se decodificó correctamente
+            if (bmp != null) {
+                imgFoto.setImageBitmap(bmp);
+                imgFoto.setVisibility(View.VISIBLE);
+                tvInicial.setVisibility(View.GONE);
+            } else {
+                // Bitmap nulo: URI válida pero contenido no decodificable; mostramos inicial
+                imgFoto.setVisibility(View.GONE);
+                tvInicial.setVisibility(View.VISIBLE);
+            }
+        } catch (Exception e) {
+            // SecurityException o FileNotFoundException: URI revocada o inválida.
+            // Degradamos graciosamente a la inicial sin crashear la app.
+            imgFoto.setVisibility(View.GONE);
+            tvInicial.setVisibility(View.VISIBLE);
+        }
+    }
 
     // Método de conveniencia para abrir el drawer desde una subclase
     protected void abrirDrawer() {

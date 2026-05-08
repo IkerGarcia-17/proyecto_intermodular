@@ -7,6 +7,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import java.io.InputStream;
 
 import androidx.activity.OnBackPressedCallback;
 
@@ -71,16 +75,12 @@ public class MainActivity extends BaseDrawerActivity {
                 tvInicial.setText(String.valueOf(nombre.charAt(0)).toUpperCase());
             }
 
-            // Foto de perfil: si el usuario tiene URI guardada la mostramos
+            // Foto de perfil: usamos carga segura con InputStream para evitar el crash
+            // de SecurityException que ocurre en onMeasure cuando se usa setImageURI
+            // con una URI de picker_get_content revocada entre sesiones.
             String fotoUri = (String) usuario.get(DatabaseHelper.COL_FOTO_PERFIL);
             if (fotoUri != null && !fotoUri.isEmpty() && imgFoto != null) {
-                try {
-                    imgFoto.setImageURI(Uri.parse(fotoUri));
-                    imgFoto.setVisibility(View.VISIBLE);
-                    if (tvInicial != null) tvInicial.setVisibility(View.GONE);
-                } catch (Exception e) {
-                    Log.w(TAG, "No se pudo cargar la foto de perfil: " + e.getMessage());
-                }
+                cargarFotoSegura(imgFoto, tvInicial, fotoUri);
             }
             Log.d(TAG, "Usuario: " + nombre + " | Categoría: " + categoria);
         } else {
@@ -132,22 +132,13 @@ public class MainActivity extends BaseDrawerActivity {
         java.util.Map<String, Object> usuario = db.obtenerUsuario(userId);
         if (usuario == null) return;
 
-        // Leemos la URI de foto guardada en la base de datos local
+        // Usamos cargarFotoSegura (heredado de BaseDrawerActivity) para evitar
+        // el crash de SecurityException en onMeasure que causa setImageURI con URIs revocadas.
         String fotoUri = (String) usuario.get(DatabaseHelper.COL_FOTO_PERFIL);
         if (fotoUri != null && !fotoUri.isEmpty()) {
-            try {
-                // Mostramos la imagen y ocultamos el texto con la inicial
-                imgFotoMain.setImageURI(android.net.Uri.parse(fotoUri));
-                imgFotoMain.setVisibility(View.VISIBLE);
-                tvInicialMain.setVisibility(View.GONE);
-            } catch (Exception e) {
-                // URI inválida o revocada: volvemos a mostrar la inicial
-                Log.w(TAG, "onResume: foto inválida, mostrando inicial");
-                imgFotoMain.setVisibility(View.GONE);
-                tvInicialMain.setVisibility(View.VISIBLE);
-            }
+            cargarFotoSegura(imgFotoMain, tvInicialMain, fotoUri);
         } else {
-            // Sin foto: aseguramos que se vea la inicial (podría haberla borrado)
+            // Sin foto guardada: aseguramos que se muestre la inicial del nombre
             imgFotoMain.setVisibility(View.GONE);
             tvInicialMain.setVisibility(View.VISIBLE);
         }

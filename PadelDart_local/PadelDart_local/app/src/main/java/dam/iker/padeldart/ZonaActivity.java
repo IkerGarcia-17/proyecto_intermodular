@@ -119,13 +119,22 @@ public class ZonaActivity extends BaseDrawerActivity {
                         if (uri != null) {
                             fotoPalaUri = uri.toString();
                             try {
-                                // Permiso persistente para leer la URI incluso tras reiniciar la app
+                                // Permiso persistente para mantener acceso a la URI tras reiniciar
                                 getContentResolver().takePersistableUriPermission(
                                         uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
                             } catch (Exception ignored) {}
+
+                            // Cargamos la preview con InputStream para evitar SecurityException
+                            // en onMeasure que ocurre si se usa setImageURI directamente.
                             if (imgPreviewPala != null) {
-                                imgPreviewPala.setImageURI(uri);
-                                imgPreviewPala.setVisibility(View.VISIBLE);
+                                try {
+                                    java.io.InputStream is = getContentResolver().openInputStream(uri);
+                                    android.graphics.Bitmap bmp = android.graphics.BitmapFactory.decodeStream(is);
+                                    if (bmp != null) {
+                                        imgPreviewPala.setImageBitmap(bmp);
+                                        imgPreviewPala.setVisibility(View.VISIBLE);
+                                    }
+                                } catch (Exception ignored2) {}
                             }
                         }
                     }
@@ -292,21 +301,28 @@ public class ZonaActivity extends BaseDrawerActivity {
         header.addView(tvTipo);
         inner.addView(header);
 
-        // Miniatura de la pala si la hay (solo PALA con foto)
+        // Miniatura de la pala: la cargamos con InputStream para evitar SecurityException
+        // en onMeasure. Si la URI está revocada simplemente no mostramos la imagen.
         if (fotoUri != null && !fotoUri.isEmpty()) {
             try {
-                ImageView imgPala = new ImageView(this);
-                LinearLayout.LayoutParams imgP = new LinearLayout.LayoutParams(dpToPx(100), dpToPx(100));
-                imgP.setMargins(0, dpToPx(10), 0, 0);
-                imgPala.setLayoutParams(imgP);
-                imgPala.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                GradientDrawable imgBg = new GradientDrawable();
-                imgBg.setCornerRadius(dpToPx(8));
-                imgBg.setColor(0xFF1A1A1A);
-                imgPala.setBackground(imgBg);
-                imgPala.setImageURI(Uri.parse(fotoUri));
-                inner.addView(imgPala);
-            } catch (Exception ignored) {} // URI inválida o revocada
+                // Intentamos decodificar el bitmap antes de crear el ImageView,
+                // así el error ocurre aquí donde el catch lo puede manejar.
+                java.io.InputStream is = getContentResolver().openInputStream(Uri.parse(fotoUri));
+                android.graphics.Bitmap bmp = android.graphics.BitmapFactory.decodeStream(is);
+                if (bmp != null) {
+                    ImageView imgPala = new ImageView(this);
+                    LinearLayout.LayoutParams imgP = new LinearLayout.LayoutParams(dpToPx(100), dpToPx(100));
+                    imgP.setMargins(0, dpToPx(10), 0, 0);
+                    imgPala.setLayoutParams(imgP);
+                    imgPala.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    GradientDrawable imgBg = new GradientDrawable();
+                    imgBg.setCornerRadius(dpToPx(8));
+                    imgBg.setColor(0xFF1A1A1A);
+                    imgPala.setBackground(imgBg);
+                    imgPala.setImageBitmap(bmp); // usamos setImageBitmap, nunca setImageURI
+                    inner.addView(imgPala);
+                }
+            } catch (Exception ignored) {} // URI inválida, revocada o sin permiso: omitimos foto
         }
 
         // Texto del anuncio (ya sin la línea @@FOTO)
