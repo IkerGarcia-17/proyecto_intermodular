@@ -183,25 +183,28 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
     // Si la carga falla, oculta la imagen y muestra la inicial del nombre.
     protected void cargarFotoSegura(ImageView imgFoto, TextView tvInicial, String fotoUri) {
         try {
-            // Abrimos la URI como stream: esto lanza SecurityException si no hay permiso
-            InputStream is = getContentResolver().openInputStream(Uri.parse(fotoUri));
+            // Abrimos la URI como stream: esto lanza SecurityException si no hay permiso.
+            // Para URIs file:// (almacenamiento interno) usamos FileInputStream directamente.
+            InputStream is;
+            Uri uri = Uri.parse(fotoUri);
+            if ("file".equals(uri.getScheme())) {
+                is = new java.io.FileInputStream(new java.io.File(uri.getPath()));
+            } else {
+                is = getContentResolver().openInputStream(uri);
+            }
             Bitmap bmp = BitmapFactory.decodeStream(is);
 
-            // Solo mostramos la imagen si el bitmap se decodificó correctamente
             if (bmp != null) {
                 imgFoto.setImageBitmap(bmp);
                 imgFoto.setVisibility(View.VISIBLE);
-                tvInicial.setVisibility(View.GONE);
+                if (tvInicial != null) tvInicial.setVisibility(View.GONE);
             } else {
-                // Bitmap nulo: URI válida pero contenido no decodificable; mostramos inicial
                 imgFoto.setVisibility(View.GONE);
-                tvInicial.setVisibility(View.VISIBLE);
+                if (tvInicial != null) tvInicial.setVisibility(View.VISIBLE);
             }
         } catch (Exception e) {
-            // SecurityException o FileNotFoundException: URI revocada o inválida.
-            // Degradamos graciosamente a la inicial sin crashear la app.
             imgFoto.setVisibility(View.GONE);
-            tvInicial.setVisibility(View.VISIBLE);
+            if (tvInicial != null) tvInicial.setVisibility(View.VISIBLE);
         }
     }
 

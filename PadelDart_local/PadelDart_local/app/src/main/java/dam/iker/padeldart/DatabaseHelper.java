@@ -412,9 +412,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Hace un JOIN con usuarios para obtener el nombre del autor en la misma query.
     public List<Map<String, Object>> obtenerAnunciosProvincia(String provincia) {
         SQLiteDatabase db = this.getReadableDatabase();
+        // Incluimos foto_perfil del autor para mostrar su avatar en la tarjeta
         String sql =
                 "SELECT a.id, a.autor_id, a.tipo, a.descripcion, a.timestamp, " +
-                "u.nombre, u.apellidos, u.categoria_actual " +
+                "u.nombre, u.apellidos, u.categoria_actual, u.foto_perfil " +
                 "FROM " + TABLE_ANUNCIOS + " a " +
                 "JOIN " + TABLE_USUARIOS + " u ON a.autor_id = u.id " +
                 "WHERE a.provincia = ? " +
@@ -433,6 +434,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             a.put("nombre",          cursor.getString(5));
             a.put("apellidos",       cursor.getString(6));
             a.put("categoria_actual", cursor.getString(7));
+            a.put("foto_perfil",     cursor.getString(8));
             anuncios.add(a);
         }
         cursor.close();
