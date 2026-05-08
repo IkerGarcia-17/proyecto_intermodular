@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pantalla de partida 501. Estructura: header → marcador → selector S/D/T →
+     teclado (scroll) → botonera. El jugador activo se resalta con un indicador
+     de color y animación de puntuación al cerrar el turno. -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo_oscuro"
+    android:orientation="vertical">
+
+    <!-- ── HEADER ─────────────────────────────────────────────────────────────── -->
+    <!-- Botón volver + título + badge de dificultad (PvE) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/fondo_tarjeta"
+        android:paddingStart="4dp"
+        android:paddingEnd="12dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnVolverPartida"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:text="←"
+            android:textColor="@color/verde_lima"
+            android:textSize="24sp"
+            android:minWidth="48dp"
+            android:paddingHorizontal="10dp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="DARDOS 501"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.05" />
+
+        <!-- Badge de dificultad: visible solo en PvE, se configura desde Java -->
+        <TextView
+            android:id="@+id/tvDificultadBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="5dp" />
+
+    </LinearLayout>
+
+    <!-- ── MARCADOR ──────────────────────────────────────────────────────────── -->
+    <!-- Dos paneles laterales para cada jugador con indicador del turno activo.
+         El panel activo muestra una línea verde en la parte superior. -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/fondo_tarjeta">
+
+        <!-- Panel Jugador 1 (izquierda) -->
+        <LinearLayout
+            android:id="@+id/panelJ1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <!-- Indicador de turno: línea verde en la parte superior del panel -->
+            <View
+                android:id="@+id/indicadorJ1"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@color/verde_lima"
+                android:visibility="visible" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:id="@+id/tvNombreJ1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Jugador 1"
+                    android:textColor="@color/verde_lima"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
+
+                <!-- Puntos restantes: número grande y legible -->
+                <TextView
+                    android:id="@+id/tvPuntosJ1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="501"
+                    android:textColor="@color/white"
+                    android:textSize="52sp"
+                    android:textStyle="bold"
+                    android:lineSpacingMultiplier="0.85" />
+
+                <TextView
+                    android:id="@+id/tvPromedioJ1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="avg 0.0"
+                    android:textColor="@color/texto_gris"
+                    android:textSize="11sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Centro: total del turno + slots de los 3 dardos -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="12dp">
+
+            <!-- Suma acumulada del turno actual -->
+            <TextView
+                android:id="@+id/tvTotalTurno"
+                android:layout_width="52dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/verde_lima_brillante"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:gravity="center" />
+
+            <!-- 3 slots de dardos con fondo redondeado -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="6dp">
+
+                <TextView
+                    android:id="@+id/tvDardo1"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:text="—"
+                    android:gravity="center"
+                    android:textColor="@color/texto_gris"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:background="@color/fondo_tarjeta_claro"
+                    android:layout_margin="2dp" />
+
+                <TextView
+                    android:id="@+id/tvDardo2"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:text="—"
+                    android:gravity="center"
+                    android:textColor="@color/texto_gris"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:background="@color/fondo_tarjeta_claro"
+                    android:layout_margin="2dp" />
+
+                <TextView
+                    android:id="@+id/tvDardo3"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:text="—"
+                    android:gravity="center"
+                    android:textColor="@color/texto_gris"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:background="@color/fondo_tarjeta_claro"
+                    android:layout_margin="2dp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Panel Jugador 2 (derecha) -->
+        <LinearLayout
+            android:id="@+id/panelJ2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <!-- Indicador de turno J2 (oculto al inicio) -->
+            <View
+                android:id="@+id/indicadorJ2"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="#2196F3"
+                android:visibility="invisible" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:id="@+id/tvNombreJ2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Jugador 2"
+                    android:textColor="@color/texto_gris"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
+
+                <TextView
+                    android:id="@+id/tvPuntosJ2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="501"
+                    android:textColor="@color/white"
+                    android:textSize="52sp"
+                    android:textStyle="bold"
+                    android:lineSpacingMultiplier="0.85" />
+
+                <TextView
+                    android:id="@+id/tvPromedioJ2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="avg 0.0"
+                    android:textColor="@color/texto_gris"
+                    android:textSize="11sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Línea separadora -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/fondo_tarjeta_claro" />
+
+    <!-- ── SELECTOR DE MODO: Simple / Doble / Triple ─────────────────────────── -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:background="@color/fondo_superficie">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnModoSimple"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="4dp"
+            android:text="Simple"
+            android:textSize="13sp"
+            android:textColor="@color/fondo_oscuro"
+            app:backgroundTint="@color/verde_lima"
+            app:cornerRadius="20dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnModoDoble"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="2dp"
+            android:text="Doble ×2"
+            android:textColor="#2196F3"
+            android:textSize="12sp"
+            app:strokeColor="#2196F3"
+            app:cornerRadius="20dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnModoTriple"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_marginStart="4dp"
+            android:text="Triple ×3"
+            android:textColor="#FF9800"
+            android:textSize="12sp"
+            app:strokeColor="#FF9800"
+            app:cornerRadius="20dp" />
+
+    </LinearLayout>
+
+    <!-- ── TECLADOS (solo uno visible a la vez) ──────────────────────────────── -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/tecladoSimple"
+                layout="@layout/teclado_simple"
+                android:visibility="visible" />
+
+            <include
+                android:id="@+id/tecladoDoble"
+                layout="@layout/teclado_doble"
+                android:visibility="gone" />
+
+            <include
+                android:id="@+id/tecladoTriple"
+                layout="@layout/teclado_triple"
+                android:visibility="gone" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- ── BOTONERA INFERIOR ─────────────────────────────────────────────────── -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:background="@color/fondo_tarjeta">
+
+        <!-- Deshacer: borra el último dardo del turno -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDeshacer"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:text="↩ Deshacer"
+            android:textColor="@color/rojo_suave"
+            android:textSize="13sp"
+            app:strokeColor="@color/rojo_suave"
+            app:cornerRadius="25dp" />
+
+        <!-- Confirmar turno: cierra el turno aunque no se hayan lanzado 3 dardos -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnConfirmarTurno"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="2"
+            android:text="✓  Confirmar turno"
+            android:textColor="@color/fondo_oscuro"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/verde_lima"
+            app:cornerRadius="25dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,12 +1,48 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+
+    <!-- Tema base: Material3 DayNight sin ActionBar propia -->
     <style name="Base.Theme.PadelDart" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <!-- Verde lima: color corporativo principal de PadelDart -->
+        <item name="colorPrimary">@color/verde_lima</item>
+        <item name="colorOnPrimary">@color/fondo_oscuro</item>
+
+        <item name="colorPrimaryContainer">@color/fondo_tarjeta</item>
+        <item name="colorOnPrimaryContainer">@color/verde_lima_suave</item>
+
+        <!-- Superficies y fondos oscuros -->
+        <item name="colorSurface">@color/fondo_oscuro</item>
+        <item name="colorOnSurface">@color/white</item>
+        <item name="colorSurfaceVariant">@color/fondo_superficie</item>
+
+        <item name="android:colorBackground">@color/fondo_oscuro</item>
+        <item name="colorOnBackground">@color/white</item>
+
+        <item name="colorError">@color/rojo_suave</item>
+        <item name="colorOnError">@color/white</item>
+
+        <!-- Status bar opaca: evita que el contenido se cuele detrás de ella.
+             El fondo oscuro es coherente con el estilo de la app. -->
+        <item name="android:statusBarColor">@color/fondo_oscuro</item>
+        <item name="android:navigationBarColor">@color/fondo_oscuro</item>
+
+        <!-- windowLightStatusBar=false → iconos de status bar en blanco (fondo oscuro) -->
+        <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
     </style>
 
     <style name="Theme.PadelDart" parent="Base.Theme.PadelDart" />
+
+    <!-- Tema de la splash screen: solo muestra el icono sobre el fondo oscuro.
+         Se aplica en el Manifest al LoginActivity y se sustituye en onCreate()
+         por Theme.PadelDart antes de inflar el layout. -->
+    <style name="Theme.PadelDart.Splash" parent="Theme.PadelDart">
+        <item name="android:windowBackground">@drawable/splash_bg</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <!-- Estilo de imagen circular reutilizable para avatares de usuario -->
     <style name="CircleImage">
         <item name="cornerSize">50%</item>
     </style>
+
 </resources>

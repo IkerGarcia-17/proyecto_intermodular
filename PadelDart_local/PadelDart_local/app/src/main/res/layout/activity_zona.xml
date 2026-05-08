@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tablón de anuncios de la zona provincial del usuario -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/fondo_oscuro">
+
+    <!-- Cabecera con nombre de la provincia -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingTop="20dp"
+        android:paddingBottom="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="60dp"
+        android:background="@color/fondo_superficie">
+
+        <!-- Flecha de volver: tamaño grande para que sea fácil de pulsar -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAtras"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="←"
+            android:textColor="@color/verde_lima"
+            android:textSize="28sp"
+            android:minWidth="0dp"
+            android:paddingHorizontal="8dp" />
+
+        <!-- El título se actualiza con la provincia del usuario desde el Activity -->
+        <TextView
+            android:id="@+id/tvTituloZona"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="📌  Mi Zona"
+            android:textColor="@color/verde_lima_brillante"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginStart="8dp" />
+
+        <!-- Botón de publicar: más grande, icon + texto, referencia a string -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnNuevoAnuncio"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:text="@string/zona_nuevo_anuncio"
+            android:textColor="@color/fondo_oscuro"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/verde_lima"
+            app:cornerRadius="22dp"
+            app:icon="@android:drawable/ic_input_add"
+            app:iconTint="@color/fondo_oscuro"
+            app:iconSize="20dp"
+            app:iconPadding="6dp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/fondo_tarjeta" />
+
+    <!-- Filtros de tipo de anuncio en fila horizontal con scroll -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- Filtros con @string para que cambien al cambiar de idioma -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnFiltroTodos"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="@string/zona_todos"
+                android:textSize="12sp"
+                android:textColor="@color/verde_lima"
+                app:strokeColor="@color/verde_lima"
+                app:cornerRadius="18dp"
+                android:layout_marginEnd="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnFiltroPartida"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="@string/zona_partida"
+                android:textSize="12sp"
+                android:textColor="#94D500"
+                app:strokeColor="#94D500"
+                app:cornerRadius="18dp"
+                android:layout_marginEnd="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnFiltroPala"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="@string/zona_pala"
+                android:textSize="12sp"
+                android:textColor="#2196F3"
+                app:strokeColor="#2196F3"
+                app:cornerRadius="18dp"
+                android:layout_marginEnd="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnFiltroOfrecer"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="@string/zona_ofrecer"
+                android:textSize="12sp"
+                android:textColor="#FF9800"
+                app:strokeColor="#FF9800"
+                app:cornerRadius="18dp"
+                android:layout_marginEnd="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnFiltroSolicitar"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="@string/zona_solicitar"
+                android:textSize="12sp"
+                android:textColor="#9C27B0"
+                app:strokeColor="#9C27B0"
+                app:cornerRadius="18dp" />
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+    <!-- Lista de anuncios (se añaden dinámicamente desde ZonaActivity) -->
+    <ScrollView
+        android:id="@+id/scrollAnuncios"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="16dp"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:id="@+id/llAnuncios"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="8dp" />
+
+    </ScrollView>
+
+</LinearLayout>

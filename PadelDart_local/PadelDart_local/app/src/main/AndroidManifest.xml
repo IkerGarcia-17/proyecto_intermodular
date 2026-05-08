@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Permiso de internet para la API de autocompletado de direcciones (Nominatim) -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -9,24 +11,54 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:localeConfig="@xml/locale_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PadelDart">
 
+        <!-- Punto de entrada: aplica el tema Splash hasta que LoginActivity cambia al normal -->
         <activity
             android:name=".LoginActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.PadelDart.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <!-- Los 4 pasos del registro. Ninguno necesita exported=true
-             porque solo se lanzan desde dentro de la app. -->
-          <activity android:name=".RegistroActivity" />
+        <!-- Menú principal: solo se llega aquí autenticado desde LoginActivity -->
+        <activity android:name=".MainActivity" />
+
+        <!-- Registro: flujo de 4 pasos. No necesita exported porque solo se lanza internamente -->
+        <activity android:name=".RegistroActivity" />
 
         <activity android:name=".RecuperarPasswordActivity" />
 
+        <!-- Hub del módulo de Pádel -->
+        <activity android:name=".PadelActivity" />
+
+        <!-- Lista de usuarios para iniciar conversaciones privadas -->
+        <activity android:name=".ChatListActivity" />
+
+        <!-- Pantalla de conversación entre dos usuarios -->
+        <activity android:name=".ConversacionActivity" />
+
+        <!-- Tablón de anuncios de la zona provincial -->
+        <activity android:name=".ZonaActivity" />
+
+        <!-- Hub de dardos: el jugador elige PvP o PvE antes de entrar a la partida -->
+        <activity android:name=".dardos.DardosActivity" />
+
+        <!-- Partida completa de 501: usa los tres teclados y la lógica OnDardoListener -->
+        <activity android:name=".dardos.PartidaDardosActivity" />
+
+        <!-- Edición de perfil: solo campos no sensibles (sin email, DNI ni método de pago) -->
+        <activity android:name=".EditProfileActivity" />
+
+        <!-- Ajustes de la app: cambio de idioma (ES/EN) -->
+        <activity android:name=".SettingsActivity" />
+
     </application>
+
 </manifest>

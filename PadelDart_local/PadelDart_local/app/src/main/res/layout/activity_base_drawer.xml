@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Contenedor raíz con menú lateral. Todas las activities autenticadas
+     lo usan como envoltorio: el contenido real se infla en contenidoActividad. -->
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <!-- ── Contenido principal de la Activity ──────────────────────────────── -->
+    <!-- El hamburger flota encima del contenido en la esquina superior izquierda -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Aquí BaseDrawerActivity inflará el layout de cada pantalla -->
+        <FrameLayout
+            android:id="@+id/contenidoActividad"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!-- Hamburger en la esquina DERECHA para no tapar el botón "←" de cada pantalla -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnHamburguesa"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="top|end"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:padding="4dp"
+            app:icon="@drawable/ic_menu_hamburger"
+            app:iconSize="26dp"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconTint="@color/verde_lima"
+            app:cornerRadius="24dp"
+            android:backgroundTint="@color/overlay_oscuro"
+            android:contentDescription="@string/drawer_perfil" />
+    </FrameLayout>
+
+    <!-- ── Panel lateral del drawer ────────────────────────────────────────── -->
+    <!-- layout_gravity="start" lo sitúa en el lateral izquierdo (o derecho en RTL) -->
+    <LinearLayout
+        android:layout_width="290dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:orientation="vertical"
+        android:background="@color/fondo_tarjeta"
+        android:fitsSystemWindows="true">
+
+        <!-- ── Cabecera: foto + datos del usuario ─────────────────────────── -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:gravity="center"
+            android:background="@color/fondo_oscuro_medio">
+
+            <!-- Foto de perfil circular; si no tiene, muestra la inicial del nombre -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardFotoPerfil"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="40dp"
+                app:cardElevation="4dp"
+                app:strokeColor="@color/verde_lima"
+                app:strokeWidth="2dp">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/fondo_tarjeta_claro">
+
+                    <!-- Imagen real si el usuario subió foto -->
+                    <ImageView
+                        android:id="@+id/imgFotoPerfilDrawer"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:contentDescription="@string/drawer_perfil"
+                        android:visibility="gone" />
+
+                    <!-- Inicial del nombre cuando no hay foto -->
+                    <TextView
+                        android:id="@+id/tvInicialPerfil"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="?"
+                        android:textColor="@color/verde_lima"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
+                </FrameLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Nombre completo del usuario logueado -->
+            <TextView
+                android:id="@+id/tvNombreDrawer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Usuario"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:gravity="center" />
+
+            <!-- Categoría de pádel y edad juntas -->
+            <TextView
+                android:id="@+id/tvCategoriaDrawer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="—"
+                android:textColor="@color/verde_lima_suave"
+                android:textSize="12sp"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/tvEdadDrawer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textColor="@color/texto_gris"
+                android:textSize="11sp"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <!-- Separador visual -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/fondo_tarjeta_claro" />
+
+        <!-- ── Opción: Editar perfil ─────────────────────────────────────── -->
+        <LinearLayout
+            android:id="@+id/itemEditarPerfil"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:background="?attr/selectableItemBackground">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/ic_perfil_default"
+                app:tint="@color/verde_lima"
+                android:contentDescription="@string/drawer_editar_perfil" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/drawer_editar_perfil"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <!-- ── Opción: Ajustes (idioma) ──────────────────────────────────── -->
+        <LinearLayout
+            android:id="@+id/itemAjustes"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:background="?attr/selectableItemBackground">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/ic_campana"
+                app:tint="@color/verde_lima"
+                android:contentDescription="@string/drawer_ajustes" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/drawer_ajustes"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <!-- Espaciador flexible: empuja el logout al fondo -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/fondo_tarjeta_claro" />
+
+        <!-- ── Botón cerrar sesión en rojo ──────────────────────────────── -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCerrarSesionDrawer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/drawer_cerrar_sesion"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:backgroundTint="@color/rojo_suave"
+            app:cornerRadius="8dp"
+            app:icon="@android:drawable/ic_menu_close_clear_cancel"
+            app:iconTint="@color/white"
+            app:iconGravity="textStart" />
+
+    </LinearLayout>
+
+</androidx.drawerlayout.widget.DrawerLayout>

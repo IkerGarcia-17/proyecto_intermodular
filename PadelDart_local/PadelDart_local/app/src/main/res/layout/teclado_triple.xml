@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Teclado de dardos para zonas triples (T1-T20).
+     El valor real es 3× el sector. T20=60 (puntuación máxima por dardo). No existe triple bull. -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="4dp">
+
+    <!-- Fila 1: T1 al T5 -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_t1"  style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="T1"  android:textColor="#FF9800" android:textSize="13sp" android:textStyle="bold" app:strokeColor="#FF9800" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_t2"  style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="T2"  android:textColor="#FF9800" android:textSize="13sp" android:textStyle="bold" app:strokeColor="#FF9800" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_t3"  style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="T3"  android:textColor="#FF9800" android:textSize="13sp" android:textStyle="bold" app:strokeColor="#FF9800" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_t4"  style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="T4"  android:textColor="#FF9800" android:textSize="13sp" android:textStyle="bold" app:strokeColor="#FF9800" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_t5"  style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="T5"  android:textColor="#FF9800" android:textSize="13sp" android:textStyle="bold" app:strokeColor="#FF9800" />
+    </LinearLayout>
+
+    <!-- Fila 2: T6 al T10 -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_t6"  style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="T6"  android:textColor="#FF9800" android:textSize="13sp" android:textStyle="bold" app:strokeColor="#FF9800" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_t7"  style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="T7"  android:textColor="#FF9800" android:textSize="13sp" android:textStyle="bold" app:strokeColor="#FF9800" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_t8"  style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="T8"  android:textColor="#FF9800" android:textSize="13sp" android:textStyle="bold" app:strokeColor="#FF9800" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_t9"  style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="T9"  android:textColor="#FF9800" android:textSize="13sp" android:textStyle="bold" app:strokeColor="#FF9800" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_t10" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="T10" android:textColor="#FF9800" android:textSize="13sp" android:textStyle="bold" app:strokeColor="#FF9800" />
+    </LinearLayout>
+
+    <!-- Fila 3: T11 al T15 -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_t11" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="T11" android:textColor="#FF9800" android:textSize="13sp" android:textStyle="bold" app:strokeColor="#FF9800" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_t12" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="T12" android:textColor="#FF9800" android:textSize="13sp" android:textStyle="bold" app:strokeColor="#FF9800" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_t13" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="T13" android:textColor="#FF9800" android:textSize="13sp" android:textStyle="bold" app:strokeColor="#FF9800" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_t14" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="T14" android:textColor="#FF9800" android:textSize="13sp" android:textStyle="bold" app:strokeColor="#FF9800" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_t15" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="T15" android:textColor="#FF9800" android:textSize="13sp" android:textStyle="bold" app:strokeColor="#FF9800" />
+    </LinearLayout>
+
+    <!-- Fila 4: T16 al T20 — T20=60, la puntuación más alta posible por dardo -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_t16" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="T16" android:textColor="#FF9800" android:textSize="13sp" android:textStyle="bold" app:strokeColor="#FF9800" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_t17" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="T17" android:textColor="#FF9800" android:textSize="13sp" android:textStyle="bold" app:strokeColor="#FF9800" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_t18" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="T18" android:textColor="#FF9800" android:textSize="13sp" android:textStyle="bold" app:strokeColor="#FF9800" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_t19" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="T19" android:textColor="#FF9800" android:textSize="13sp" android:textStyle="bold" app:strokeColor="#FF9800" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_t20" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="T20\n60" android:textColor="@color/fondo_oscuro" android:textSize="12sp" android:textStyle="bold" app:backgroundTint="#FF9800" app:cornerRadius="6dp" />
+    </LinearLayout>
+
+</LinearLayout>

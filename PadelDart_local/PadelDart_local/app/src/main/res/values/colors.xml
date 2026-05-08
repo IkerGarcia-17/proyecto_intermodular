@@ -2,4 +2,37 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Paleta principal: verdes lima sobre fondo casi negro -->
+    <color name="verde_lima">#94D500</color>
+    <color name="verde_lima_brillante">#B2F814</color>
+    <color name="verde_lima_suave">#ECFBB5</color>
+    <color name="verde_lima_claro">#EDFFAC</color>
+    <color name="verde_lima_link">#8CDE18</color>
+
+    <!-- Fondos oscuros y variantes de superficie -->
+    <color name="fondo_oscuro">#121212</color>
+    <color name="fondo_oscuro_medio">#1A1A1A</color>
+    <color name="fondo_superficie">#232222</color>
+    <color name="fondo_tarjeta">#2A2A2A</color>
+    <color name="fondo_tarjeta_claro">#3A3A3A</color>
+
+    <!-- Texto secundario y estados deshabilitados -->
+    <color name="texto_gris">#A0A0A0</color>
+    <color name="texto_gris_suave">#666666</color>
+
+    <!-- Alerta / error -->
+    <color name="rojo_suave">#FF848E</color>
+
+    <!-- Borde de los campos de texto en las pantallas de login y registro -->
+
+
+    <!-- Overlay semitransparente sobre el fondo de pádel -->
+    <color name="overlay_oscuro">#99121212</color>
+
+    <!-- Colores de badges en ZonaActivity: suficiente contraste entre ellos -->
+    <color name="badge_partida">#94D500</color>   <!-- verde lima corporativo -->
+    <color name="badge_pala">#1E88E5</color>       <!-- azul material 600 -->
+    <color name="badge_ofrecer">#FB8C00</color>    <!-- naranja material 700 -->
+    <color name="badge_solicitar">#8E24AA</color>  <!-- morado material 700 -->
 </resources>

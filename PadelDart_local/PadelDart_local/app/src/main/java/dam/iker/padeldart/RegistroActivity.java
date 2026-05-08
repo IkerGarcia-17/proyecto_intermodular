@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -21,6 +23,8 @@ import android.os.Handler;
 import android.os.Looper;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -46,6 +50,25 @@ public class RegistroActivity extends AppCompatActivity {
     private View layoutPaso1, layoutPaso2, layoutPaso3, layoutPaso4;
     private AutoCompleteTextView dropdownProvincia, dropdownClub;
     private Button btnVerMapa;
+
+    // Vista de la foto de perfil seleccionada en paso 1
+    private ImageView imgFotoRegistro;
+
+    // Launcher para el selector de imagen del sistema (paso 1: foto de perfil)
+    private final ActivityResultLauncher<Intent> fotoLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    Uri uri = result.getData().getData();
+                    if (uri != null) {
+                        usuario.fotoPerfil = uri.toString();
+                        // Mostramos la foto elegida en el ImageView del paso 1
+                        if (imgFotoRegistro != null) {
+                            imgFotoRegistro.setImageURI(uri);
+                            imgFotoRegistro.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,8 +128,21 @@ public class RegistroActivity extends AppCompatActivity {
         TextInputEditText etPass2     = findViewById(R.id.etPass2);
         AutoCompleteTextView etDireccion = findViewById(R.id.etDireccion);
         TextInputEditText etCP        = findViewById(R.id.etCP);
+        TextInputEditText etEdad      = findViewById(R.id.etEdadRegistro); // campo de edad añadido en v3
         Button btnSiguiente1          = findViewById(R.id.btnSiguiente1);
         Button btnAtras1              = findViewById(R.id.btnAtras1);
+
+        // Foto de perfil: ImageView y botón para abrir la galería
+        imgFotoRegistro = findViewById(R.id.imgFotoRegistro);
+        Button btnSeleccionarFoto = findViewById(R.id.btnSeleccionarFoto);
+        if (btnSeleccionarFoto != null) {
+            btnSeleccionarFoto.setOnClickListener(v -> {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                fotoLauncher.launch(Intent.createChooser(intent,
+                        getString(R.string.reg_foto_seleccionar)));
+            });
+        }
 
         // Referencias a los textos que chivan si la contraseña es segura
         TextView tvRuleLength  = findViewById(R.id.tvRuleLength);
@@ -187,6 +223,13 @@ public class RegistroActivity extends AppCompatActivity {
             usuario.password  = pass;
             usuario.direccion = etDireccion.getText().toString().trim();
             usuario.cp        = etCP.getText().toString().trim();
+
+            // Guardamos la edad si se rellenó (campo opcional, puede quedar en 0)
+            if (etEdad != null) {
+                String edadStr = etEdad.getText().toString().trim();
+                try { usuario.edad = Integer.parseInt(edadStr); }
+                catch (NumberFormatException ignored) { usuario.edad = 0; }
+            }
 
             layoutPaso1.setVisibility(View.GONE);
             layoutPaso2.setVisibility(View.VISIBLE);
@@ -499,7 +542,21 @@ public class RegistroActivity extends AppCompatActivity {
         Button btnAtras4       = findViewById(R.id.btnAtras4);
         Button btnCrearCuenta  = findViewById(R.id.btnCrearCuenta);
 
-        // Esto es oro UX, pinchas en la tarjeta entera y se marca el circulito
+        // Referencia al checkbox y al link de política de privacidad (añadidos en el layout)
+        CheckBox cbPrivacidad      = findViewById(R.id.cbPrivacidad);
+        TextView tvVerPrivacidad   = findViewById(R.id.tvVerPrivacidad);
+
+        // Al pulsar "Ver políticas" mostramos el texto completo en un diálogo
+        if (tvVerPrivacidad != null) {
+            tvVerPrivacidad.setOnClickListener(v ->
+                    new AlertDialog.Builder(this)
+                            .setTitle(getString(R.string.privacidad_titulo))
+                            .setMessage(getString(R.string.privacidad_texto))
+                            .setPositiveButton("OK", (d, w) -> d.dismiss())
+                            .show());
+        }
+
+        // Pulsando en la tarjeta entera se marca el radio correspondiente
         findViewById(R.id.cardTarjeta).setOnClickListener(v  -> rbTarjeta.setChecked(true));
         findViewById(R.id.cardPaypal).setOnClickListener(v   -> rbPaypal.setChecked(true));
         findViewById(R.id.cardBizum).setOnClickListener(v    -> rbBizum.setChecked(true));
@@ -511,8 +568,14 @@ public class RegistroActivity extends AppCompatActivity {
         });
 
         btnCrearCuenta.setOnClickListener(v -> {
-            String metodoPago = "Tarjeta Bancaria"; // Red de seguridad
+            // Verificamos que el usuario aceptó las políticas antes de continuar
+            if (cbPrivacidad != null && !cbPrivacidad.isChecked()) {
+                Toast.makeText(this, getString(R.string.reg_privacidad_obligatorio),
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
 
+            String metodoPago = "Tarjeta Bancaria";
             if      (rbTarjeta.isChecked())  metodoPago = "Tarjeta Bancaria";
             else if (rbPaypal.isChecked())   metodoPago = "PayPal";
             else if (rbBizum.isChecked())    metodoPago = "Bizum";
@@ -520,7 +583,7 @@ public class RegistroActivity extends AppCompatActivity {
 
             usuario.metodoPago = metodoPago;
 
-            // Llegó la hora de la verdad, empaquetamos todo para la Base de Datos
+            // Empaquetamos todos los campos del registro en el Map que espera DatabaseHelper
             Map<String, Object> datos = new HashMap<>();
             datos.put("email",             usuario.email);
             datos.put("password",          usuario.password);
@@ -536,20 +599,19 @@ public class RegistroActivity extends AppCompatActivity {
             datos.put("provincia",         usuario.provincia);
             datos.put("pista_favorita",    usuario.pistaFavorita);
             datos.put("tiene_diana_propia", usuario.tieneDiana);
+            // Campos nuevos de v3: edad y foto de perfil
+            datos.put("edad",              usuario.edad);
+            datos.put("foto_perfil",       usuario.fotoPerfil);
 
-            if (usuario.tieneDiana) {
-                datos.put("tipo_diana", usuario.tipoDiana);
-            }
+            if (usuario.tieneDiana) datos.put("tipo_diana", usuario.tipoDiana);
 
-            // Metemos la ficha en la ranura
             long id = db.registrarUsuario(datos);
 
-            // Si devuelve -1 es que algo ha petado en el SQLite
             if (id != -1) {
-                Toast.makeText(this, "¡Cuenta creada correctamente!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.reg_exito), Toast.LENGTH_LONG).show();
                 finish();
             } else {
-                Toast.makeText(this, "Error al guardar la cuenta. Inténtalo de nuevo.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.reg_error), Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Diana de dardos formada por anillos concéntricos usando layer-list.
+     Se usa como fondo del marcador en la pantalla de partida. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Anillo exterior negro (borde del círculo más grande) -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#1A1A1A" />
+        </shape>
+    </item>
+
+    <!-- Anillo rojo exterior (zona de puntuación media) -->
+    <item android:top="6dp" android:bottom="6dp" android:left="6dp" android:right="6dp">
+        <shape android:shape="oval">
+            <solid android:color="#CC2222" />
+        </shape>
+    </item>
+
+    <!-- Círculo verde medio (zona de puntuación alta) -->
+    <item android:top="18dp" android:bottom="18dp" android:left="18dp" android:right="18dp">
+        <shape android:shape="oval">
+            <solid android:color="#1B5E20" />
+        </shape>
+    </item>
+
+    <!-- Anillo rojo interior (zona triple/doble) -->
+    <item android:top="32dp" android:bottom="32dp" android:left="32dp" android:right="32dp">
+        <shape android:shape="oval">
+            <solid android:color="#B71C1C" />
+        </shape>
+    </item>
+
+    <!-- Bull verde (outer bull: 25 puntos) -->
+    <item android:top="44dp" android:bottom="44dp" android:left="44dp" android:right="44dp">
+        <shape android:shape="oval">
+            <solid android:color="#2E7D32" />
+        </shape>
+    </item>
+
+    <!-- Bull rojo (inner bull/bullseye: 50 puntos) -->
+    <item android:top="54dp" android:bottom="54dp" android:left="54dp" android:right="54dp">
+        <shape android:shape="oval">
+            <solid android:color="#94D500" />
+        </shape>
+    </item>
+
+</layer-list>

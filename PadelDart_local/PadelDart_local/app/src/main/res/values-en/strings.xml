@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- English strings. Android loads this file automatically
+     when the device locale is set to English. -->
+<resources>
+    <string name="app_name">PadelDart</string>
+    <string name="app_slogan">Your padel and darts space</string>
+
+    <!-- ── Login ── -->
+    <string name="login_email">Email address</string>
+    <string name="login_password">Password</string>
+    <string name="login_btn_entrar">LOG IN</string>
+    <string name="login_google">Continue with Google</string>
+    <string name="login_olvide">Forgot your password?</string>
+    <string name="login_registrarse">No account yet. Sign up!</string>
+    <string name="login_recordar">Remember me</string>
+    <string name="login_bienvenido">Welcome!</string>
+    <string name="login_error_campos">Please fill in all fields</string>
+    <string name="login_error_no_cuentas">No accounts registered yet. Tap \"Sign up\" first.</string>
+    <string name="login_error_credenciales">Wrong email or password.\nCheck your details or sign up.</string>
+    <string name="login_proximamente_google">Coming soon: Sign in with Google</string>
+    <string name="reg_foto_titulo">Add your profile photo</string>
+    <!-- ── Drawer ── -->
+    <string name="drawer_perfil">My Profile</string>
+    <string name="drawer_ajustes">Settings</string>
+    <string name="drawer_editar_perfil">Edit profile</string>
+    <string name="drawer_cerrar_sesion">Log out</string>
+    <string name="drawer_categoria">Category</string>
+    <string name="drawer_anos">years old</string>
+
+    <!-- ── Main screen ── -->
+    <string name="main_hola">Hello, %1$s!</string>
+    <string name="main_jugador">player</string>
+    <string name="main_bienvenido">Welcome!</string>
+    <string name="main_que_hacer">What do you feel like doing today?</string>
+    <string name="main_padel">Padel</string>
+    <string name="main_padel_desc">Chat, provincial zone and stats</string>
+    <string name="main_dardos">Darts</string>
+    <string name="main_dardos_desc">Local PvP and PvE matches vs AI</string>
+
+    <!-- ── Settings ── -->
+    <string name="settings_titulo">Settings</string>
+    <string name="settings_idioma">Language</string>
+    <string name="settings_espanol">Español</string>
+    <string name="settings_english">English</string>
+    <string name="settings_guardar">Save changes</string>
+    <string name="settings_reiniciando">Language changed. Restarting…</string>
+
+    <!-- ── Edit profile ── -->
+    <string name="edit_titulo">Edit profile</string>
+    <string name="edit_nombre">First name</string>
+    <string name="edit_apellidos">Last name</string>
+    <string name="edit_posicion">Position (Forehand / Backhand)</string>
+    <string name="edit_provincia">Province</string>
+    <string name="edit_pista">Favourite court</string>
+    <string name="edit_edad">Age</string>
+    <string name="edit_foto">Change profile photo</string>
+    <string name="edit_guardar">Save</string>
+    <string name="edit_ok">Profile updated successfully</string>
+    <string name="edit_error">Error saving changes</string>
+    <string name="edit_nota_bloqueados">Email, ID and payment method cannot be edited for security reasons.</string>
+
+    <!-- ── Registration ── -->
+    <string name="reg_titulo_paso1">Personal details</string>
+    <string name="reg_titulo_paso2">Padel profile</string>
+    <string name="reg_titulo_paso3">Darts profile</string>
+    <string name="reg_titulo_paso4">Payment method</string>
+    <string name="reg_paso1_de4">STEP 1 OF 4</string>
+    <string name="reg_paso2_de4">STEP 2 OF 4</string>
+    <string name="reg_paso3_de4">STEP 3 OF 4</string>
+    <string name="reg_paso4_de4">STEP 4 OF 4</string>
+    <string name="reg_foto_hint">Add profile photo (optional)</string>
+    <string name="reg_foto_seleccionar">Select photo</string>
+    <string name="reg_edad">Age</string>
+    <string name="reg_cancelar">✕ Cancel registration</string>
+    <string name="reg_siguiente">Next</string>
+    <string name="reg_atras">Back</string>
+    <string name="reg_crear_cuenta">Create account</string>
+    <string name="reg_privacidad_acepto">I have read and accept the Privacy Policy</string>
+    <string name="reg_privacidad_ver">View privacy policy</string>
+    <string name="reg_privacidad_obligatorio">You must accept the privacy policy to continue</string>
+    <string name="reg_exito">Account created successfully!</string>
+    <string name="reg_error">Error saving account. Please try again.</string>
+
+    <!-- ── Padel ── -->
+    <string name="padel_titulo">Padel</string>
+    <string name="padel_chat_amigos">Friends chat</string>
+    <string name="padel_chat_desc">Talk to other players and arrange matches</string>
+    <string name="padel_zona">My Zone</string>
+    <string name="padel_zona_desc">Offers and searches in your province</string>
+
+    <!-- ── Zone ── -->
+    <string name="zona_nuevo_anuncio">Post</string>
+    <string name="zona_nuevo_titulo">New post</string>
+    <string name="zona_todos">All</string>
+    <string name="zona_partida">Match</string>
+    <string name="zona_pala">Racket</string>
+    <string name="zona_ofrecer">Offer class</string>
+    <string name="zona_solicitar">Seek class</string>
+    <string name="zona_tipo_anuncio">Post type</string>
+    <string name="zona_descripcion">Description</string>
+    <string name="zona_desc_hint">E.g.: Looking for a partner level 3.0+ this Saturday at…</string>
+    <string name="zona_publicar">Publish</string>
+    <string name="zona_selecciona_tipo">Select a post type</string>
+    <string name="zona_escribe_desc">Write a description</string>
+    <string name="zona_publicado">Post published!</string>
+    <string name="zona_error_publicar">Error publishing the post</string>
+    <string name="zona_siguiente">Next</string>
+    <!-- Radio button labels in the new post dialog -->
+    <string name="zona_rb_partida">Arrange a match</string>
+    <string name="zona_rb_pala">Buy/Sell a racket</string>
+    <string name="zona_rb_ofrecer">I offer lessons</string>
+    <string name="zona_rb_solicitar">I seek lessons</string>
+    <!-- Form titles -->
+    <string name="zona_titulo_pala">Racket for sale</string>
+    <string name="zona_titulo_ofrecer">I offer lessons</string>
+    <string name="zona_titulo_solicitar">I seek lessons</string>
+    <!-- Racket form fields -->
+    <string name="zona_pala_nombre">Racket name</string>
+    <string name="zona_pala_modelo">Model</string>
+    <string name="zona_pala_estado">Product condition</string>
+    <string name="zona_pala_nuevo">New</string>
+    <string name="zona_pala_muy_bueno">Very good</string>
+    <string name="zona_pala_bueno">Good</string>
+    <string name="zona_pala_regular">Fair</string>
+    <string name="zona_pala_imagen">Add racket image</string>
+    <!-- Common fields -->
+    <string name="zona_desc_opcional">Description (optional)</string>
+    <string name="zona_localidad">Town/City</string>
+    <string name="zona_pista_club">Court / Club</string>
+    <!-- Lesson form fields -->
+    <string name="zona_clase_precio">Price per hour (€)</string>
+    <string name="zona_clase_incluye_pista">Includes court booking</string>
+    <!-- Match form fields -->
+    <string name="zona_partida_categoria">Match category</string>
+    <string name="zona_partida_jugadores">No. of players needed</string>
+    <string name="zona_partida_acompanante">Bringing someone? (name &amp; category)</string>
+    <string name="zona_partida_acomp_nombre">Partner\'s name</string>
+    <string name="zona_partida_acomp_categoria">Partner\'s category</string>
+
+    <!-- ── Darts ── -->
+    <string name="dardos_titulo">Darts 501</string>
+    <string name="dardos_elige_modo">Choose game mode</string>
+    <string name="dardos_pvp">Player vs Player</string>
+    <string name="dardos_pvp_desc">Two players, same device</string>
+    <string name="dardos_pve">Player vs CPU</string>
+    <string name="dardos_pve_desc">Play against the machine</string>
+    <string name="dardos_reglas">501 points · 3 darts per turn · Win by reaching exactly 0</string>
+    <!-- AI difficulty levels -->
+    <string name="dardos_elegir_dificultad">Choose difficulty</string>
+    <string name="dardos_facil">Easy</string>
+    <string name="dardos_normal">Normal</string>
+    <string name="dardos_dificil">Hard</string>
+    <string name="dardos_perfecto">Perfect</string>
+    <string name="dardos_facil_desc">For beginners · the AI makes mistakes and misses often</string>
+    <string name="dardos_normal_desc">Balanced challenge · decent scoring per turn</string>
+    <string name="dardos_dificil_desc">Can you win? · aims for Triple 20 almost every dart</string>
+    <string name="dardos_perfecto_desc">Pro level · T20 every dart, perfect finishes</string>
+    <string name="dardos_elige_dificultad">Choose difficulty and challenge the AI</string>
+
+    <!-- ── General ── -->
+    <string name="btn_atras">Back</string>
+    <string name="btn_guardar">Save</string>
+    <string name="btn_cancelar">Cancel</string>
+    <string name="proximamente">Coming soon</string>
+
+    <!-- ── Privacy policy ── -->
+    <string name="privacidad_titulo">PadelDart Privacy Policy</string>
+    <string name="privacidad_texto">
+        PRIVACY POLICY — PadelDart\n\n
+        Last updated: January 2025\n\n
+        1. DATA CONTROLLER\n
+        PadelDart is a mobile application developed as a Final Degree Project (TFG)
+        by Iker, a DAM student. Data is stored exclusively on the user\'s device
+        (local SQLite database) and is never transmitted to external servers.\n\n
+        2. DATA COLLECTED\n
+        — First and last name\n
+        — Email address (used as login identifier)\n
+        — National ID (for registration identification only)\n
+        — Postal address and postcode\n
+        — Age\n
+        — Profile photo (stored locally)\n
+        — Padel level, position, province and favourite court\n
+        — Dartboard preferences and payment method\n\n
+        3. PURPOSE\n
+        Data is used exclusively to:\n
+        a) Manage user sessions within the app.\n
+        b) Display the profile card in the side menu.\n
+        c) Filter the notice board by province.\n
+        d) Personalise the gaming experience (darts and padel).\n\n
+        4. LEGAL BASIS\n
+        Processing is based on the user\'s express consent,
+        given by accepting this policy during registration (Art. 6.1.a GDPR).\n\n
+        5. RETENTION\n
+        Data remains on the device until the user uninstalls the app
+        or explicitly requests deletion.\n\n
+        6. USER RIGHTS\n
+        Users may exercise their rights of access, rectification, erasure,
+        portability and restriction by contacting the developer or
+        uninstalling the app (which removes all data from the device).\n\n
+        7. SECURITY\n
+        Data is stored in the app\'s private database (SQLite),
+        only accessible by PadelDart, with no internet connection and no cloud backup.\n\n
+        8. MINORS\n
+        The app is not intended for users under 14 years of age.
+        If you are under that age, do not register without your legal guardian\'s consent.\n\n
+        By accepting this policy you confirm having read and understood all of the above.
+    </string>
+</resources>
