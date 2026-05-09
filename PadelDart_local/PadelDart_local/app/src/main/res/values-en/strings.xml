@@ -159,6 +159,7 @@
 
     <!-- ── Friends ── -->
     <string name="drawer_amigos">Friends</string>
+    <string name="drawer_mensajes">Messages</string>
     <string name="friends_titulo">Friends</string>
     <string name="friends_buscar_label">🔍 Search friend by email</string>
     <string name="friends_buscar_hint">Email address</string>

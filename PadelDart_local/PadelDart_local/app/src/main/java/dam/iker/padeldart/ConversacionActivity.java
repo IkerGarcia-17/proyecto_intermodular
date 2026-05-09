@@ -73,6 +73,13 @@ public class ConversacionActivity extends AppCompatActivity {
         // Cargamos el historial de mensajes de esta conversación
         cargarMensajes();
 
+        // Si venimos de "Hacer oferta", pre-rellenamos el campo con el texto de oferta
+        String msgInicial = getIntent().getStringExtra("mensaje_inicial");
+        if (msgInicial != null && !msgInicial.isEmpty()) {
+            etMensaje.setText(msgInicial);
+            etMensaje.setSelection(msgInicial.length());
+        }
+
         // Botón de enviar: guarda el mensaje en la BD y lo muestra en pantalla
         findViewById(R.id.btnEnviar).setOnClickListener(v -> {
             String texto = etMensaje.getText().toString().trim();

@@ -442,6 +442,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    // Actualiza el contenido de un anuncio propio (descripción) marcando nuevo timestamp.
+    public boolean actualizarAnuncio(long id, String descripcion) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("descripcion", descripcion);
+        cv.put("timestamp",   System.currentTimeMillis());
+        return db.update(TABLE_ANUNCIOS, cv, "id = ?", new String[]{String.valueOf(id)}) > 0;
+    }
+
+    // Elimina un anuncio por su id.
+    public boolean eliminarAnuncio(long id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(TABLE_ANUNCIOS, "id = ?", new String[]{String.valueOf(id)}) > 0;
+    }
+
     // -----------------------------------------------------------------------
     //  CRUD - AMIGOS
     // -----------------------------------------------------------------------

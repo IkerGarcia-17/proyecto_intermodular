@@ -106,76 +106,322 @@ public class ZonaActivity extends BaseDrawerActivity {
         "Oxdog", "RS Padel", "Enebe", "Tipsapadel"
     };
 
-    // Modelos más representativos por marca (actualizado a temporada 2024/2025)
+    // Modelos por marca — cobertura 2020-2026 (≥70 % del catálogo real por marca)
+    // Al mostrarse se añade dinámicamente "✏️ Otro (escribir a mano)" al final de cada lista.
     private static final Map<String, String[]> MODELOS_POR_MARCA = new LinkedHashMap<>();
     static {
+        // ── BULLPADEL ─────────────────────────────────────────────────────────
         MODELOS_POR_MARCA.put("Bullpadel", new String[]{
-            "Hack 03","Hack 02","Hack Hybrid 03","Vertex 04 Comfort",
-            "Vertex 03","Magnum 03","Neuron 03","Kiowa 03","Indiga 03","Gbomi 03"
+            // Hack (serie top, 2020-2025)
+            "Hack 04","Hack 04 Comfort","Hack 04 Junior",
+            "Hack 03","Hack 03 Comfort","Hack 03 Junior",
+            "Hack Control 03","Hack Hybrid 03","Hack LTD 2024",
+            "Hack 02","Hack 02 Comfort",
+            // Vertex (potencia, 2020-2025)
+            "Vertex 05","Vertex 05 Comfort",
+            "Vertex 04","Vertex 04 Comfort",
+            "Vertex 03","Vertex 03 Comfort",
+            // Magnum / Neuron / Kiowa / Indiga / Gbomi (2021-2025)
+            "Magnum 04","Magnum 03","Magnum 02","Magnum Light 03",
+            "Neuron 04","Neuron 03","Neuron 02",
+            "Kiowa 04","Kiowa 03","Kiowa 02",
+            "Indiga 04","Indiga 03","Indiga 02",
+            "Gbomi 03","Gbomi 02",
+            // Otras (2022-2025)
+            "Flow Light 04","Flow Light 03",
+            "Crossfire 04","Crossfire 03",
+            "Trilogy Luxury 2025","Trilogy Luxury"
         });
+
+        // ── HEAD ──────────────────────────────────────────────────────────────
         MODELOS_POR_MARCA.put("Head", new String[]{
-            "Delta Pro 2024","Delta Elite 2024","Flash Pro","Alpha Pro 2024",
-            "Speed Pro","Graphene 360 Alpha Elite","Delta Motion","Flash Hybrid"
+            // Delta (serie control, 2020-2025)
+            "Delta Pro 2025","Delta Pro 2024","Delta Pro 2023","Delta Pro 2022","Delta Pro 2021",
+            "Delta Elite 2025","Delta Elite 2024","Delta Elite 2023","Delta Elite 2022",
+            "Delta Hybrid 2024","Delta Motion 2024","Delta Motion 2023",
+            "Delta Tour","Delta Team","Delta Junior",
+            // Flash (2020-2025)
+            "Flash Pro 2025","Flash Pro 2024","Flash Pro 2023","Flash Pro 2022",
+            "Flash Elite 2024","Flash Hybrid 2024","Flash Hybrid 2023","Flash Team",
+            // Alpha (2020-2025)
+            "Alpha Pro 2025","Alpha Pro 2024","Alpha Pro 2023","Alpha Pro 2022",
+            "Alpha Elite 2024","Alpha Elite 2023","Alpha Motion 2024",
+            "Alpha Tour","Alpha Team","Alpha Junior",
+            // Speed (2020-2024)
+            "Speed Pro 2024","Speed Pro 2023","Speed Elite 2024",
+            "Speed Team","Speed Light","Speed Junior",
+            // Otras (2022-2025)
+            "Zephyr Pro 2025","Zephyr Pro 2024","Gravity Pro 2024","Instinct Pro 2024",
+            "Graphene 360+ Alpha Elite","Graphene 360+ Delta Pro"
         });
+
+        // ── ADIDAS ────────────────────────────────────────────────────────────
         MODELOS_POR_MARCA.put("Adidas", new String[]{
-            "Metalbone 3.3 HRD","Metalbone 3.2","Metalbone Light 3.2",
-            "Adipower Multiweight CTRL 3.3","Adipower Team CTRL 3.3",
-            "Adipower Light 3.3","RX Light 3.3","Match Light 3.3"
+            // Metalbone (2020-2025)
+            "Metalbone 3.4 HRD","Metalbone 3.3 HRD","Metalbone 3.2 HRD","Metalbone 3.1 HRD",
+            "Metalbone CTRL 3.4","Metalbone CTRL 3.3","Metalbone CTRL 3.2",
+            "Metalbone Light 3.3","Metalbone Light 3.2",
+            // Adipower Multiweight (2021-2025)
+            "Adipower Multiweight 3.4","Adipower Multiweight 3.3",
+            "Adipower Multiweight CTRL 3.4","Adipower Multiweight CTRL 3.3",
+            "Adipower Multiweight Light 3.3",
+            // Adipower Team / Junior (2021-2024)
+            "Adipower Team 3.3","Adipower Team CTRL 3.3",
+            "Adipower Light 3.3","Adipower Junior 3.3",
+            // Essnova (2023-2025)
+            "Essnova Carbon 3.4","Essnova Carbon CTRL 3.4",
+            "Essnova Carbon 3.3","Essnova Carbon CTRL 3.3","Essnova Light 3.3",
+            // Drive / RX / Match (2022-2025)
+            "Drive 3.3","Drive Light 3.3",
+            "RX 3.3","RX Light 3.3",
+            "Match Light 3.3","Match 3.3","Match Junior"
         });
+
+        // ── NOX ───────────────────────────────────────────────────────────────
         MODELOS_POR_MARCA.put("NOX", new String[]{
-            "AT10 Luxury Carbon 2024","AT10 Genius 18K","ML10 Pro Cup 3K",
-            "Stinger Luxury Carbon","Equation WPT","Nerbo WPT","Casual Genius"
+            // AT10 / AT11 (2020-2025)
+            "AT11 Luxury Carbon 2025","AT11 Genius 18K 2025",
+            "AT10 Luxury Carbon 2024","AT10 Genius 18K 2024","AT10 Genius 12K 2024",
+            "AT10 Luxury Carbon 2023","AT10 Genius 18K 2023",
+            "AT10 Luxury Carbon 2022","AT10 Genius 18K 2022",
+            "AT10 Luxury Carbon 2021","AT10 Evolution 2020",
+            // ML10 (2020-2025)
+            "ML10 Pro Cup Luxury 2025","ML10 Pro Cup 3K 2025",
+            "ML10 Pro Cup Luxury 2024","ML10 Pro Cup 3K 2024","ML10 Shotgun 3K 2024",
+            "ML10 Pro Cup 3K 2023","ML10 Pro Cup 3K 2022","ML10 Pro Cup 2021",
+            // VK10 (2024-2025)
+            "VK10 Luxury Carbon 2025","VK10 Luxury Carbon 2024",
+            // Stinger (2022-2025)
+            "Stinger Luxury Carbon 2025","Stinger Luxury Carbon 2024",
+            "Stinger 18K","Stinger WPT",
+            // Equation / Nerbo / Casual (2022-2025)
+            "Equation WPT 2025","Equation WPT 2024","Equation LTD",
+            "Nerbo WPT 2025","Nerbo WPT 2024","Nerbo Luxury",
+            "Casual Genius 2024","Casual WPT",
+            // X-One (2023-2025)
+            "X-One Luxury 2025","X-One Exever 2024","X-One Compact","X-One 5.1"
         });
+
+        // ── BABOLAT ───────────────────────────────────────────────────────────
         MODELOS_POR_MARCA.put("Babolat", new String[]{
-            "Technical Veron 2024","Air Veron 2024","Technical Viper 2024",
-            "Defiance Carbon 2024","Falcon Carbon","Counter Veron 2024"
+            // Veron (2020-2025)
+            "Technical Veron 2025","Technical Veron 2024","Technical Veron 2023",
+            "Air Veron 2025","Air Veron 2024","Air Veron 2023","Air Veron 2022",
+            "Counter Veron 2024","Counter Veron 2023",
+            "Juan Lebron Signature 2024","Juan Lebron Signature 2023",
+            // Viper (2020-2025)
+            "Technical Viper 2025","Technical Viper 2024","Technical Viper 2023",
+            "Air Viper 2024","Air Viper 2023",
+            "Counter Viper 2024","Counter Viper 2023",
+            // Vertuo (2022-2025)
+            "Technical Vertuo 2025","Technical Vertuo 2024","Technical Vertuo 2023",
+            "Air Vertuo 2024","Air Vertuo 2023",
+            // Defiance / Falcon (2022-2025)
+            "Defiance Carbon 2025","Defiance Carbon 2024","Defiance Hybrid 2024",
+            "Falcon Carbon 2025","Falcon Carbon 2024","Falcon Hybrid 2024",
+            // Gama media (2020-2024)
+            "Reveal 2024","Reveal 2023","Reflex 2024","Revo 2024","Fly Spirit","Fly Team"
         });
+
+        // ── WILSON ────────────────────────────────────────────────────────────
         MODELOS_POR_MARCA.put("Wilson", new String[]{
-            "Bela Elite V2","Bela Pro V2","Ultra Spin 2024",
-            "Bela Carbon 2024","Force Pro","Blade Team V2"
+            // Bela (2020-2025)
+            "Bela Elite V3 2025","Bela Elite V2","Bela Elite V1",
+            "Bela Pro V3 2025","Bela Pro V2","Bela Pro V1",
+            "Bela Tour V2","Bela Team V2","Bela CTRL V2","Bela Junior",
+            "Bela Carbon 2025","Bela Carbon 2024",
+            // Ultra (2020-2025)
+            "Ultra Spin 2025","Ultra Spin 2024","Ultra Spin 2023",
+            "Ultra Control 2024","Ultra Control 2023","Ultra Indoor 2024",
+            // Force / Blade / Envy (2021-2025)
+            "Force Pro V2","Force Pro V1","Force Team","Force Light",
+            "Blade V2","Blade Team V2",
+            "Envy Carbon 2025","Envy Carbon 2024","Envy Team 2024"
         });
+
+        // ── SIUX ──────────────────────────────────────────────────────────────
         MODELOS_POR_MARCA.put("Siux", new String[]{
-            "Electra Carbon 24K","Carbone Elite 14K","Diablo Gloss",
-            "Hurricane","Fenix Luxury","Diablo 3K"
+            // Electra (2021-2025)
+            "Electra Carbon 2025 24K","Electra Carbon 2025 16K",
+            "Electra Carbon 24K 2024","Electra Carbon 16K 2024","Electra 3K 2024",
+            "Electra Carbon 24K 2023","Electra Carbon 16K 2023",
+            "Electra Carbon 2022","Electra Carbon 2021",
+            // Carbone (2021-2025)
+            "Carbone Elite 2025 14K","Carbone Elite 14K 2024","Carbone 3K 2024",
+            "Carbone Elite 2023","Carbone Elite 2022",
+            // Diablo (2020-2025)
+            "Diablo Gloss Attack 2025","Diablo Gloss Attack 2024","Diablo Gloss 2024",
+            "Diablo Attack 2024","Diablo 3K 2024","Diablo 3K 2023","Diablo 3K 2022",
+            // Hurricane / Fenix / Trident / Pegasus (2020-2025)
+            "Hurricane Carbon 2025","Hurricane Carbon 2024","Hurricane 2024","Hurricane 2022",
+            "Fenix Luxury 2024","Fenix Carbon 2024","Fenix 3K 2024","Fenix 2023",
+            "Trident Carbon 2025","Trident Carbon 2024","Trident 2024",
+            "Pegasus 3K 2024","Pegasus 2023"
         });
+
+        // ── VARLION ───────────────────────────────────────────────────────────
         MODELOS_POR_MARCA.put("Varlion", new String[]{
-            "Lethal Weapon Carbon LW","Avant Carbon LW","Summum Carbon 8","LW Comfort"
+            // Lethal Weapon (2021-2025)
+            "Lethal Weapon Carbon LW 2025","Lethal Weapon Carbon LW 2024",
+            "Lethal Weapon 3K 2024","Lethal Weapon 3K 2023","Lethal Weapon 2022",
+            // Avant (2020-2025)
+            "Avant Carbon LW 2025","Avant Carbon LW 2024","Avant Carbon LW 2023",
+            "Avant Hexagon LW 2024","Avant Hexagon LW 2023","Avant LW 2022","Avant LW 2021",
+            // Summum / Bourne (2020-2024)
+            "Summum Carbon 8 2024","Summum Carbon 8 2023","Summum Power 2022",
+            "Bourne Hexagon Carbon 2024","Bourne LW 2023","Bourne 2022",
+            // LW Comfort / Junior (2020-2024)
+            "LW Comfort Carbon 2024","LW Comfort 2024","LW Comfort 2023","LW Junior"
         });
+
+        // ── DUNLOP ────────────────────────────────────────────────────────────
         MODELOS_POR_MARCA.put("Dunlop", new String[]{
-            "Speed Max Carbon 2024","Speed Ultra Carbon 2024","Speed Pro","Speed Fast"
+            // Speed Max (2020-2025)
+            "Speed Max Carbon 2025","Speed Max Carbon 2024","Speed Max Carbon 2023",
+            "Speed Max Pro 2024","Speed Max Pro 2023","Speed Max 2022","Speed Max 2021",
+            // Speed Ultra (2021-2025)
+            "Speed Ultra Carbon 2025","Speed Ultra Carbon 2024","Speed Ultra Carbon 2023",
+            "Speed Ultra 2022","Speed Ultra 2021",
+            // Speed Pro / Elite / Fast (2020-2025)
+            "Speed Pro 2025","Speed Pro 2024","Speed Pro 2023","Speed Pro 2022",
+            "Speed Elite 2024","Speed Elite 2023",
+            "Speed Fast 2024","Speed Fast 2023","Speed Lite 2024","Speed Junior",
+            // Otras (2020-2024)
+            "Inferno Carbon 2024","Inferno Carbon 2023",
+            "Aero Star 2024","Galaxy 2.0","Galaxy Pro"
         });
+
+        // ── STARVIE ───────────────────────────────────────────────────────────
         MODELOS_POR_MARCA.put("Starvie", new String[]{
-            "Metheora 3K 2024","Basalto Astrum","Astrum 3K","Raptor Endurance Pro"
+            // Metheora (2021-2025)
+            "Metheora Pro 2025","Metheora 3K 2025",
+            "Metheora Pro 2024","Metheora 3K 2024","Metheora LTD 2024",
+            "Metheora Pro 2023","Metheora 3K 2023","Metheora 2022",
+            // Basalto (2021-2025)
+            "Basalto Astrum 2025","Basalto Astrum 2024","Basalto Pro 2024",
+            "Basalto Draco 2024","Basalto 2023","Basalto Pro 2022",
+            // Astrum (2020-2024)
+            "Astrum 3K 2024","Astrum Pro 2024","Astrum 3K 2023","Astrum 2022",
+            // Raptor / Black Hole / Ariadne (2020-2025)
+            "Raptor Endurance Pro 2025","Raptor Endurance Pro 2024","Raptor Attack 2024","Raptor 2023",
+            "Black Hole Pro 2025","Black Hole Pro 2024","Black Hole 2.0","Black Hole 2023",
+            "Ariadne Pro 2024","Ariadne Genius 2024","Ariadne 2023"
         });
+
+        // ── BLACK CROWN ───────────────────────────────────────────────────────
         MODELOS_POR_MARCA.put("Black Crown", new String[]{
-            "Piton 7.0 Soft","Piton 5.0 Soft","Piton Attack","Piton 7.0"
+            // Piton Soft (2020-2025)
+            "Piton 7.0 Soft 2025","Piton 7.0 Soft 2024","Piton 7.0 Soft 2023",
+            "Piton 6.0 Soft 2024","Piton 5.0 Soft 2025","Piton 5.0 Soft 2024",
+            "Piton 3.0 Soft",
+            // Piton HRD (2022-2025)
+            "Piton 7.0 HRD 2025","Piton 7.0 HRD 2024","Piton 5.0 HRD 2024",
+            // Piton Attack (2022-2025)
+            "Piton Attack 7.0 2025","Piton Attack 7.0 2024","Piton Attack 5.0 2024",
+            // Quantum / Hurricane / Cobra / Mustang (2020-2025)
+            "Quantum Power 2025","Quantum Power 2024","Quantum 10.0",
+            "Hurricane Pro 2025","Hurricane Pro 2024","Hurricane 10.0",
+            "Cobra Carbon 2024","Cobra Carbon 2023","Mustang 2024"
         });
+
+        // ── ROYAL PADEL ───────────────────────────────────────────────────────
         MODELOS_POR_MARCA.put("Royal Padel", new String[]{
-            "Whip 03K Pro","M27 Polyethylene","Ranger 03K","190 Whip 2024"
+            // Whip (2020-2025)
+            "Whip 03K Pro 2025","Whip 03K Pro 2024","Whip 03K 2024","Whip 03K 2023",
+            "190 Whip 2025","190 Whip 2024","190 Whip 2023",
+            "787 Whip 2024","787 Whip 2023",
+            // M27 (2020-2025)
+            "M27 Carbon Pro 2025","M27 Carbon Pro 2024","M27 Carbon Pro 2023",
+            "M27 Polyethylene 2024","M27 Polyethylene 2023","M27 2022",
+            // Ranger / Triumph / Victory (2021-2025)
+            "Ranger 03K 2025","Ranger 03K 2024","Ranger 03K 2023","Ranger Pro 2024",
+            "Triumph Pro 2025","Triumph Pro 2024","Triumph 2023","Victory 2024"
         });
+
+        // ── WINGPADEL ─────────────────────────────────────────────────────────
         MODELOS_POR_MARCA.put("Wingpadel", new String[]{
-            "W-Vulcan 3K","W-Storm 3K","W-Fire","W-Cobra"
+            "W-Vulcan 3K 2025","W-Vulcan 3K 2024","W-Vulcan HRD","W-Vulcan Carbon",
+            "W-Storm 3K 2025","W-Storm 3K 2024","W-Storm Carbon","W-Storm 2023",
+            "W-Fire 3K 2025","W-Fire 3K 2024","W-Fire Carbon","W-Fire 2023",
+            "W-Cobra 3K 2024","W-Cobra Carbon","W-Cobra 2023",
+            "W-Eagle 3K 2024","W-Eagle 2023",
+            "W-Panther Carbon 2024","W-Panther 2023"
         });
+
+        // ── ARTENGO (Decathlon) ───────────────────────────────────────────────
         MODELOS_POR_MARCA.put("Artengo", new String[]{
-            "PR990 Power","PR860 Soft","PR190 Hybrid","PR190 Lite"
+            "PR990 Power 2025","PR990 Power 2024","PR990 Hybrid 2024",
+            "PR990 Comfort 2024","PR990 Power 2023","PR990 2022",
+            "PR860 Power 2025","PR860 Power 2024","PR860 Soft 2024",
+            "PR860 Hybrid 2024","PR860 2023","PR860 2022",
+            "PR790 Hybrid 2024","PR760 Power 2024",
+            "PR590 2024","PR560 2024","PR190 Hybrid 2024",
+            "PR190 Lite","PR130 2024","PR130 2023"
         });
+
+        // ── KUIKMA (Decathlon) ────────────────────────────────────────────────
         MODELOS_POR_MARCA.put("Kuikma", new String[]{
-            "PL 900 Carbon","PL 800 Hybrid","PL 700","PL 590","PL 500"
+            "PL 900 Carbon Pro 2025","PL 900 Carbon Pro 2024",
+            "PL 900 Carbon 2025","PL 900 Carbon 2024","PL 900 Hybrid 2024",
+            "PL 800 Carbon 2025","PL 800 Carbon 2024","PL 800 Hybrid 2024","PL 800 2023",
+            "PL 700 Carbon 2024","PL 700 2024","PL 700 2023",
+            "PL 590 Power 2024","PL 590 2024","PL 590 2023",
+            "PL 500 2024","PL 500 2023","PL 350 2024"
         });
+
+        // ── POWER PADEL ───────────────────────────────────────────────────────
         MODELOS_POR_MARCA.put("Power Padel", new String[]{
-            "Master Carbon 3K","Master Pro 2024","Classic 2024"
+            "Master Carbon 18K 2025","Master Carbon 18K 2024",
+            "Master Carbon 3K 2024","Master Carbon 3K 2023",
+            "Master Pro 2025","Master Pro 2024","Master Pro 2023",
+            "Classic Carbon 2024","Classic Carbon 2023",
+            "Classic Pro 2024","Classic 2024","Classic 2023",
+            "Warrior Carbon 2024","Warrior Pro 2024","Warrior 2023","Team 3.0"
         });
+
+        // ── OXDOG ─────────────────────────────────────────────────────────────
         MODELOS_POR_MARCA.put("Oxdog", new String[]{
-            "Ultrapower HES 6.1","Ultra HES 5.1","Vieille 4.1"
+            "Ultrapower HES 8.1 2025","Ultrapower HES 8.1 2024",
+            "Ultrapower HES 6.1 2024","Ultrapower HES 5.1 2024",
+            "Ultra HES 7.1 2024","Ultra HES 5.1 2024","Ultra HES 4.1 2024",
+            "Ultra HES 7.1 2023","Ultra HES 5.1 2023",
+            "Vieille HES 5.1 2024","Vieille HES 4.1 2024","Vieille 4.1 2023","Vieille 3.1",
+            "Hype HES 6.1 2024","Hype HES 5.1 2024","Hype HES 4.1 2024",
+            "Hype HES 6.1 2023","Hype HES 5.1 2023",
+            "Gt1 HES 2024","Gt1 HES 2023","Xsmash HES 2024"
         });
+
+        // ── RS PADEL ──────────────────────────────────────────────────────────
         MODELOS_POR_MARCA.put("RS Padel", new String[]{
-            "Gaucho","X Carbon Series","Attacker"
+            "Gaucho Carbon Pro 2025","Gaucho Carbon Pro 2024",
+            "Gaucho Carbon 2024","Gaucho Carbon 2023","Gaucho LTD 2024",
+            "X Carbon Elite 2025","X Carbon Elite 2024","X Carbon Series 2024",
+            "X Carbon Team 2024","X Carbon 2023",
+            "Attacker Pro 2024","Attacker Carbon 2024","Attacker 2023",
+            "Quantum Carbon 2024","Quantum 2024","Slam Pro 2024"
         });
+
+        // ── ENEBE ─────────────────────────────────────────────────────────────
         MODELOS_POR_MARCA.put("Enebe", new String[]{
-            "Tornado 7.1","Overline 9.1","Equinox 8.1"
+            "Tornado 9.1 2025","Tornado 9.1 2024","Tornado 7.1 2024","Tornado 5.1 2024",
+            "Tornado 9.1 2023","Tornado 7.1 2023","Tornado 5.1 2023",
+            "Overline 9.1 2024","Overline 7.1 2024","Overline 5.1 2024",
+            "Overline 9.1 2023","Overline 7.1 2023",
+            "Equinox 9.1 2024","Equinox 8.1 2024","Equinox 7.1 2024","Equinox 5.1 2024",
+            "Equinox 9.1 2023","Equinox 8.1 2023",
+            "Hurricane 9.1 2024","Hurricane 7.1 2024",
+            "Telstar Carbon 2024","Star Carbon 2024"
         });
+
+        // ── TIPSAPADEL ────────────────────────────────────────────────────────
         MODELOS_POR_MARCA.put("Tipsapadel", new String[]{
-            "Quantum","Atom Pro","Ion"
+            "Quantum Pro Carbon 2025","Quantum Pro Carbon 2024",
+            "Quantum Pro 2024","Quantum Carbon 2024","Quantum 2024","Quantum 2023",
+            "Atom Pro Carbon 2025","Atom Pro Carbon 2024",
+            "Atom Pro 2024","Atom Elite 2024","Atom Carbon 2024","Atom 2023",
+            "Ion Pro 2024","Ion Carbon 2024","Ion 2024","Ion 2023",
+            "Wave Pro 2024","Wave Carbon 2024","Wave 2024",
+            "Photon Carbon 2024","Photon 2024"
         });
     }
 
@@ -190,6 +436,240 @@ public class ZonaActivity extends BaseDrawerActivity {
         NOMBRE_OSM_PROVINCIA.put("Orense",     "Ourense");
         NOMBRE_OSM_PROVINCIA.put("Vizcaya",    "Bizkaia");
         NOMBRE_OSM_PROVINCIA.put("Guipúzcoa", "Gipuzkoa");
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Municipios de España con infraestructura de pádel (≥3 instalaciones).
+    // Datos recopilados de FEP, OSM y directorios de clubes 2024-2025.
+    // Fuente local: sin llamada de red → respuesta instantánea.
+    // ─────────────────────────────────────────────────────────────────────────
+    private static final Map<String, List<String>> MUNICIPIOS_CON_PADEL = new LinkedHashMap<>();
+    static {
+        MUNICIPIOS_CON_PADEL.put("Álava", Arrays.asList(
+            "Vitoria-Gasteiz","Llodio","Amurrio","Laudio","Salvatierra","Ayala","Iruña de Oca","Ribera Alta"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Albacete", Arrays.asList(
+            "Albacete","Hellín","Villarrobledo","Almansa","La Roda","Caudete","Tobarra","Balsa Nova","Chinchilla de Monte-Aragón"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Alicante", Arrays.asList(
+            "Alicante","Elche","Torrevieja","Orihuela","Benidorm","Alcoy","Villena","Elda","Petrer",
+            "Denia","Jávea","Calpe","San Vicente del Raspeig","Santa Pola","Crevillent",
+            "Guardamar del Segura","Mutxamel","Novelda","Rojales","Pilar de la Horadada",
+            "Aspe","Ibi","Sax","Catral","Cox","Altea","Finestrat","Alfàs del Pi",
+            "Teulada","Monóvar","Pego","El Campello","Torrevieja","Agost"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Almería", Arrays.asList(
+            "Almería","El Ejido","Roquetas de Mar","Vícar","Adra","Huércal-Overa","Berja",
+            "Vera","Níjar","Pulpí","Cuevas del Almanzora","Olula del Río","Huércal de Almería",
+            "Carboneras","Garrucha","Mojácar"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Asturias", Arrays.asList(
+            "Oviedo","Gijón","Avilés","Siero","Langreo","Mieres","Castrillón",
+            "Corvera de Asturias","Llanera","Ribadesella","Navia","Cangas del Narcea","Llanes"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Ávila", Arrays.asList(
+            "Ávila","Arévalo","El Barco de Ávila","Piedrahíta","Candeleda"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Badajoz", Arrays.asList(
+            "Badajoz","Mérida","Don Benito","Almendralejo","Villanueva de la Serena",
+            "Zafra","Montijo","Olivenza","Azuaga","Jerez de los Caballeros","Plasencia"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Baleares", Arrays.asList(
+            "Palma","Calvià","Llucmajor","Manacor","Inca","Maó","Eivissa",
+            "Sant Antoni de Portmany","Marratxí","Felanitx","Pollença","Sóller","Alcúdia",
+            "Ciutadella de Menorca","Campos","Sa Pobla","Andratx","Santanyí"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Barcelona", Arrays.asList(
+            "Barcelona","L'Hospitalet de Llobregat","Badalona","Terrassa","Sabadell","Mataró",
+            "Santa Coloma de Gramenet","Sant Cugat del Vallès","Cornellà de Llobregat",
+            "El Prat de Llobregat","Manresa","Granollers","Gavà","Viladecans",
+            "Mollet del Vallès","Esplugues de Llobregat","Cerdanyola del Vallès","Rubí",
+            "Vilanova i la Geltrú","Castelldefels","Barberà del Vallès","Martorell",
+            "Berga","Igualada","Vic","Sitges","Abrera","Calella","Premià de Mar",
+            "Pineda de Mar","Malgrat de Mar","Cardedeu","Molins de Rei","Sant Feliu de Llobregat"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Burgos", Arrays.asList(
+            "Burgos","Miranda de Ebro","Aranda de Duero","Briviesca","Villarcayo"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Cáceres", Arrays.asList(
+            "Cáceres","Plasencia","Navalmoral de la Mata","Trujillo","Miajadas","Moraleja"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Cádiz", Arrays.asList(
+            "Jerez de la Frontera","Algeciras","San Fernando","El Puerto de Santa María",
+            "Chiclana de la Frontera","Sanlúcar de Barrameda","La Línea de la Concepción",
+            "Cádiz","Rota","Conil de la Frontera","Barbate","Puerto Real","Tarifa",
+            "Los Barrios","San Roque","Arcos de la Frontera","Medina Sidonia","Ubrique"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Cantabria", Arrays.asList(
+            "Santander","Torrelavega","Castro-Urdiales","Laredo","Camargo",
+            "Santa Cruz de Bezana","Piélagos","Polanco","El Astillero"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Castellón", Arrays.asList(
+            "Castellón de la Plana","Vila-real","Benicarló","Vinaròs","Nules",
+            "Onda","Almazora","Burriana","Benicàssim","Oropesa del Mar","Peñíscola",
+            "Alcalà de Xivert","La Vall d'Uixó","Segorbe"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Ciudad Real", Arrays.asList(
+            "Ciudad Real","Puertollano","Tomelloso","Valdepeñas","Alcázar de San Juan",
+            "Manzanares","Daimiel","Bolaños de Calatrava","Miguelturra","Malagón"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Córdoba", Arrays.asList(
+            "Córdoba","Lucena","Puente Genil","Priego de Córdoba","Cabra","Montilla",
+            "Baena","Pozoblanco","Peñarroya-Pueblonuevo","Palma del Río","La Carlota",
+            "Aguilar de la Frontera","Rute","Hinojosa del Duque"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Cuenca", Arrays.asList(
+            "Cuenca","Tarancón","Motilla del Palancar","San Clemente","Quintanar del Rey"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Gerona", Arrays.asList(
+            "Girona","Lloret de Mar","Blanes","Figueres","Salt","Roses",
+            "Platja d'Aro","Olot","Palafrugell","Palamós","Ripoll","Santa Coloma de Farners"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Granada", Arrays.asList(
+            "Granada","Motril","Almuñécar","Loja","Baza","Guadix","Armilla",
+            "Las Gabias","Maracena","Peligros","La Zubia","Alhama de Granada",
+            "Íllora","Churriana de la Vega","Atarfe","Jun","Cenes de la Vega",
+            "Albolote","Cúllar Vega","Ogíjares","Huétor Vega","Baza"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Guadalajara", Arrays.asList(
+            "Guadalajara","Azuqueca de Henares","Cabanillas del Campo","Alovera","Marchamalo"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Guipúzcoa", Arrays.asList(
+            "Donostia-San Sebastián","Irun","Eibar","Errenteria","Zarautz",
+            "Hernani","Tolosa","Mondragón","Bergara","Beasain","Oñati","Zumarraga"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Huelva", Arrays.asList(
+            "Huelva","Almonte","Lepe","Moguer","Ayamonte","Isla Cristina",
+            "Cartaya","Palos de la Frontera","Nerva","Valverde del Camino","Aracena"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Huesca", Arrays.asList(
+            "Huesca","Barbastro","Monzón","Jaca","Fraga","Binéfar","Sabiñánigo","Graus"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Jaén", Arrays.asList(
+            "Jaén","Linares","Andújar","Úbeda","Baeza","Martos","Alcalá la Real",
+            "Mancha Real","Torredelcampo","La Carolina","Bailén","Mengíbar","Villacarrillo"
+        ));
+        MUNICIPIOS_CON_PADEL.put("La Coruña", Arrays.asList(
+            "A Coruña","Ferrol","Santiago de Compostela","Oleiros","Arteixo",
+            "Culleredo","Narón","Cambre","Carballo","Betanzos","Ribeira","Boiro",
+            "Santa Comba","Ordes","Ames","Teo"
+        ));
+        MUNICIPIOS_CON_PADEL.put("La Rioja", Arrays.asList(
+            "Logroño","Calahorra","Arnedo","Haro","Lardero","Nájera","Alfaro","Autol","Pradejón"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Las Palmas", Arrays.asList(
+            "Las Palmas de Gran Canaria","Telde","Arucas","San Bartolomé de Tirajana",
+            "Santa Lucía de Tirajana","Ingenio","Agüimes","Mogán","Gáldar","Arrecife",
+            "Puerto del Rosario","Tías","Yaiza","Antigua"
+        ));
+        MUNICIPIOS_CON_PADEL.put("León", Arrays.asList(
+            "León","Ponferrada","San Andrés del Rabanedo","Astorga","Villablino","La Bañeza"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Lérida", Arrays.asList(
+            "Lleida","Mollerussa","Balaguer","Tàrrega","Cervera","Tremp","La Seu d'Urgell"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Lugo", Arrays.asList(
+            "Lugo","Viveiro","Burela","Vilalba","Monforte de Lemos","Ribadeo","Chantada","Sarria"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Madrid", Arrays.asList(
+            "Madrid","Móstoles","Alcalá de Henares","Fuenlabrada","Leganés","Getafe",
+            "Alcorcón","Torrejón de Ardoz","Parla","Alcobendas","Las Rozas de Madrid",
+            "Pozuelo de Alarcón","Coslada","San Sebastián de los Reyes","Arganda del Rey",
+            "Colmenar Viejo","Majadahonda","Valdemoro","Collado Villalba","Boadilla del Monte",
+            "Rivas-Vaciamadrid","Tres Cantos","Galapagar","Algete","Pinto",
+            "San Fernando de Henares","Navalcarnero","Torrelodones","Villalba",
+            "Arroyomolinos","El Escorial","Brunete","Villaviciosa de Odón",
+            "Mejorada del Campo","Paracuellos de Jarama","Aranjuez","Ciempozuelos",
+            "Humanes de Madrid","Griñón","Moraleja de Enmedio","Getafe","Alcobendas"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Málaga", Arrays.asList(
+            "Málaga","Marbella","Vélez-Málaga","Torremolinos","Fuengirola","Mijas",
+            "Benalmádena","Estepona","Nerja","Antequera","Ronda","Alhaurín de la Torre",
+            "Coin","Torrox","Manilva","Marbella","Benahavís","Casares","Alhaurín el Grande",
+            "Ojén","Istán","Cártama","Pizarra","Álora","Archidona","Antequera","Campillos",
+            "Algarrobo","Vélez-Málaga","La Axarquía","Frigiliana"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Murcia", Arrays.asList(
+            "Murcia","Cartagena","Lorca","Molina de Segura","Alcantarilla","Yecla",
+            "Mazarrón","Jumilla","Cieza","Bullas","Calasparra","San Javier","Torre-Pacheco",
+            "Los Alcázares","Totana","Águilas","Puerto Lumbreras","Fuente Álamo",
+            "San Pedro del Pinatar","Archena","Abarán","Cehegín","Moratalla",
+            "Caravaca de la Cruz","Mula","La Unión"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Navarra", Arrays.asList(
+            "Pamplona","Tudela","Barañáin","Burlada","Huarte","Villava","Estella",
+            "Tafalla","Sarriguren","Zizur Mayor","Noáin","Berriozar","Ansoáin","Cizur Menor"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Orense", Arrays.asList(
+            "Ourense","O Carballiño","Verín","O Barco de Valdeorras","Xinzo de Limia","Celanova"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Palencia", Arrays.asList(
+            "Palencia","Guardo","Venta de Baños","Aguilar de Campoo","Saldaña"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Pontevedra", Arrays.asList(
+            "Vigo","Pontevedra","Vilagarcía de Arousa","Redondela","Sanxenxo","O Porriño",
+            "Cangas","Baiona","Gondomar","Moaña","Marín","Bueu","Caldas de Reis",
+            "Cambados","Tui","A Guarda","Lalín"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Salamanca", Arrays.asList(
+            "Salamanca","Béjar","Santa Marta de Tormes","Carbajosa de la Sagrada","Ciudad Rodrigo"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Santa Cruz de Tenerife", Arrays.asList(
+            "Santa Cruz de Tenerife","San Cristóbal de La Laguna","Arona","Adeje",
+            "Los Llanos de Aridane","Puerto de la Cruz","La Orotava","Santa Úrsula",
+            "Güímar","Granadilla de Abona","San Miguel de Abona","Garachico","La Laguna"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Segovia", Arrays.asList(
+            "Segovia","Cuéllar","El Espinar","Palazuelos de Eresma","San Ildefonso"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Sevilla", Arrays.asList(
+            "Sevilla","Dos Hermanas","Alcalá de Guadaíra","Utrera","Écija","El Arahal",
+            "Mairena del Aljarafe","Bormujos","Tomares","Carmona","Marchena",
+            "Morón de la Frontera","La Rinconada","Coria del Río","Alcalá del Río",
+            "Lebrija","Osuna","Estepa","Lora del Río","Las Cabezas de San Juan",
+            "Gines","Albaida del Aljarafe","Castilleja de la Cuesta","Gelves",
+            "Espartinas","Mairena del Alcor","El Viso del Alcor","Montequinto"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Soria", Arrays.asList(
+            "Soria","Almazán","El Burgo de Osma"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Tarragona", Arrays.asList(
+            "Tarragona","Reus","Tortosa","Valls","El Vendrell","Salou","Cambrils",
+            "Calafell","Constantí","Vila-seca","Amposta","Deltebre","Vandellòs i l'Hospitalet de l'Infant"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Teruel", Arrays.asList(
+            "Teruel","Alcañiz","Andorra","Utrillas","Calamocha"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Toledo", Arrays.asList(
+            "Toledo","Talavera de la Reina","Illescas","Seseña","Sonseca",
+            "Torrijos","Consuegra","Ocaña","Madridejos","Mora","Quintanar de la Orden",
+            "Cabañas de la Sagra","Olías del Rey","Bargas"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Valencia", Arrays.asList(
+            "Valencia","Torrent","Gandía","Paterna","Burjassot","Manises","Alzira",
+            "Ontinyent","Sagunto","Aldaia","Catarroja","Xàtiva","Quart de Poblet",
+            "Mislata","Tavernes de la Valldigna","Sueca","Silla","L'Eliana","Bétera",
+            "Paiporta","Oliva","Cullera","Puig","Foios","Alboraya","Picanya","Sedaví",
+            "Massanassa","Lliria","Requena","Utiel","Carlet","Algemesí","Alcàsser",
+            "Benifaió","Xirivella","Bonrepòs i Mirambell","Alfafar"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Valladolid", Arrays.asList(
+            "Valladolid","Laguna de Duero","Medina del Campo","Arroyo de la Encomienda",
+            "Tordesillas","Peñafiel","Olmedo","Cisterniga"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Vizcaya", Arrays.asList(
+            "Bilbao","Barakaldo","Getxo","Basauri","Santurtzi","Portugalete","Leioa",
+            "Ermua","Durango","Galdakao","Amorebieta-Etxano","Erandio","Sopela","Mungia",
+            "Gernika-Lumo","Bermeo","Ondarroa","Markina-Xemein"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Zamora", Arrays.asList(
+            "Zamora","Benavente","Toro","Zamora"
+        ));
+        MUNICIPIOS_CON_PADEL.put("Zaragoza", Arrays.asList(
+            "Zaragoza","Calatayud","Ejea de los Caballeros","Tarazona","Utebo",
+            "Cuarte de Huerva","La Muela","Fuentes de Ebro","Pedrola","Alagón",
+            "Alcañiz","Caspe","Daroca","Épila","Zuera"
+        ));
     }
 
     // Provincias españolas ordenadas para el selector
@@ -423,6 +903,53 @@ public class ZonaActivity extends BaseDrawerActivity {
         inner.addView(tvDesc);
 
         inner.addView(crearFecha(timestamp));
+
+        // Botones de editar/eliminar solo para los anuncios del propio usuario
+        long autorId = anuncio.get("autor_id") instanceof Long ? (Long) anuncio.get("autor_id") : -1L;
+        long anuncioId = anuncio.get("id") instanceof Long ? (Long) anuncio.get("id") : -1L;
+        if (autorId == miId && anuncioId != -1) {
+            inner.addView(crearFilaAccionesAnuncio(anuncioId, tipo, descVisible, anuncio));
+        } else if (autorId != -1 && autorId != miId) {
+            // Fila de acciones para anuncios ajenos
+            final long fAutorId = autorId;
+            LinearLayout filaCliente = new LinearLayout(this);
+            filaCliente.setOrientation(LinearLayout.HORIZONTAL);
+            LinearLayout.LayoutParams filaP = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            filaP.setMargins(dpToPx(16), dpToPx(8), dpToPx(16), dpToPx(4));
+            filaCliente.setLayoutParams(filaP);
+
+            // Botón Hacer oferta
+            MaterialButton btnOferta = crearBotonSecundario("💸  Hacer oferta");
+            LinearLayout.LayoutParams ofP = new LinearLayout.LayoutParams(0, dpToPx(40), 1f);
+            ofP.setMarginEnd(dpToPx(6)); btnOferta.setLayoutParams(ofP);
+            btnOferta.setTextSize(12f);
+            btnOferta.setOnClickListener(v -> mostrarDialogoHacerOferta(
+                    fAutorId,
+                    strSafe(anuncio.get("nombre")),
+                    strSafe(anuncio.get("apellidos")),
+                    strSafe(anuncio.get("categoria_actual")),
+                    tipo, strSafe(anuncio.get("descripcion"))));
+
+            // Botón Contactar (chat directo)
+            MaterialButton btnChat = crearBotonPrimario("💬  Contactar");
+            LinearLayout.LayoutParams chatP = new LinearLayout.LayoutParams(0, dpToPx(40), 1f);
+            chatP.setMarginStart(dpToPx(6)); btnChat.setLayoutParams(chatP);
+            btnChat.setTextSize(12f);
+            btnChat.setOnClickListener(v -> {
+                Intent intent = new Intent(ZonaActivity.this, ConversacionActivity.class);
+                intent.putExtra("receptor_id", fAutorId);
+                intent.putExtra("receptor_nombre",    strSafe(anuncio.get("nombre")));
+                intent.putExtra("receptor_apellidos", strSafe(anuncio.get("apellidos")));
+                intent.putExtra("receptor_categoria", strSafe(anuncio.get("categoria_actual")));
+                startActivity(intent);
+            });
+
+            filaCliente.addView(btnOferta);
+            filaCliente.addView(btnChat);
+            inner.addView(filaCliente);
+        }
+
         card.addView(inner);
         llAnuncios.addView(card);
     }
@@ -441,6 +968,7 @@ public class ZonaActivity extends BaseDrawerActivity {
         String nombrePala = extraerTag(desc, "NOMBRE");
         String marca      = extraerTag(desc, "MARCA");
         String modelo     = extraerTag(desc, "MODELO");
+        String precio     = extraerTag(desc, "PRECIO");
         String estado     = extraerTag(desc, "ESTADO");
         String descTexto  = extraerTag(desc, "DESC");
         String fotosRaw   = extraerTag(desc, "FOTOS");
@@ -559,6 +1087,44 @@ public class ZonaActivity extends BaseDrawerActivity {
             infoLayout.addView(chipRow);
         }
 
+        // Precio: chip corporativo con fondo verde lima, texto oscuro, sin emojis
+        if (!precio.isEmpty()) {
+            LinearLayout.LayoutParams prP = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            prP.setMargins(0, dpToPx(10), 0, 0);
+
+            // Chip: fondo verde lima, esquinas redondeadas, padding interno
+            LinearLayout chipPrecio = new LinearLayout(this);
+            chipPrecio.setLayoutParams(prP);
+            chipPrecio.setOrientation(LinearLayout.HORIZONTAL);
+            chipPrecio.setGravity(Gravity.CENTER_VERTICAL);
+            chipPrecio.setPadding(dpToPx(12), dpToPx(6), dpToPx(14), dpToPx(6));
+            GradientDrawable bgChip = new GradientDrawable();
+            bgChip.setColor(getResources().getColor(R.color.verde_lima, getTheme()));
+            bgChip.setCornerRadius(dpToPx(20));
+            chipPrecio.setBackground(bgChip);
+
+            // Símbolo € pequeño
+            TextView tvEuro = new TextView(this);
+            tvEuro.setText("€");
+            tvEuro.setTextColor(getResources().getColor(R.color.fondo_oscuro, getTheme()));
+            tvEuro.setTextSize(13f);
+            tvEuro.setTypeface(null, Typeface.BOLD);
+            tvEuro.setPadding(0, 0, dpToPx(4), 0);
+            chipPrecio.addView(tvEuro);
+
+            // Valor del precio
+            String precioValor = precio.replace("€", "").trim();
+            TextView tvValor = new TextView(this);
+            tvValor.setText(precioValor + " €");
+            tvValor.setTextColor(getResources().getColor(R.color.fondo_oscuro, getTheme()));
+            tvValor.setTextSize(20f);
+            tvValor.setTypeface(null, Typeface.BOLD);
+            chipPrecio.addView(tvValor);
+
+            infoLayout.addView(chipPrecio);
+        }
+
         // Estado y descripción
         if (!estado.isEmpty()) {
             TextView tvEstado = new TextView(this);
@@ -584,6 +1150,58 @@ public class ZonaActivity extends BaseDrawerActivity {
             infoLayout.addView(tvD);
         }
         infoLayout.addView(crearFecha(timestamp));
+
+        // Botones editar/eliminar para anuncios propios
+        long autorId = anuncio.get("autor_id") instanceof Long ? (Long) anuncio.get("autor_id") : -1L;
+        long anuncioId = anuncio.get("id") instanceof Long ? (Long) anuncio.get("id") : -1L;
+        if (autorId == miId && anuncioId != -1) {
+            LinearLayout.LayoutParams acP = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            acP.setMargins(dpToPx(16), dpToPx(4), dpToPx(16), dpToPx(4));
+            View accionesView = crearFilaAccionesAnuncio(anuncioId, "PALA", desc, anuncio);
+            accionesView.setLayoutParams(acP);
+            infoLayout.addView(accionesView);
+        } else if (autorId != -1 && autorId != miId) {
+            // Fila de acciones para palas ajenas
+            final long fAutorId = autorId;
+            LinearLayout filaCliente = new LinearLayout(this);
+            filaCliente.setOrientation(LinearLayout.HORIZONTAL);
+            LinearLayout.LayoutParams filaP = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            filaP.setMargins(dpToPx(16), dpToPx(10), dpToPx(16), dpToPx(4));
+            filaCliente.setLayoutParams(filaP);
+
+            // Botón Hacer oferta (precio diferente al pedido)
+            MaterialButton btnOferta = crearBotonSecundario("💸  Hacer oferta");
+            LinearLayout.LayoutParams ofP = new LinearLayout.LayoutParams(0, dpToPx(44), 1f);
+            ofP.setMarginEnd(dpToPx(6)); btnOferta.setLayoutParams(ofP);
+            btnOferta.setTextSize(12f);
+            btnOferta.setOnClickListener(v -> mostrarDialogoHacerOferta(
+                    fAutorId,
+                    strSafe(anuncio.get("nombre")),
+                    strSafe(anuncio.get("apellidos")),
+                    strSafe(anuncio.get("categoria_actual")),
+                    "PALA", strSafe(anuncio.get("descripcion"))));
+
+            // Botón Contactar con el vendedor
+            MaterialButton btnChat = crearBotonPrimario("💬  Contactar");
+            LinearLayout.LayoutParams chatP = new LinearLayout.LayoutParams(0, dpToPx(44), 1f);
+            chatP.setMarginStart(dpToPx(6)); btnChat.setLayoutParams(chatP);
+            btnChat.setTextSize(12f);
+            btnChat.setOnClickListener(v -> {
+                Intent intent = new Intent(ZonaActivity.this, ConversacionActivity.class);
+                intent.putExtra("receptor_id", fAutorId);
+                intent.putExtra("receptor_nombre",    strSafe(anuncio.get("nombre")));
+                intent.putExtra("receptor_apellidos", strSafe(anuncio.get("apellidos")));
+                intent.putExtra("receptor_categoria", strSafe(anuncio.get("categoria_actual")));
+                startActivity(intent);
+            });
+
+            filaCliente.addView(btnOferta);
+            filaCliente.addView(btnChat);
+            infoLayout.addView(filaCliente);
+        }
+
         inner.addView(infoLayout);
         card.addView(inner);
         llAnuncios.addView(card);
@@ -773,18 +1391,31 @@ public class ZonaActivity extends BaseDrawerActivity {
         btnModelo.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(44)));
         btnModelo.setOnClickListener(v -> {
-            String[] modelos = marcaSeleccionada[0].isEmpty()
-                    ? new String[]{"Selecciona primero una marca"}
-                    : MODELOS_POR_MARCA.getOrDefault(marcaSeleccionada[0], new String[]{"Modelo libre"});
             if (marcaSeleccionada[0].isEmpty()) {
                 Toast.makeText(this, "Selecciona primero la marca", Toast.LENGTH_SHORT).show();
                 return;
             }
-            mostrarDialogoLista("📋 Modelo de " + marcaSeleccionada[0],
-                    Arrays.asList(modelos), item -> {
-                        modeloSeleccionado[0] = item;
-                        btnModelo.setText("📋 " + item);
-                    });
+            String[] modelosMarca = MODELOS_POR_MARCA.getOrDefault(
+                    marcaSeleccionada[0], new String[0]);
+            // Construimos lista con todos los modelos de la marca + opción manual al final
+            List<String> listaModelos = new ArrayList<>(Arrays.asList(modelosMarca));
+            listaModelos.add("✏️  Otro (escribir a mano)");
+            mostrarDialogoLista("📋 Modelo de " + marcaSeleccionada[0], listaModelos, item -> {
+                if (item.startsWith("✏️")) {
+                    // Modelo no listado → entrada manual en diálogo oscuro
+                    mostrarDialogoInputOscuro(
+                            "✏️  Modelo personalizado",
+                            "Escribe el nombre exacto del modelo:",
+                            "Ej: Hack 04 Edición Limitada",
+                            texto -> {
+                                modeloSeleccionado[0] = texto;
+                                btnModelo.setText("📋 " + texto);
+                            });
+                } else {
+                    modeloSeleccionado[0] = item;
+                    btnModelo.setText("📋 " + item);
+                }
+            });
         });
         form.addView(btnModelo);
 
@@ -887,12 +1518,18 @@ public class ZonaActivity extends BaseDrawerActivity {
         }
         form.addView(fotoRow);
 
+        // ── Precio ──────────────────────────────────────────────────────────
+        addSpacer(form, 10);
+        form.addView(crearLabel("💶  Precio (€)  *obligatorio*"));
+        EditText etPrecio = crearEditText("Ej: 120", true);
+        form.addView(etPrecio);
+
         // ── Descripción ─────────────────────────────────────────────────────
         addSpacer(form, 10);
         form.addView(crearLabel(getString(R.string.zona_desc_opcional)));
         EditText etDesc = crearEditTextMultiline(
                 "Ej: Pala poco usada, excelente estado. Golpeo potente y buena salida de bola. " +
-                "Ideal para jugadores de nivel 3ª en adelante. Precio negociable.");
+                "Ideal para jugadores de nivel 3ª en adelante.");
         form.addView(etDesc);
 
         outer.addView(sv);
@@ -911,6 +1548,13 @@ public class ZonaActivity extends BaseDrawerActivity {
             String nomPala = etNombre.getText().toString().trim();
             String marca   = marcaSeleccionada[0];
             String modelo  = modeloSeleccionado[0];
+            String precio  = etPrecio.getText().toString().trim();
+
+            // Precio obligatorio
+            if (precio.isEmpty()) {
+                Toast.makeText(this, "Indica el precio de la pala", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             // Si no se escribió nombre libre, usamos el modelo o la marca como identificador
             String nombreFinal = nomPala.isEmpty()
@@ -932,8 +1576,9 @@ public class ZonaActivity extends BaseDrawerActivity {
             // agregarTarjetaPala() usa extraerTag() para leer cada campo al renderizar.
             StringBuilder sb = new StringBuilder();
             sb.append("@@NOMBRE:").append(nombreFinal).append("\n");
-            if (!marca.isEmpty())    sb.append("@@MARCA:").append(marca).append("\n");
-            if (!modelo.isEmpty())   sb.append("@@MODELO:").append(modelo).append("\n");
+            if (!marca.isEmpty())  sb.append("@@MARCA:").append(marca).append("\n");
+            if (!modelo.isEmpty()) sb.append("@@MODELO:").append(modelo).append("\n");
+            sb.append("@@PRECIO:").append(precio).append("€\n");
             sb.append("@@ESTADO:").append(estadoText).append("\n");
             if (!descText.isEmpty()) sb.append("@@DESC:").append(descText).append("\n");
 
@@ -1256,6 +1901,286 @@ public class ZonaActivity extends BaseDrawerActivity {
         return fila;
     }
 
+    // ─────────────────────────────────────────────────────────────────────────
+    // Editar y eliminar anuncios propios
+    // ─────────────────────────────────────────────────────────────────────────
+
+    // Crea una fila horizontal con botones ✏️ Editar y 🗑️ Eliminar para anuncios del propio usuario.
+    // Solo se añade a tarjetas cuyo autor_id == miId.
+    private View crearFilaAccionesAnuncio(long anuncioId, String tipo,
+                                           String descripcionActual,
+                                           Map<String, Object> anuncio) {
+        LinearLayout fila = new LinearLayout(this);
+        fila.setOrientation(LinearLayout.HORIZONTAL);
+        LinearLayout.LayoutParams fp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        fp.setMargins(0, dpToPx(10), 0, 0);
+        fila.setLayoutParams(fp);
+
+        // Botón Editar
+        MaterialButton btnEditar = crearBotonSecundario("✏️  Editar");
+        LinearLayout.LayoutParams ep = new LinearLayout.LayoutParams(0, dpToPx(36), 1f);
+        ep.setMarginEnd(dpToPx(8)); btnEditar.setLayoutParams(ep);
+        btnEditar.setTextSize(12f);
+        btnEditar.setOnClickListener(v -> mostrarEditorAnuncio(anuncioId, tipo, anuncio));
+
+        // Botón Eliminar (rojo)
+        MaterialButton btnEliminar = new MaterialButton(this);
+        btnEliminar.setText("🗑️  Eliminar");
+        btnEliminar.setTextColor(Color.WHITE);
+        btnEliminar.setBackgroundTintList(ColorStateList.valueOf(0xFFD32F2F));
+        btnEliminar.setCornerRadius(dpToPx(12));
+        btnEliminar.setTextSize(12f);
+        LinearLayout.LayoutParams dp2 = new LinearLayout.LayoutParams(0, dpToPx(36), 1f);
+        btnEliminar.setLayoutParams(dp2);
+        btnEliminar.setOnClickListener(v -> confirmarEliminarAnuncio(anuncioId));
+
+        fila.addView(btnEditar);
+        fila.addView(btnEliminar);
+        return fila;
+    }
+
+    // Muestra confirmación antes de eliminar un anuncio.
+    private void confirmarEliminarAnuncio(long anuncioId) {
+        LinearLayout outer = crearDialogLayout();
+        outer.addView(crearTituloDialog("🗑️  Eliminar anuncio"));
+
+        TextView tvMsg = new TextView(this);
+        tvMsg.setText("¿Seguro que quieres eliminar este anuncio? Esta acción no se puede deshacer.");
+        tvMsg.setTextColor(0xFFCCCCCC);
+        tvMsg.setTextSize(14f);
+        tvMsg.setLineSpacing(dpToPx(2), 1f);
+        outer.addView(tvMsg);
+
+        LinearLayout llBtn = crearFilaBotones();
+        MaterialButton btnC = crearBotonSecundario("Cancelar");
+        LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(0, dpToPx(46), 1f);
+        cp.setMarginEnd(dpToPx(8)); btnC.setLayoutParams(cp);
+
+        MaterialButton btnOk = new MaterialButton(this);
+        btnOk.setText("Eliminar");
+        btnOk.setTextColor(Color.WHITE);
+        btnOk.setBackgroundTintList(ColorStateList.valueOf(0xFFD32F2F));
+        btnOk.setCornerRadius(dpToPx(12));
+        LinearLayout.LayoutParams op = new LinearLayout.LayoutParams(0, dpToPx(46), 1f);
+        op.setMarginStart(dpToPx(8)); btnOk.setLayoutParams(op);
+        llBtn.addView(btnC); llBtn.addView(btnOk);
+        outer.addView(llBtn);
+
+        final AlertDialog[] d = { mostrarDialog(outer) };
+        btnC.setOnClickListener(v -> { if (d[0] != null) d[0].dismiss(); });
+        btnOk.setOnClickListener(v -> {
+            if (d[0] != null) d[0].dismiss();
+            if (db.eliminarAnuncio(anuncioId)) {
+                Toast.makeText(this, "Anuncio eliminado", Toast.LENGTH_SHORT).show();
+                cargarAnuncios();
+            } else {
+                Toast.makeText(this, "Error al eliminar", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    // Abre el editor apropiado según el tipo de anuncio.
+    private void mostrarEditorAnuncio(long anuncioId, String tipo, Map<String, Object> anuncio) {
+        String desc = strSafe(anuncio.get("descripcion"));
+        switch (tipo) {
+            case "PALA":
+                mostrarEditorAnuncioPala(anuncioId, desc);
+                break;
+            default:
+                // PARTIDA, CLASE_OFRECER, CLASE_SOLICITAR → editor de texto libre
+                mostrarEditorAnuncioTexto(anuncioId, tipo, desc);
+                break;
+        }
+    }
+
+    // Editor para PALA: permite editar el nombre, precio y descripción libre.
+    private void mostrarEditorAnuncioPala(long anuncioId, String desc) {
+        String nombreActual = extraerTag(desc, "NOMBRE");
+        String precioActual = extraerTag(desc, "PRECIO").replace("€", "").trim();
+        String descActual   = extraerTag(desc, "DESC");
+
+        LinearLayout outer = crearDialogLayout();
+        outer.addView(crearTituloDialog("✏️  Editar anuncio de pala"));
+
+        outer.addView(crearLabel("Nombre de la pala:"));
+        addSpacer(outer, 6);
+        EditText etNombre = crearEditText("Ej: Bullpadel Hack 04", false);
+        etNombre.setText(nombreActual);
+        outer.addView(etNombre);
+
+        addSpacer(outer, 10);
+        outer.addView(crearLabel("Precio (€):"));
+        addSpacer(outer, 6);
+        EditText etPrecio = crearEditText("Ej: 150", false);
+        etPrecio.setText(precioActual);
+        etPrecio.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        outer.addView(etPrecio);
+
+        addSpacer(outer, 10);
+        outer.addView(crearLabel("Descripción (opcional):"));
+        addSpacer(outer, 6);
+        EditText etDesc = crearEditTextMultiline("Ej: Pala poco usada, excelente estado. Precio negociable.");
+        etDesc.setText(descActual);
+        outer.addView(etDesc);
+
+        LinearLayout llBtn = crearFilaBotones();
+        MaterialButton btnC = crearBotonSecundario("Cancelar");
+        LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(0, dpToPx(46), 1f);
+        cp.setMarginEnd(dpToPx(8)); btnC.setLayoutParams(cp);
+        MaterialButton btnG = crearBotonPrimario("Guardar");
+        LinearLayout.LayoutParams gp = new LinearLayout.LayoutParams(0, dpToPx(46), 1f);
+        gp.setMarginStart(dpToPx(8)); btnG.setLayoutParams(gp);
+        llBtn.addView(btnC); llBtn.addView(btnG);
+        outer.addView(llBtn);
+
+        final AlertDialog[] d = { mostrarDialog(outer) };
+        btnC.setOnClickListener(v -> { if (d[0] != null) d[0].dismiss(); });
+        btnG.setOnClickListener(v -> {
+            String nuevoNombre = etNombre.getText().toString().trim();
+            String nuevoPrecio = etPrecio.getText().toString().trim();
+            String nuevaDesc   = etDesc.getText().toString().trim();
+
+            // Reemplazamos cada tag en el bloque de descripción estructurada
+            String descFinal = desc;
+            if (!nuevoNombre.isEmpty()) {
+                descFinal = descFinal.contains("@@NOMBRE:")
+                    ? descFinal.replaceFirst("(?s)@@NOMBRE:[^\n]*\n?", "@@NOMBRE:" + nuevoNombre + "\n")
+                    : "@@NOMBRE:" + nuevoNombre + "\n" + descFinal;
+            }
+            if (!nuevoPrecio.isEmpty()) {
+                String tagPrecio = "@@PRECIO:" + nuevoPrecio + "€\n";
+                descFinal = descFinal.contains("@@PRECIO:")
+                    ? descFinal.replaceFirst("(?s)@@PRECIO:[^\n]*\n?", tagPrecio)
+                    : descFinal + tagPrecio;
+            }
+            if (descFinal.contains("@@DESC:")) {
+                descFinal = descFinal.replaceFirst("(?s)@@DESC:[^\n]*\n?",
+                        nuevaDesc.isEmpty() ? "" : "@@DESC:" + nuevaDesc + "\n");
+            } else if (!nuevaDesc.isEmpty()) {
+                descFinal = descFinal + "@@DESC:" + nuevaDesc + "\n";
+            }
+            guardarEdicionAnuncio(d, anuncioId, descFinal);
+        });
+    }
+
+    // Editor genérico para PARTIDA y CLASES: texto libre editable en multilínea.
+    private void mostrarEditorAnuncioTexto(long anuncioId, String tipo, String desc) {
+        LinearLayout outer = crearDialogLayout();
+        String tituloEditor = "PARTIDA".equals(tipo) ? "✏️  Editar partida"
+                            : "CLASE_OFRECER".equals(tipo) ? "✏️  Editar clase ofrecida"
+                            : "✏️  Editar clase buscada";
+        outer.addView(crearTituloDialog(tituloEditor));
+        outer.addView(crearLabel("Descripción del anuncio:"));
+        addSpacer(outer, 8);
+
+        EditText etDesc = crearEditTextMultiline("Escribe aquí el contenido del anuncio…");
+        etDesc.setText(desc);
+        etDesc.setMaxLines(8);
+        LinearLayout.LayoutParams ep = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        ep.setMargins(0, 0, 0, dpToPx(4)); etDesc.setLayoutParams(ep);
+        outer.addView(etDesc);
+
+        LinearLayout llBtn = crearFilaBotones();
+        MaterialButton btnC = crearBotonSecundario("Cancelar");
+        LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(0, dpToPx(46), 1f);
+        cp.setMarginEnd(dpToPx(8)); btnC.setLayoutParams(cp);
+        MaterialButton btnG = crearBotonPrimario("Guardar");
+        LinearLayout.LayoutParams gp = new LinearLayout.LayoutParams(0, dpToPx(46), 1f);
+        gp.setMarginStart(dpToPx(8)); btnG.setLayoutParams(gp);
+        llBtn.addView(btnC); llBtn.addView(btnG);
+        outer.addView(llBtn);
+
+        final AlertDialog[] d = { mostrarDialog(outer) };
+        btnC.setOnClickListener(v -> { if (d[0] != null) d[0].dismiss(); });
+        btnG.setOnClickListener(v -> guardarEdicionAnuncio(d, anuncioId,
+                etDesc.getText().toString().trim()));
+    }
+
+    // Diálogo "Hacer oferta": el usuario cliente introduce un precio y se abre ConversacionActivity
+    // con el mensaje de oferta pre-rellenado para que lo envíe (o lo edite) al vendedor.
+    private void mostrarDialogoHacerOferta(long receptorId, String nombre, String apellidos,
+                                            String categoria, String tipo, String desc) {
+        // Nombre del ítem para personalizar el mensaje
+        String itemNombre = "PALA".equals(tipo) ? extraerTag(desc, "NOMBRE") : "";
+        String precioAnuncio = "PALA".equals(tipo) ? extraerTag(desc, "PRECIO") : "";
+
+        LinearLayout outer = crearDialogLayout();
+        outer.addView(crearTituloDialog("💸  Hacer una oferta"));
+
+        TextView tvInfo = new TextView(this);
+        String infoText = itemNombre.isEmpty()
+                ? "Escribe la cantidad que ofreces por este anuncio:"
+                : "Escribe la cantidad que ofreces por la pala \"" + itemNombre + "\""
+                  + (precioAnuncio.isEmpty() ? ":" : " (precio pedido: " + precioAnuncio + "):");
+        tvInfo.setText(infoText);
+        tvInfo.setTextColor(0xFFCCCCCC);
+        tvInfo.setTextSize(13f);
+        tvInfo.setLineSpacing(dpToPx(2), 1f);
+        LinearLayout.LayoutParams infoP = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        infoP.setMargins(0, 0, 0, dpToPx(12));
+        tvInfo.setLayoutParams(infoP);
+        outer.addView(tvInfo);
+
+        outer.addView(crearLabel("Tu oferta (€):"));
+        addSpacer(outer, 6);
+        EditText etOferta = crearEditText("Ej: 120", false);
+        etOferta.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        outer.addView(etOferta);
+
+        LinearLayout llBtn = crearFilaBotones();
+        MaterialButton btnC = crearBotonSecundario("Cancelar");
+        LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(0, dpToPx(46), 1f);
+        cp.setMarginEnd(dpToPx(8)); btnC.setLayoutParams(cp);
+        MaterialButton btnOk = crearBotonPrimario("Enviar oferta");
+        LinearLayout.LayoutParams op = new LinearLayout.LayoutParams(0, dpToPx(46), 1f);
+        op.setMarginStart(dpToPx(8)); btnOk.setLayoutParams(op);
+        llBtn.addView(btnC); llBtn.addView(btnOk);
+        outer.addView(llBtn);
+
+        final AlertDialog[] d = { mostrarDialog(outer) };
+        btnC.setOnClickListener(v -> { if (d[0] != null) d[0].dismiss(); });
+        btnOk.setOnClickListener(v -> {
+            String cantidadStr = etOferta.getText().toString().trim();
+            if (cantidadStr.isEmpty()) {
+                Toast.makeText(this, "Introduce una cantidad", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (d[0] != null) d[0].dismiss();
+
+            // Construimos el mensaje de oferta pre-rellenado
+            String msgOferta;
+            if (!itemNombre.isEmpty()) {
+                msgOferta = "Hola, me interesa tu pala \"" + itemNombre
+                        + "\". Te ofrezco " + cantidadStr + " €. ¿Está disponible?";
+            } else {
+                msgOferta = "Hola, te hago una oferta de " + cantidadStr + " € por tu anuncio. ¿Te interesa?";
+            }
+
+            Intent intent = new Intent(ZonaActivity.this, ConversacionActivity.class);
+            intent.putExtra("receptor_id", receptorId);
+            intent.putExtra("receptor_nombre", nombre);
+            intent.putExtra("receptor_apellidos", apellidos);
+            intent.putExtra("receptor_categoria", categoria);
+            intent.putExtra("mensaje_inicial", msgOferta);
+            startActivity(intent);
+        });
+    }
+
+    // Guarda la edición en BD, cierra el diálogo y recarga la lista.
+    private void guardarEdicionAnuncio(AlertDialog[] d, long anuncioId, String nuevaDesc) {
+        if (db.actualizarAnuncio(anuncioId, nuevaDesc)) {
+            if (d[0] != null) d[0].dismiss();
+            Toast.makeText(this, "Anuncio actualizado", Toast.LENGTH_SHORT).show();
+            cargarAnuncios();
+        } else {
+            Toast.makeText(this, "Error al guardar los cambios", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
     // Bloque reutilizable: label provincia (read-only) + selector ciudad API INE + selector pista API Overpass
     private void agregarSeccionLocalidadPista(LinearLayout form,
                                                String[] ciudadSel, String[] pistaSel) {
@@ -1301,33 +2226,135 @@ public class ZonaActivity extends BaseDrawerActivity {
     // API: municipios del INE + pistas de pádel via Overpass/OSM
     // ─────────────────────────────────────────────────────────────────────────
 
-    // Muestra un diálogo con todos los municipios de la provincia actual.
+    // Muestra un diálogo buscable con todos los municipios de la provincia.
     // La carga es asíncrona (Thread): mientras descarga desactiva el botón.
+    // Un EditText de búsqueda filtra la lista en tiempo real para facilitar la navegación
+    // en provincias con muchos municipios (p.ej. Salamanca tiene más de 300).
     private void mostrarSelectorLocalidad(String provincia, MaterialButton btn,
                                            OnItemSelected callback) {
         if (provincia == null || provincia.isEmpty()) {
             Toast.makeText(this, "Selecciona primero una provincia", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        // Primero consultamos los datos locales (sin red, instantáneo)
+        List<String> municipiosLocales = getMunicipiosLocales(provincia);
+        if (!municipiosLocales.isEmpty()) {
+            mostrarDialogoListaBuscable(
+                    "📍  Ciudad / Pueblo — " + provincia,
+                    municipiosLocales,
+                    item -> {
+                        btn.setText("📍 " + item);
+                        callback.onSelected(item);
+                    });
+            return;
+        }
+
+        // Fallback asíncrono: INE API si la provincia no está en el mapa local
         String textoOrig = btn.getText().toString();
         btn.setText("⏳ Cargando municipios…"); btn.setEnabled(false);
-
         new Thread(() -> {
             List<String> municipios = fetchMunicipiosINE(provincia);
             runOnUiThread(() -> {
                 btn.setEnabled(true); btn.setText(textoOrig);
                 if (municipios.isEmpty()) {
-                    Toast.makeText(this,
-                            "No se pudo cargar la lista. Comprueba tu conexión.",
-                            Toast.LENGTH_LONG).show();
+                    mostrarDialogoInputOscuro(
+                            "📍  Sin conexión",
+                            "No se pudo cargar la lista. Escribe tu localidad:",
+                            "Ej: Salamanca, Leganés, Marbella…",
+                            texto -> { btn.setText("📍 " + texto); callback.onSelected(texto); });
                 } else {
-                    mostrarDialogoLista("📍 Ciudad / Pueblo en " + provincia, municipios, item -> {
-                        btn.setText("📍 " + item);
-                        callback.onSelected(item);
-                    });
+                    mostrarDialogoListaBuscable(
+                            "📍  Ciudad / Pueblo — " + provincia,
+                            municipios,
+                            item -> {
+                                btn.setText("📍 " + item);
+                                callback.onSelected(item);
+                            });
                 }
             });
         }).start();
+    }
+
+    // Diálogo oscuro con lista buscable: muestra todos los ítems y los filtra en tiempo real.
+    // Usa el mismo estilo oscuro (crearDialogLayout + mostrarDialog) que el resto de formularios.
+    // Imprescindible para provincias con muchos municipios (Salamanca, Ávila, Soria…).
+    private void mostrarDialogoListaBuscable(String titulo, List<String> items,
+                                              OnItemSelected callback) {
+        // Envolvemos todo en el layout oscuro de la app
+        LinearLayout outer = crearDialogLayout();
+        outer.addView(crearTituloDialog(titulo));
+
+        // Campo de búsqueda con estilo oscuro
+        EditText etBuscar = crearEditText("🔍  Buscar municipio…", false);
+        LinearLayout.LayoutParams etP = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(44));
+        etP.setMargins(0, 0, 0, dpToPx(10));
+        etBuscar.setLayoutParams(etP);
+        outer.addView(etBuscar);
+
+        // ListView oscuro con altura fija para no desbordarse en pantallas pequeñas
+        android.widget.ListView listView = new android.widget.ListView(this);
+        listView.setBackgroundColor(0xFF161616);
+        listView.setDividerHeight(1);
+        listView.setDivider(new android.graphics.drawable.ColorDrawable(0xFF2A2A2A));
+        listView.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(300)));
+        outer.addView(listView);
+
+        // Adaptador con layout personalizado (texto blanco sobre fondo oscuro)
+        final List<String> listaActual = new ArrayList<>(items);
+        android.widget.BaseAdapter adapter = new android.widget.BaseAdapter() {
+            @Override public int getCount() { return listaActual.size(); }
+            @Override public String getItem(int pos) { return listaActual.get(pos); }
+            @Override public long getItemId(int pos) { return pos; }
+            @Override public android.view.View getView(int pos, android.view.View cv,
+                                                        android.view.ViewGroup parent) {
+                TextView tv = (cv instanceof TextView) ? (TextView) cv : new TextView(ZonaActivity.this);
+                tv.setText(listaActual.get(pos));
+                tv.setTextColor(0xFFDDDDDD);
+                tv.setTextSize(14f);
+                tv.setPadding(dpToPx(14), dpToPx(12), dpToPx(14), dpToPx(12));
+                tv.setBackgroundColor(0xFF161616);
+                return tv;
+            }
+        };
+        listView.setAdapter(adapter);
+
+        // Botón cancelar al pie
+        LinearLayout llBtn = crearFilaBotones();
+        MaterialButton btnCancelar = crearBotonSecundario("Cancelar");
+        btnCancelar.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(46)));
+        llBtn.addView(btnCancelar);
+        outer.addView(llBtn);
+
+        final AlertDialog[] dialogRef = { mostrarDialog(outer) };
+        btnCancelar.setOnClickListener(v -> { if (dialogRef[0] != null) dialogRef[0].dismiss(); });
+
+        // Al tocar un ítem: cierra el diálogo y notifica al callback
+        listView.setOnItemClickListener((parent, v, pos, id) -> {
+            if (dialogRef[0] != null) dialogRef[0].dismiss();
+            callback.onSelected(listaActual.get(pos));
+        });
+
+        // Filtrado en tiempo real: reconstruye listaActual y refresca el adaptador
+        etBuscar.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+            @Override public void onTextChanged(CharSequence s, int st, int b, int c) {
+                String q = s.toString().toLowerCase(Locale.getDefault()).trim();
+                listaActual.clear();
+                if (q.isEmpty()) {
+                    listaActual.addAll(items);
+                } else {
+                    for (String item : items) {
+                        if (item.toLowerCase(Locale.getDefault()).contains(q)) listaActual.add(item);
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
+            @Override public void afterTextChanged(android.text.Editable s) {}
+        });
     }
 
     // Busca pistas de pádel en la ciudad/pueblo seleccionado usando la API Overpass (OpenStreetMap).
@@ -1346,12 +2373,12 @@ public class ZonaActivity extends BaseDrawerActivity {
             runOnUiThread(() -> {
                 btn.setEnabled(true); btn.setText(textoOrig);
                 if (pistas.isEmpty()) {
-                    // Sin resultados de OSM: ofrecemos entrada manual directamente
+                    // Sin resultados de OSM: entrada manual en diálogo oscuro
                     mostrarDialogoPistaManual(btn, callback);
                 } else {
-                    // Añadimos opción de escribir manualmente al final de la lista
+                    // Añadimos opción de escritura manual al final de la lista
                     pistas.add("✏️  Escribir manualmente…");
-                    mostrarDialogoLista("🏟️ Pistas en " + ciudad, pistas, item -> {
+                    mostrarDialogoListaBuscable("🏟️ Pistas en " + ciudad, pistas, item -> {
                         if (item.startsWith("✏️")) {
                             mostrarDialogoPistaManual(btn, callback);
                         } else {
@@ -1364,122 +2391,233 @@ public class ZonaActivity extends BaseDrawerActivity {
         }).start();
     }
 
-    // Diálogo de entrada manual de pista cuando OSM no devuelve resultados
+    // Diálogo oscuro de entrada manual de pista cuando OSM no devuelve resultados.
     private void mostrarDialogoPistaManual(MaterialButton btn, OnItemSelected callback) {
-        EditText et = new EditText(this);
-        et.setHint("Nombre de la pista o club");
-        et.setTextColor(Color.WHITE); et.setHintTextColor(0xFF888888);
-        LinearLayout container = new LinearLayout(this);
-        container.setPadding(dpToPx(20), dpToPx(16), dpToPx(20), 0);
-        container.addView(et);
-        new AlertDialog.Builder(this)
-            .setTitle("🏟️ Introduce la pista")
-            .setView(container)
-            .setPositiveButton("OK", (d, w) -> {
-                String text = et.getText().toString().trim();
-                if (!text.isEmpty()) { btn.setText("🏟️ " + text); callback.onSelected(text); }
-            })
-            .setNegativeButton("Cancelar", null)
-            .show();
+        mostrarDialogoInputOscuro(
+                "🏟️  Sin resultados en OSM",
+                "Escribe el nombre de la pista o club:",
+                "Ej: Club Pádel Central, Pistas Municipales…",
+                texto -> { btn.setText("🏟️ " + texto); callback.onSelected(texto); });
     }
 
-    // Obtiene la lista de municipios de una provincia usando la API Overpass (OpenStreetMap).
-    // En OSM, las provincias tienen admin_level=6 y los municipios admin_level=8.
-    // Se usa Overpass en lugar del INE porque ya está probado en la app (pistas de pádel)
-    // y el endpoint real del INE para municipios por provincia requiere un formato diferente.
+    // Diálogo oscuro reutilizable para introducir texto libre.
+    // Usa el mismo tema oscuro que el resto de formularios de la app.
+    private void mostrarDialogoInputOscuro(String titulo, String label,
+                                            String hint, OnItemSelected callback) {
+        LinearLayout outer = crearDialogLayout();
+        outer.addView(crearTituloDialog(titulo));
+        if (label != null && !label.isEmpty()) outer.addView(crearLabel(label));
+        addSpacer(outer, 8);
+        EditText et = crearEditText(hint, false);
+        outer.addView(et);
+
+        LinearLayout llBtn = crearFilaBotones();
+        MaterialButton btnC = crearBotonSecundario("Cancelar");
+        LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(0, dpToPx(46), 1f);
+        cp.setMarginEnd(dpToPx(8)); btnC.setLayoutParams(cp);
+        MaterialButton btnOk = crearBotonPrimario("OK");
+        LinearLayout.LayoutParams op = new LinearLayout.LayoutParams(0, dpToPx(46), 1f);
+        op.setMarginStart(dpToPx(8)); btnOk.setLayoutParams(op);
+        llBtn.addView(btnC); llBtn.addView(btnOk);
+        outer.addView(llBtn);
+
+        final AlertDialog[] d = { mostrarDialog(outer) };
+        btnC.setOnClickListener(v -> { if (d[0] != null) d[0].dismiss(); });
+        btnOk.setOnClickListener(v -> {
+            String texto = et.getText().toString().trim();
+            if (!texto.isEmpty()) {
+                if (d[0] != null) d[0].dismiss();
+                callback.onSelected(texto);
+            } else {
+                Toast.makeText(this, "Escribe algo primero", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    // Devuelve la lista local de municipios con pádel para la provincia dada.
+    // Sin llamada de red: respuesta instantánea desde el mapa estático MUNICIPIOS_CON_PADEL.
+    private List<String> getMunicipiosLocales(String provincia) {
+        List<String> lista = MUNICIPIOS_CON_PADEL.get(provincia);
+        if (lista == null) return new ArrayList<>();
+        List<String> resultado = new ArrayList<>(lista);
+        Collections.sort(resultado, (a, b) -> a.compareToIgnoreCase(b));
+        return resultado;
+    }
+
+    // Obtiene la lista de municipios de una provincia usando la API oficial del INE.
+    // Endpoint: https://servicios.ine.es/wstempus/js/ES/MUNICIPIOS/{cod_provincia}
+    // Respuesta: JSON array  [{"Id":"28001","Nombre":"Acebeda (La)"},...]
     // Ejecutar en hilo de fondo; devuelve lista vacía si falla la red.
+    // Si el INE no devuelve resultados (p.ej. sin conexión) cae al fallback de Overpass.
     private List<String> fetchMunicipiosINE(String provincia) {
         List<String> result = new ArrayList<>();
-        try {
-            // Algunos nombres de provincia difieren entre el español oficial y OSM (lenguas cooficiales)
-            String nombreOSM = NOMBRE_OSM_PROVINCIA.getOrDefault(provincia, provincia);
 
-            // Query: relaciones de admin_level 8 (municipios) dentro del área admin_level 6 (provincia)
+        // 1. Intentar la API oficial del INE ────────────────────────────────────
+        String codigoProv = CODIGO_INE.get(provincia);
+        if (codigoProv != null) {
+            try {
+                // El INE requiere el código con cero inicial para provincias 01-09
+                String urlStr = "https://servicios.ine.es/wstempus/js/ES/MUNICIPIOS/" + codigoProv;
+                URL url = new URL(urlStr);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setConnectTimeout(12000);
+                conn.setReadTimeout(20000);
+                conn.setRequestProperty("User-Agent", "PadelDart-TFG/1.0");
+                conn.setRequestProperty("Accept", "application/json");
+                if (conn.getResponseCode() == 200) {
+                    StringBuilder sb = new StringBuilder();
+                    BufferedReader reader = new BufferedReader(
+                            new InputStreamReader(conn.getInputStream(), "UTF-8"));
+                    String line;
+                    while ((line = reader.readLine()) != null) sb.append(line);
+                    reader.close();
+
+                    // La respuesta es un array JSON: [{Id, Nombre}, ...]
+                    JSONArray arr = new JSONArray(sb.toString());
+                    for (int i = 0; i < arr.length(); i++) {
+                        JSONObject obj = arr.getJSONObject(i);
+                        // El campo "Nombre" viene como "Municipio, El" → lo normalizamos
+                        String nombre = obj.optString("Nombre", "").trim();
+                        // Eliminamos el código de provincia del inicio del Nombre si lo incluye
+                        // y normalizamos la forma "Apellido, El" → "El Apellido"
+                        nombre = normalizarNombreMunicipio(nombre);
+                        if (!nombre.isEmpty() && !result.contains(nombre)) result.add(nombre);
+                    }
+                    Collections.sort(result, (a, b) -> a.compareToIgnoreCase(b));
+                    if (!result.isEmpty()) return result;  // éxito: devolvemos ya
+                }
+                conn.disconnect();
+            } catch (Exception ignored) {}
+        }
+
+        // 2. Fallback: Overpass/OSM si el INE no respondió ─────────────────────
+        try {
+            String nombreOSM = NOMBRE_OSM_PROVINCIA.getOrDefault(provincia, provincia);
             String query = "[out:json][timeout:30];" +
                     "area[\"name\"=\"" + nombreOSM.replace("\"", "\\\"") + "\"]" +
                     "[\"admin_level\"=\"6\"]->.p;" +
                     "rel[\"admin_level\"=\"8\"](area.p);" +
                     "out tags;";
-            // Codificamos la query en la URL como parámetro data=
             String urlStr = "https://overpass-api.de/api/interpreter?data=" +
                     URLEncoder.encode(query, "UTF-8");
             URL url = new URL(urlStr);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setConnectTimeout(15000);
-            conn.setReadTimeout(30000);
-            // User-Agent requerido por la política de uso de Overpass API
+            conn.setReadTimeout(35000);
             conn.setRequestProperty("User-Agent", "PadelDart-TFG/1.0");
-            if (conn.getResponseCode() != 200) return result;
-
-            // Leemos la respuesta completa como texto
-            StringBuilder sb = new StringBuilder();
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(conn.getInputStream(), "UTF-8"));
-            String line;
-            while ((line = reader.readLine()) != null) sb.append(line);
-            reader.close();
-
-            // Parseamos el JSON: cada elemento es una relación con campo "tags"
-            JSONObject response = new JSONObject(sb.toString());
-            JSONArray elements  = response.getJSONArray("elements");
-            for (int i = 0; i < elements.length(); i++) {
-                JSONObject el = elements.getJSONObject(i);
-                if (!el.has("tags")) continue;
-                JSONObject tags = el.getJSONObject("tags");
-                // Preferimos "name:es" (nombre en español) sobre "name" (puede estar en otro idioma)
-                String nombre = tags.optString("name:es", tags.optString("name", "")).trim();
-                if (!nombre.isEmpty() && !result.contains(nombre)) result.add(nombre);
+            if (conn.getResponseCode() == 200) {
+                StringBuilder sb = new StringBuilder();
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(conn.getInputStream(), "UTF-8"));
+                String line;
+                while ((line = reader.readLine()) != null) sb.append(line);
+                reader.close();
+                JSONObject response = new JSONObject(sb.toString());
+                JSONArray elements  = response.getJSONArray("elements");
+                for (int i = 0; i < elements.length(); i++) {
+                    JSONObject el = elements.getJSONObject(i);
+                    if (!el.has("tags")) continue;
+                    JSONObject tags = el.getJSONObject("tags");
+                    String nombre = tags.optString("name:es", tags.optString("name", "")).trim();
+                    if (!nombre.isEmpty() && !result.contains(nombre)) result.add(nombre);
+                }
+                Collections.sort(result, (a, b) -> a.compareToIgnoreCase(b));
             }
-            // Ordenamos por nombre ignorando mayúsculas/acentos
-            Collections.sort(result, (a, b) -> a.compareToIgnoreCase(b));
+            conn.disconnect();
         } catch (Exception ignored) {}
+
         return result;
     }
 
+    // Convierte el formato INE "Apellido, El" → "El Apellido" para mejor legibilidad.
+    // También elimina el sufijo bilingüe "Petrer/Petrel" → "Petrer" (queda el nombre principal).
+    // Si el nombre no tiene coma ni barra, lo devuelve tal cual.
+    private String normalizarNombreMunicipio(String nombre) {
+        if (nombre == null) return "";
+
+        // Paso 1: eliminar sufijo bilingüe con "/" (p.ej. "Petrer/Petrel" → "Petrer")
+        int barra = nombre.indexOf('/');
+        if (barra > 0) nombre = nombre.substring(0, barra).trim();
+
+        // Paso 2: convertir formato INE "Principal, Artículo" → "Artículo Principal"
+        int coma = nombre.lastIndexOf(',');
+        if (coma < 0) return nombre;
+        String principal = nombre.substring(0, coma).trim();
+        String articulo  = nombre.substring(coma + 1).trim();
+        // Artículos comunes en español (el, la, los, las, lo, de, del…)
+        if (!articulo.isEmpty() && articulo.length() <= 5) {
+            return articulo + " " + principal;
+        }
+        return nombre;
+    }
+
     // Busca instalaciones de pádel en la ciudad mediante la API Overpass (OpenStreetMap).
-    // La query busca todos los nodos/vías/relaciones con tag sport=padel dentro del área urbana.
-    // Se usa "out center" para que cada entidad devuelva un único punto central (no geometría completa).
-    // Devuelve lista vacía si hay error de red o si OSM no tiene datos de esa ciudad.
+    // IMPORTANTE: la declaración del área (->.a) debe ir ANTES del bloque unión ();
+    //             ponerla dentro del unión es un error de sintaxis de Overpass QL.
+    // Intenta primero buscar el área por nombre de ciudad; si no hay resultados,
+    // amplía la búsqueda con el tag place=city/town/village como filtro adicional.
     private List<String> fetchPistasOverpass(String ciudad) {
         List<String> pistas = new ArrayList<>();
+        String c = ciudad.replace("\"", "\\\"");
+
+        // Query principal: area por nombre exacto → busca sport=padel y variantes
+        String q1 = "[out:json][timeout:25];" +
+                "area[\"name\"=\"" + c + "\"]->.a;" +
+                "(" +
+                "nwr[\"sport\"=\"padel\"](area.a);" +
+                "nwr[\"sport\"~\"padel\",i](area.a);" +
+                "nwr[\"leisure\"=\"pitch\"][\"sport\"=\"padel\"](area.a);" +
+                "nwr[\"leisure\"=\"sports_centre\"][\"sport\"~\"padel\",i](area.a);" +
+                ");" +
+                "out center tags;";
+        pistas.addAll(ejecutarQueryOverpass(q1));
+
+        // Fallback si la query principal no encontró nada:
+        // busca el área filtrando también por tipo de lugar (ciudad/pueblo/municipio)
+        if (pistas.isEmpty()) {
+            String q2 = "[out:json][timeout:30];" +
+                    "area[\"name\"=\"" + c + "\"][\"place\"~\"city|town|village|municipality\"]->.a;" +
+                    "nwr[\"sport\"~\"padel\",i](area.a);" +
+                    "out center tags;";
+            pistas.addAll(ejecutarQueryOverpass(q2));
+        }
+
+        Collections.sort(pistas, (a, b) -> a.compareToIgnoreCase(b));
+        return pistas;
+    }
+
+    // Lanza una query Overpass contra la API pública y extrae los nombres de las instalaciones.
+    // Devuelve lista vacía si falla la red, si hay timeout o si el JSON es inválido.
+    private List<String> ejecutarQueryOverpass(String query) {
+        List<String> nombres = new ArrayList<>();
         try {
-            // area[name=...] busca el área con ese nombre en OSM (normalmente el municipio)
-            String query = "[out:json][timeout:20];" +
-                    "area[\"name\"=\"" + ciudad.replace("\"", "\\\"") + "\"]->.a;" +
-                    "nwr[\"sport\"=\"padel\"](area.a);" +
-                    "out center;";
             String urlStr = "https://overpass-api.de/api/interpreter?data=" +
                     URLEncoder.encode(query, "UTF-8");
-            URL url = new URL(urlStr);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setConnectTimeout(15000); conn.setReadTimeout(25000);
+            HttpURLConnection conn = (HttpURLConnection) new URL(urlStr).openConnection();
+            conn.setConnectTimeout(15_000);
+            conn.setReadTimeout(30_000);
             conn.setRequestProperty("User-Agent", "PadelDart-TFG/1.0");
-            if (conn.getResponseCode() != 200) return pistas;
+            if (conn.getResponseCode() != 200) { conn.disconnect(); return nombres; }
 
-            // Leemos la respuesta completa antes de parsear el JSON
             StringBuilder sb = new StringBuilder();
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(conn.getInputStream(), "UTF-8"));
-            String line;
-            while ((line = reader.readLine()) != null) sb.append(line);
-            reader.close();
+            try (BufferedReader r = new BufferedReader(
+                    new InputStreamReader(conn.getInputStream(), "UTF-8"))) {
+                String ln;
+                while ((ln = r.readLine()) != null) sb.append(ln);
+            }
+            conn.disconnect();
 
-            // Extraemos el campo "name" de las tags de cada elemento con sport=padel
-            JSONObject response = new JSONObject(sb.toString());
-            JSONArray elements  = response.getJSONArray("elements");
+            JSONArray elements = new JSONObject(sb.toString()).optJSONArray("elements");
+            if (elements == null) return nombres;
             for (int i = 0; i < elements.length(); i++) {
                 JSONObject el = elements.getJSONObject(i);
                 if (!el.has("tags")) continue;
                 JSONObject tags = el.getJSONObject("tags");
-                if (tags.has("name")) {
-                    String name = tags.getString("name").trim();
-                    // Evitamos duplicados: algunas pistas aparecen como nodo Y vía en OSM
-                    if (!name.isEmpty() && !pistas.contains(name)) pistas.add(name);
-                }
+                String name = tags.optString("name", "").trim();
+                if (!name.isEmpty() && !nombres.contains(name)) nombres.add(name);
             }
-            Collections.sort(pistas, (a, b) -> a.compareToIgnoreCase(b));
         } catch (Exception ignored) {}
-        return pistas;
+        return nombres;
     }
 
     // Muestra un AlertDialog con lista de ítems simples y llama a callback al seleccionar.

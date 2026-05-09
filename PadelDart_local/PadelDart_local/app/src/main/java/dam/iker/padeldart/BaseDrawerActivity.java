@@ -81,14 +81,15 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         refrescarFotoCabecera();
 
         // Cada opción del menú navega a su Activity correspondiente
-        LinearLayout itemEditar  = findViewById(R.id.itemEditarPerfil);
-        LinearLayout itemAjustes = findViewById(R.id.itemAjustes);
+        LinearLayout itemEditar   = findViewById(R.id.itemEditarPerfil);
+        LinearLayout itemAjustes  = findViewById(R.id.itemAjustes);
+        LinearLayout itemAmigos   = findViewById(R.id.itemAmigos);
+        LinearLayout itemMensajes = findViewById(R.id.itemMensajes);
 
-        LinearLayout itemAmigos  = findViewById(R.id.itemAmigos);
-
-        if (itemAmigos  != null) itemAmigos.setOnClickListener(v -> abrirAmigos());
-        if (itemEditar  != null) itemEditar.setOnClickListener(v -> abrirEditarPerfil());
-        if (itemAjustes != null) itemAjustes.setOnClickListener(v -> abrirAjustes());
+        if (itemMensajes != null) itemMensajes.setOnClickListener(v -> abrirMensajes());
+        if (itemAmigos   != null) itemAmigos.setOnClickListener(v -> abrirAmigos());
+        if (itemEditar   != null) itemEditar.setOnClickListener(v -> abrirEditarPerfil());
+        if (itemAjustes  != null) itemAjustes.setOnClickListener(v -> abrirAjustes());
 
         // Botón de cerrar sesión en rojo: limpia la sesión y vuelve al Login
         MaterialButton btnLogout = findViewById(R.id.btnCerrarSesionDrawer);
@@ -147,6 +148,12 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
     }
 
     // ── Navegación desde el drawer ───────────────────────────────────────────
+
+    // Abre ChatListActivity (bandeja de mensajes) y cierra el drawer
+    private void abrirMensajes() {
+        drawerLayout.closeDrawer(GravityCompat.START);
+        startActivity(new Intent(this, ChatListActivity.class));
+    }
 
     // Abre FriendsActivity y cierra el drawer
     private void abrirAmigos() {
