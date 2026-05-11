@@ -12,7 +12,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.firestore.ListenerRegistration;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,43 +19,38 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-// Pantalla de chat entre dos usuarios. Los mensajes se almacenan en Firestore
-// y se muestran en tiempo real mediante un SnapshotListener de Firestore.
-// Burbujas: verde (enviados) y gris oscuro (recibidos).
+// Pantalla de chat entre dos usuarios. Los mensajes se almacenan en SQLite
+// y se muestran como burbujas: verde (enviados) y gris oscuro (recibidos).
 public class ConversacionActivity extends AppCompatActivity {
 
-    private FirebaseHelper fb;
+    private DatabaseHelper db;
     private SessionManager session;
 
-    // UIDs de ambos extremos de la conversación (ahora son String, no long)
-    private String miId;
-    private String receptorId;
+    // IDs de ambos extremos de la conversación
+    private long miId;
+    private long receptorId;
 
     // Referencias a las vistas de la conversación
-    private LinearLayout     llMensajes;
-    private ScrollView       scrollMensajes;
+    private LinearLayout llMensajes;
+    private ScrollView   scrollMensajes;
     private TextInputEditText etMensaje;
-
-    // Listener en tiempo real de Firestore; hay que cancelarlo en onDestroy para evitar fugas
-    private ListenerRegistration mensajesListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversacion);
 
-        fb      = FirebaseHelper.getInstance();
+        db      = DatabaseHelper.getInstance(this);
         session = SessionManager.getInstance(this);
         miId    = session.getUsuarioActualId();
 
         // Datos del interlocutor recibidos desde ChatListActivity vía Intent extras
-        receptorId = getIntent().getStringExtra("receptor_id"); // String UID de Firebase
+        receptorId = getIntent().getLongExtra("receptor_id", -1);
         String nombre    = getIntent().getStringExtra("receptor_nombre");
         String apellidos = getIntent().getStringExtra("receptor_apellidos");
         String categoria = getIntent().getStringExtra("receptor_categoria");
 
-        // Si no hay receptor válido no podemos abrir el chat
-        if (receptorId == null || receptorId.isEmpty()) { finish(); return; }
+        if (receptorId == -1) { finish(); return; }
 
         // Configuramos la cabecera con los datos del interlocutor
         TextView tvAvatar = findViewById(R.id.tvAvatarHeader);
@@ -70,53 +64,58 @@ public class ConversacionActivity extends AppCompatActivity {
         tvCategoria.setText(categoria != null ? categoria : "");
 
         // Enlazamos las vistas del área de mensajes y el campo de texto
-        llMensajes     = findViewById(R.id.llMensajes);
+        llMensajes    = findViewById(R.id.llMensajes);
         scrollMensajes = findViewById(R.id.scrollMensajes);
-        etMensaje      = findViewById(R.id.etMensaje);
+        etMensaje     = findViewById(R.id.etMensaje);
 
         findViewById(R.id.btnAtras).setOnClickListener(v -> finish());
 
-        // Iniciamos el listener en tiempo real; se actualiza automáticamente con nuevos mensajes
-        mensajesListener = fb.escucharConversacion(miId, receptorId, this::mostrarMensajes);
+        // Cargamos el historial de mensajes de esta conversación
+        cargarMensajes();
 
-        // Al pulsar Enviar: guardamos el mensaje en Firestore (el listener lo mostrará)
+        // Si venimos de "Hacer oferta", pre-rellenamos el campo con el texto de oferta
+        String msgInicial = getIntent().getStringExtra("mensaje_inicial");
+        if (msgInicial != null && !msgInicial.isEmpty()) {
+            etMensaje.setText(msgInicial);
+            etMensaje.setSelection(msgInicial.length());
+        }
+
+        // Botón de enviar: guarda el mensaje en la BD y lo muestra en pantalla
         findViewById(R.id.btnEnviar).setOnClickListener(v -> {
             String texto = etMensaje.getText().toString().trim();
             if (texto.isEmpty()) return;
 
-            etMensaje.setText(""); // Limpiamos el campo antes de la respuesta asíncrona
-            fb.enviarMensaje(miId, receptorId, texto, ok -> {
-                if (!ok) {
-                    Toast.makeText(this, "Error al enviar el mensaje", Toast.LENGTH_SHORT).show();
-                }
-                // Si ok=true el SnapshotListener ya redibuja la lista automáticamente
-            });
+            // Guardamos el mensaje en la tabla mensajes de la BD
+            long id = db.enviarMensaje(miId, receptorId, texto);
+            if (id != -1) {
+                // Mostramos el mensaje en la UI sin recargar toda la lista
+                agregarBurbuja(texto, true, System.currentTimeMillis());
+                etMensaje.setText("");
+                // Hacemos scroll al final para ver el mensaje recién enviado
+                scrollAlFinal();
+            } else {
+                Toast.makeText(this, "Error al enviar el mensaje", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // Cancelamos el listener para evitar actualizaciones en una Activity ya destruida
-        if (mensajesListener != null) mensajesListener.remove();
-    }
-
-    // Limpia la lista y redibuja todos los mensajes con los datos del snapshot
-    private void mostrarMensajes(List<Map<String, Object>> mensajes) {
+    // Consulta la BD y muestra todos los mensajes de esta conversación
+    private void cargarMensajes() {
+        List<Map<String, Object>> mensajes = db.obtenerConversacion(miId, receptorId);
         llMensajes.removeAllViews();
+
         for (Map<String, Object> m : mensajes) {
-            String contenido = (String) m.get("contenido");
-            String emisorId  = (String) m.get("emisor_id");
-            long   timestamp = m.get("timestamp") instanceof Number
-                    ? ((Number) m.get("timestamp")).longValue() : 0L;
-            // Comparamos los UIDs como String para saber si el mensaje es mío
-            agregarBurbuja(contenido, miId.equals(emisorId), timestamp);
+            String contenido  = (String) m.get("contenido");
+            long   emisorId   = (Long)   m.get("emisor_id");
+            long   timestamp  = (Long)   m.get("timestamp");
+            // Determinamos si este mensaje lo envié yo o lo recibí
+            agregarBurbuja(contenido, emisorId == miId, timestamp);
         }
         scrollAlFinal();
     }
 
     // Crea una burbuja de mensaje y la añade al contenedor.
-    // esMio=true → burbuja verde a la derecha; esMio=false → gris a la izquierda.
+    // esMio=true -> burbuja verde a la derecha; esMio=false -> gris a la izquierda.
     private void agregarBurbuja(String texto, boolean esMio, long timestamp) {
         // Wrapper para la alineación (izquierda o derecha)
         LinearLayout wrapper = new LinearLayout(this);

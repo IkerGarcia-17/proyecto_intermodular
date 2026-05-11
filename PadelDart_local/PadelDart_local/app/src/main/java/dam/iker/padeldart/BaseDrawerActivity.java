@@ -1,6 +1,8 @@
 package dam.iker.padeldart;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -15,11 +17,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.button.MaterialButton;
 
+import java.io.InputStream;
 import java.util.Map;
 
 // Clase base para todas las Activities autenticadas.
 // Envuelve cualquier layout en un DrawerLayout con menú lateral.
-// Los datos del cabecero del drawer se cargan de Firestore de forma asíncrona.
+// Extender esta clase en lugar de AppCompatActivity añade el drawer automáticamente.
 public abstract class BaseDrawerActivity extends AppCompatActivity {
 
     // El DrawerLayout raíz que envuelve todo el contenido
@@ -32,6 +35,16 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         // Las subclases llaman a setContentView() normalmente;
         // el override de abajo se encarga de insertar el drawer.
+    }
+
+    // onResume se ejecuta cada vez que esta Activity vuelve al primer plano,
+    // lo que incluye el retorno desde EditProfileActivity.
+    // Así la foto del drawer se refresca automáticamente si el usuario
+    // acaba de actualizar su foto de perfil sin cerrar y reabrir sesión.
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refrescarFotoCabecera();
     }
 
     // Sobrescribimos setContentView para envolver el layout de la subclase
@@ -64,27 +77,36 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
                     drawerLayout.openDrawer(GravityCompat.START));
         }
 
-        // Cargamos los datos del usuario logueado desde Firestore para la cabecera del drawer
-        SessionManager session = SessionManager.getInstance(this);
-        String userId = session.getUsuarioActualId();
-
-        if (!userId.isEmpty()) {
-            // Carga asíncrona: el drawer se rellena cuando llega el dato de Firestore
-            FirebaseHelper.getInstance().obtenerUsuario(userId, usuario -> {
-                if (usuario != null) rellenarCabecera(usuario);
-            });
-        }
+        // Cargamos los datos del usuario logueado para la cabecera del drawer
+        refrescarFotoCabecera();
 
         // Cada opción del menú navega a su Activity correspondiente
-        LinearLayout itemEditar  = findViewById(R.id.itemEditarPerfil);
-        LinearLayout itemAjustes = findViewById(R.id.itemAjustes);
+        LinearLayout itemEditar   = findViewById(R.id.itemEditarPerfil);
+        LinearLayout itemAjustes  = findViewById(R.id.itemAjustes);
+        LinearLayout itemAmigos   = findViewById(R.id.itemAmigos);
+        LinearLayout itemMensajes = findViewById(R.id.itemMensajes);
 
-        if (itemEditar  != null) itemEditar.setOnClickListener(v -> abrirEditarPerfil());
-        if (itemAjustes != null) itemAjustes.setOnClickListener(v -> abrirAjustes());
+        if (itemMensajes != null) itemMensajes.setOnClickListener(v -> abrirMensajes());
+        if (itemAmigos   != null) itemAmigos.setOnClickListener(v -> abrirAmigos());
+        if (itemEditar   != null) itemEditar.setOnClickListener(v -> abrirEditarPerfil());
+        if (itemAjustes  != null) itemAjustes.setOnClickListener(v -> abrirAjustes());
 
-        // Botón de cerrar sesión en rojo: cierra Firebase Auth y vuelve al Login
+        // Botón de cerrar sesión en rojo: limpia la sesión y vuelve al Login
         MaterialButton btnLogout = findViewById(R.id.btnCerrarSesionDrawer);
         if (btnLogout != null) btnLogout.setOnClickListener(v -> cerrarSesion());
+    }
+
+    // Método público para que subclases (ej. EditProfileActivity) puedan forzar
+    // un refresco de la cabecera del drawer tras guardar cambios en el perfil.
+    // También se llama desde onResume para mantenerla siempre actualizada.
+    protected void refrescarFotoCabecera() {
+        SessionManager session = SessionManager.getInstance(this);
+        long userId = session.getUsuarioActualId();
+        if (userId == -1) return; // sin sesión activa no hay nada que cargar
+
+        DatabaseHelper db = DatabaseHelper.getInstance(this);
+        Map<String, Object> usuario = db.obtenerUsuario(userId);
+        if (usuario != null) rellenarCabecera(usuario);
     }
 
     // Rellena el header del drawer con la foto, nombre, categoría y edad del usuario.
@@ -116,20 +138,28 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
             tvInicial.setText(String.valueOf(nombre.charAt(0)).toUpperCase());
         }
 
-        // Foto de perfil: si el usuario tiene URI guardada, la mostramos; si no, la inicial
+        // Foto de perfil: cargamos el bitmap manualmente con openInputStream en lugar
+        // de setImageURI, porque setImageURI delega la decodificación al onMeasure y
+        // cualquier SecurityException (URI de picker revocada) crashea fuera del try-catch.
         String fotoUri = strOrDefault(usuario.get(DatabaseHelper.COL_FOTO_PERFIL), "");
         if (!fotoUri.isEmpty() && imgFoto != null && tvInicial != null) {
-            try {
-                imgFoto.setImageURI(Uri.parse(fotoUri));
-                imgFoto.setVisibility(View.VISIBLE);
-                tvInicial.setVisibility(View.GONE);
-            } catch (Exception e) {
-                // URI inválida: dejamos la inicial
-            }
+            cargarFotoSegura(imgFoto, tvInicial, fotoUri);
         }
     }
 
     // ── Navegación desde el drawer ───────────────────────────────────────────
+
+    // Abre ChatListActivity (bandeja de mensajes) y cierra el drawer
+    private void abrirMensajes() {
+        drawerLayout.closeDrawer(GravityCompat.START);
+        startActivity(new Intent(this, ChatListActivity.class));
+    }
+
+    // Abre FriendsActivity y cierra el drawer
+    private void abrirAmigos() {
+        drawerLayout.closeDrawer(GravityCompat.START);
+        startActivity(new Intent(this, FriendsActivity.class));
+    }
 
     // Abre EditProfileActivity y cierra el drawer
     private void abrirEditarPerfil() {
@@ -143,16 +173,47 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         startActivity(new Intent(this, SettingsActivity.class));
     }
 
-    // Cierra sesión de Firebase Auth y vuelve al Login limpiando el stack de Activities
+    // Cierra sesión: borra el ID de SharedPreferences y vuelve al Login
     private void cerrarSesion() {
         SessionManager.getInstance(this).cerrarSesion();
         Intent intent = new Intent(this, LoginActivity.class);
-        // Limpiamos el stack para que el Atrás no vuelva al menú autenticado
+        // Limpiamos el stack de Activities para que el Atrás no vuelva al menú autenticado
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 
     // ── Helpers ──────────────────────────────────────────────────────────────
+
+    // Carga segura de foto de perfil: abre el InputStream manualmente para que
+    // cualquier SecurityException (URI de picker_get_content revocada entre sesiones)
+    // se capture aquí y no crashee durante el onMeasure del ImageView.
+    // Si la carga falla, oculta la imagen y muestra la inicial del nombre.
+    protected void cargarFotoSegura(ImageView imgFoto, TextView tvInicial, String fotoUri) {
+        try {
+            // Abrimos la URI como stream: esto lanza SecurityException si no hay permiso.
+            // Para URIs file:// (almacenamiento interno) usamos FileInputStream directamente.
+            InputStream is;
+            Uri uri = Uri.parse(fotoUri);
+            if ("file".equals(uri.getScheme())) {
+                is = new java.io.FileInputStream(new java.io.File(uri.getPath()));
+            } else {
+                is = getContentResolver().openInputStream(uri);
+            }
+            Bitmap bmp = BitmapFactory.decodeStream(is);
+
+            if (bmp != null) {
+                imgFoto.setImageBitmap(bmp);
+                imgFoto.setVisibility(View.VISIBLE);
+                if (tvInicial != null) tvInicial.setVisibility(View.GONE);
+            } else {
+                imgFoto.setVisibility(View.GONE);
+                if (tvInicial != null) tvInicial.setVisibility(View.VISIBLE);
+            }
+        } catch (Exception e) {
+            imgFoto.setVisibility(View.GONE);
+            if (tvInicial != null) tvInicial.setVisibility(View.VISIBLE);
+        }
+    }
 
     // Método de conveniencia para abrir el drawer desde una subclase
     protected void abrirDrawer() {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Contenedor raíz con menú lateral. Todas las activities autenticadas
-     lo usan como envoltorio: el contenido real se infla en contenidoActividad. -->
+<!-- Contenedor raíz con menú lateral. Todas las activities autenticadas lo usan
+     como envoltorio: la barra superior siempre visible + el contenido de cada Activity. -->
 <androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -9,42 +9,80 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <!-- ── Contenido principal de la Activity ──────────────────────────────── -->
-    <!-- El hamburger flota encima del contenido en la esquina superior izquierda -->
-    <FrameLayout
+    <!-- ── Contenido principal ──────────────────────────────────────────────── -->
+    <!-- LinearLayout vertical: barra superior fija + contenido de la Activity.
+         La barra ocupa altura fija y NO flota sobre el contenido, evitando
+         que el botón "←" de cada pantalla quede tapado. -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <!-- Aquí BaseDrawerActivity inflará el layout de cada pantalla -->
+        <!-- BARRA SUPERIOR PERSISTENTE: visible en todas las pantallas.
+             Contiene únicamente el botón hamburguesa alineado a la izquierda.
+             Fondo oscuro con borde inferior sutil para separarse del contenido. -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@color/fondo_tarjeta"
+            android:elevation="4dp">
+
+            <!-- Botón hamburguesa: grande, verde lima, esquina izquierda de la barra.
+                 El área de toque de 54dp garantiza que sea fácil de pulsar. -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnHamburguesa"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:layout_gravity="center_vertical"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:padding="6dp"
+                app:icon="@drawable/ic_menu_hamburger"
+                app:iconSize="32dp"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconTint="@color/verde_lima"
+                app:cornerRadius="0dp"
+                android:backgroundTint="@android:color/transparent"
+                android:contentDescription="@string/drawer_perfil" />
+
+            <!-- Nombre de la app como branding en la barra: verde lima brillante,
+                 tamaño moderado para no robar protagonismo al contenido. -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="PadelDart"
+                android:textColor="@color/verde_lima_brillante"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.05"
+                android:layout_marginStart="4dp" />
+
+        </LinearLayout>
+
+        <!-- Línea separadora entre barra superior y el contenido de la Activity -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/fondo_tarjeta_claro" />
+
+        <!-- Aquí BaseDrawerActivity inflará el layout propio de cada Activity.
+             weight=1 hace que ocupe todo el espacio restante bajo la barra. -->
         <FrameLayout
             android:id="@+id/contenidoActividad"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
-        <!-- Hamburger en la esquina DERECHA para no tapar el botón "←" de cada pantalla -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnHamburguesa"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="top|end"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:padding="4dp"
-            app:icon="@drawable/ic_menu_hamburger"
-            app:iconSize="26dp"
-            app:iconGravity="textStart"
-            app:iconPadding="0dp"
-            app:iconTint="@color/verde_lima"
-            app:cornerRadius="24dp"
-            android:backgroundTint="@color/overlay_oscuro"
-            android:contentDescription="@string/drawer_perfil" />
-    </FrameLayout>
+    </LinearLayout>
 
-    <!-- ── Panel lateral del drawer ────────────────────────────────────────── -->
-    <!-- layout_gravity="start" lo sitúa en el lateral izquierdo (o derecho en RTL) -->
+    <!-- ── Panel lateral del drawer ─────────────────────────────────────────── -->
+    <!-- Se desliza desde el lateral izquierdo al pulsar el hamburger.
+         Ancho 290dp: suficiente para opciones de menú cómodas sin tapar demasiado. -->
     <LinearLayout
         android:layout_width="290dp"
         android:layout_height="match_parent"
@@ -53,7 +91,7 @@
         android:background="@color/fondo_tarjeta"
         android:fitsSystemWindows="true">
 
-        <!-- ── Cabecera: foto + datos del usuario ─────────────────────────── -->
+        <!-- ── Cabecera: foto + datos del usuario ─────────────────────────────── -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -62,7 +100,7 @@
             android:gravity="center"
             android:background="@color/fondo_oscuro_medio">
 
-            <!-- Foto de perfil circular; si no tiene, muestra la inicial del nombre -->
+            <!-- Foto de perfil circular; si no tiene foto muestra la inicial del nombre -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardFotoPerfil"
                 android:layout_width="80dp"
@@ -78,7 +116,7 @@
                     android:layout_height="match_parent"
                     android:background="@color/fondo_tarjeta_claro">
 
-                    <!-- Imagen real si el usuario subió foto -->
+                    <!-- Imagen real si el usuario subió foto de perfil -->
                     <ImageView
                         android:id="@+id/imgFotoPerfilDrawer"
                         android:layout_width="match_parent"
@@ -87,7 +125,7 @@
                         android:contentDescription="@string/drawer_perfil"
                         android:visibility="gone" />
 
-                    <!-- Inicial del nombre cuando no hay foto -->
+                    <!-- Inicial del nombre cuando no hay foto cargada -->
                     <TextView
                         android:id="@+id/tvInicialPerfil"
                         android:layout_width="match_parent"
@@ -111,7 +149,7 @@
                 android:textStyle="bold"
                 android:gravity="center" />
 
-            <!-- Categoría de pádel y edad juntas -->
+            <!-- Categoría de pádel -->
             <TextView
                 android:id="@+id/tvCategoriaDrawer"
                 android:layout_width="wrap_content"
@@ -122,6 +160,7 @@
                 android:textSize="12sp"
                 android:gravity="center" />
 
+            <!-- Edad del usuario (oculta si es 0) -->
             <TextView
                 android:id="@+id/tvEdadDrawer"
                 android:layout_width="wrap_content"
@@ -138,7 +177,62 @@
             android:layout_height="1dp"
             android:background="@color/fondo_tarjeta_claro" />
 
-        <!-- ── Opción: Editar perfil ─────────────────────────────────────── -->
+        <!-- ── Opción: Mensajes ──────────────────────────────────────────────── -->
+        <LinearLayout
+            android:id="@+id/itemMensajes"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:background="?attr/selectableItemBackground">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/ic_chat"
+                app:tint="@color/verde_lima"
+                android:contentDescription="@string/drawer_mensajes" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/drawer_mensajes"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <!-- ── Opción: Amigos ────────────────────────────────────────────────── -->
+        <LinearLayout
+            android:id="@+id/itemAmigos"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:background="?attr/selectableItemBackground">
+
+            <!-- Icono de personas en color verde lima corporativo -->
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/ic_people"
+                app:tint="@color/verde_lima"
+                android:contentDescription="@string/drawer_amigos" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/drawer_amigos"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <!-- ── Opción: Editar perfil ─────────────────────────────────────────── -->
         <LinearLayout
             android:id="@+id/itemEditarPerfil"
             android:layout_width="match_parent"
@@ -165,7 +259,7 @@
                 android:textSize="15sp" />
         </LinearLayout>
 
-        <!-- ── Opción: Ajustes (idioma) ──────────────────────────────────── -->
+        <!-- ── Opción: Ajustes (idioma) ──────────────────────────────────────── -->
         <LinearLayout
             android:id="@+id/itemAjustes"
             android:layout_width="match_parent"
@@ -192,7 +286,7 @@
                 android:textSize="15sp" />
         </LinearLayout>
 
-        <!-- Espaciador flexible: empuja el logout al fondo -->
+        <!-- Espaciador flexible: empuja el botón de logout al fondo de la pantalla -->
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -203,7 +297,7 @@
             android:layout_height="1dp"
             android:background="@color/fondo_tarjeta_claro" />
 
-        <!-- ── Botón cerrar sesión en rojo ──────────────────────────────── -->
+        <!-- ── Botón cerrar sesión en rojo ──────────────────────────────────── -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCerrarSesionDrawer"
             android:layout_width="match_parent"

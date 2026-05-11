@@ -86,21 +86,12 @@ public class PartidaDardosActivity extends AppCompatActivity implements OnDardoL
         modo = getIntent().getStringExtra("modo");
         if (modo == null) modo = "pvp";
 
-        // Iniciamos con nombre por defecto; Firestore lo actualizará en cuanto responda
-        initVistas("Jugador 1");
+        // Cargamos el nombre del jugador activo desde la BD
+        String nombreUsuario = cargarNombreUsuario(session.getUsuarioActualId());
+
+        initVistas(nombreUsuario);
         initListenersTeclados();
         actualizarUI();
-
-        // Carga asíncrona del nombre real del usuario logueado desde Firestore
-        String uid = session.getUsuarioActualId();
-        dam.iker.padeldart.FirebaseHelper.getInstance().obtenerUsuario(uid, usuario -> {
-            if (usuario != null && tvNombreJ1 != null) {
-                Object nombre = usuario.get(DatabaseHelper.COL_NOMBRE);
-                if (nombre instanceof String && !((String) nombre).isEmpty()) {
-                    tvNombreJ1.setText((String) nombre);
-                }
-            }
-        });
     }
 
     @Override
@@ -111,6 +102,17 @@ public class PartidaDardosActivity extends AppCompatActivity implements OnDardoL
     }
 
     // ── Inicialización ───────────────────────────────────────────────────────
+
+    // Obtiene el nombre del jugador desde la BD para mostrarlo en el marcador.
+    private String cargarNombreUsuario(long id) {
+        DatabaseHelper db = DatabaseHelper.getInstance(this);
+        Map<String, Object> usuario = db.obtenerUsuario(id);
+        if (usuario != null) {
+            Object nombre = usuario.get(DatabaseHelper.COL_NOMBRE);
+            if (nombre instanceof String) return (String) nombre;
+        }
+        return "Jugador 1";
+    }
 
     // Enlaza las vistas del layout y configura los listeners de la botonera.
     private void initVistas(String nombreJ1) {

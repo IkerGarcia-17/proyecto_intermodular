@@ -13,42 +13,43 @@ import java.util.List;
 import java.util.Map;
 
 // Lista de usuarios para iniciar conversación privada. Extiende BaseDrawerActivity.
-// Ahora carga los usuarios desde Firestore de forma asíncrona usando FirebaseHelper.
+// En local mostramos todos los usuarios registrados en la BD SQLite.
 public class ChatListActivity extends BaseDrawerActivity {
 
-    private SessionManager  session;
-    private LinearLayout    llUsuarios;
+    private DatabaseHelper db;
+    private SessionManager session;
+    private LinearLayout llUsuarios;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_list);
 
-        session    = SessionManager.getInstance(this);
+        db      = DatabaseHelper.getInstance(this);
+        session = SessionManager.getInstance(this);
 
         llUsuarios = findViewById(R.id.llUsuarios);
         findViewById(R.id.btnAtras).setOnClickListener(v -> finish());
 
-        // Obtenemos el UID del usuario logueado (ahora es String, no long)
-        String miId = session.getUsuarioActualId();
+        // Cargamos la lista de otros usuarios (excluyendo al propio usuario logueado)
+        long miId = session.getUsuarioActualId();
+        List<Map<String, Object>> usuarios = db.obtenerTodosUsuariosMenos(miId);
 
-        // Cargamos la lista de otros usuarios desde Firestore de forma asíncrona
-        FirebaseHelper.getInstance().obtenerTodosUsuariosMenos(miId, usuarios -> {
-            if (usuarios.isEmpty()) {
-                mostrarMensajeVacio();
-            } else {
-                // Creamos una tarjeta por cada usuario encontrado en Firestore
-                for (Map<String, Object> u : usuarios) {
-                    añadirTarjetaUsuario(u);
-                }
+        if (usuarios.isEmpty()) {
+            // Si no hay más usuarios registrados, avisamos al usuario
+            mostrarMensajeVacio();
+        } else {
+            // Creamos una tarjeta por cada usuario encontrado
+            for (Map<String, Object> u : usuarios) {
+                añadirTarjetaUsuario(u);
             }
-        });
+        }
     }
 
     // Crea y añade una tarjeta de usuario al contenedor de forma programática.
+    // Esto evita tener que usar un RecyclerView + Adapter para listas simples.
     private void añadirTarjetaUsuario(Map<String, Object> usuario) {
-        // El UID de Firestore viene bajo la clave "id" (añadido en FirebaseHelper)
-        String uid       = (String) usuario.get(DatabaseHelper.COL_ID);
+        long   uid       = (Long)   usuario.get(DatabaseHelper.COL_ID);
         String nombre    = (String) usuario.get(DatabaseHelper.COL_NOMBRE);
         String apellidos = (String) usuario.get(DatabaseHelper.COL_APELLIDOS);
         String categoria = (String) usuario.get(DatabaseHelper.COL_CATEGORIA);
@@ -136,17 +137,17 @@ public class ChatListActivity extends BaseDrawerActivity {
         card.setOnClickListener(v -> abrirConversacion(uid, nombre, apellidos, categoria));
     }
 
-    // Lanza la pantalla de conversación pasando el UID (String) como extra del Intent
-    private void abrirConversacion(String userId, String nombre, String apellidos, String categoria) {
+    // Lanza la pantalla de conversación pasando los datos del interlocutor como extras
+    private void abrirConversacion(long userId, String nombre, String apellidos, String categoria) {
         Intent intent = new Intent(this, ConversacionActivity.class);
-        intent.putExtra("receptor_id",        userId);  // Ahora es String (UID de Firebase)
-        intent.putExtra("receptor_nombre",    nombre   != null ? nombre    : "");
+        intent.putExtra("receptor_id",       userId);
+        intent.putExtra("receptor_nombre",   nombre != null ? nombre : "");
         intent.putExtra("receptor_apellidos", apellidos != null ? apellidos : "");
         intent.putExtra("receptor_categoria", categoria != null ? categoria : "");
         startActivity(intent);
     }
 
-    // Muestra un texto informativo si no hay otros usuarios en Firestore
+    // Muestra un texto informativo si no hay otros usuarios en la BD
     private void mostrarMensajeVacio() {
         TextView tv = new TextView(this);
         tv.setText("Aún no hay otros jugadores registrados.\nRegistra más cuentas para empezar a chatear.");

@@ -1,166 +1,223 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Tablón de anuncios de la zona provincial del usuario -->
-<LinearLayout
+<!-- Tablón de anuncios de zona provincial.
+     CoordinatorLayout como raíz permite que el FAB (botón flotante de publicar)
+     se muestre correctamente encima del scroll y con comportamiento Material. -->
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/fondo_oscuro">
 
-    <!-- Cabecera con nombre de la provincia -->
+    <!-- Contenido principal: cabecera + filtros + lista de anuncios -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingTop="20dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="60dp"
-        android:background="@color/fondo_superficie">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <!-- Flecha de volver: tamaño grande para que sea fácil de pulsar -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAtras"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="←"
-            android:textColor="@color/verde_lima"
-            android:textSize="28sp"
-            android:minWidth="0dp"
-            android:paddingHorizontal="8dp" />
-
-        <!-- El título se actualiza con la provincia del usuario desde el Activity -->
-        <TextView
-            android:id="@+id/tvTituloZona"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="📌  Mi Zona"
-            android:textColor="@color/verde_lima_brillante"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginStart="8dp" />
-
-        <!-- Botón de publicar: más grande, icon + texto, referencia a string -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnNuevoAnuncio"
-            android:layout_width="wrap_content"
-            android:layout_height="44dp"
-            android:text="@string/zona_nuevo_anuncio"
-            android:textColor="@color/fondo_oscuro"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:backgroundTint="@color/verde_lima"
-            app:cornerRadius="22dp"
-            app:icon="@android:drawable/ic_input_add"
-            app:iconTint="@color/fondo_oscuro"
-            app:iconSize="20dp"
-            app:iconPadding="6dp" />
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/fondo_tarjeta" />
-
-    <!-- Filtros de tipo de anuncio en fila horizontal con scroll -->
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="12dp"
-        android:scrollbars="none">
-
+        <!-- ── Cabecera: botón atrás + provincia seleccionada ─────────────────── -->
+        <!-- paddingEnd="16dp" porque ya no hay botón "Publicar" en la cabecera -->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingTop="20dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:background="@color/fondo_superficie">
 
-            <!-- Filtros con @string para que cambien al cambiar de idioma -->
+            <!-- Flecha de volver: área de toque mínima 48dp para accesibilidad -->
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnFiltroTodos"
+                android:id="@+id/btnAtras"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:text="@string/zona_todos"
-                android:textSize="12sp"
-                android:textColor="@color/verde_lima"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:padding="0dp"
+                android:text=""
+                app:icon="@drawable/ic_arrow_back"
+                app:iconSize="22dp"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconTint="@color/verde_lima"
                 app:strokeColor="@color/verde_lima"
-                app:cornerRadius="18dp"
-                android:layout_marginEnd="8dp" />
+                app:strokeWidth="2dp"
+                app:cornerRadius="22dp"
+                android:backgroundTint="@android:color/transparent"
+                android:contentDescription="@string/btn_atras" />
 
+            <!-- Título con la provincia activa. Se actualiza desde ZonaActivity
+                 cada vez que el usuario selecciona una provincia diferente. -->
+            <TextView
+                android:id="@+id/tvTituloZona"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="📌  Mi Zona"
+                android:textColor="@color/verde_lima_brillante"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginStart="8dp" />
+
+            <!-- Selector de provincia: muestra el nombre de la provincia activa.
+                 ZonaActivity actualiza el texto dinámicamente al cambiar provincia.
+                 El icono ▾ indica visualmente que es un desplegable seleccionable. -->
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnFiltroPartida"
+                android:id="@+id/btnCambiarProvincia"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:text="@string/zona_partida"
-                android:textSize="12sp"
-                android:textColor="#94D500"
-                app:strokeColor="#94D500"
-                app:cornerRadius="18dp"
-                android:layout_marginEnd="8dp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnFiltroPala"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:text="@string/zona_pala"
-                android:textSize="12sp"
-                android:textColor="#2196F3"
-                app:strokeColor="#2196F3"
-                app:cornerRadius="18dp"
-                android:layout_marginEnd="8dp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnFiltroOfrecer"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:text="@string/zona_ofrecer"
-                android:textSize="12sp"
-                android:textColor="#FF9800"
-                app:strokeColor="#FF9800"
-                app:cornerRadius="18dp"
-                android:layout_marginEnd="8dp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnFiltroSolicitar"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:text="@string/zona_solicitar"
-                android:textSize="12sp"
-                android:textColor="#9C27B0"
-                app:strokeColor="#9C27B0"
-                app:cornerRadius="18dp" />
+                android:layout_height="38dp"
+                android:text="📍 ..."
+                android:textColor="@color/verde_lima"
+                android:textSize="11sp"
+                android:maxWidth="140dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                app:strokeColor="@color/verde_lima"
+                app:cornerRadius="19dp"
+                app:icon="@android:drawable/arrow_down_float"
+                app:iconTint="@color/verde_lima"
+                app:iconSize="12dp"
+                app:iconPadding="4dp"
+                app:iconGravity="end" />
 
         </LinearLayout>
 
-    </HorizontalScrollView>
+        <!-- Separador visual entre cabecera y filtros -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/fondo_tarjeta" />
 
-    <!-- Lista de anuncios (se añaden dinámicamente desde ZonaActivity) -->
-    <ScrollView
-        android:id="@+id/scrollAnuncios"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingHorizontal="16dp"
-        android:paddingBottom="16dp"
-        android:clipToPadding="false">
-
-        <LinearLayout
-            android:id="@+id/llAnuncios"
+        <!-- ── Filtros de tipo de anuncio ─────────────────────────────────────── -->
+        <!-- HorizontalScrollView para que los chips no se corten en pantallas pequeñas -->
+        <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="8dp" />
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="12dp"
+            android:scrollbars="none">
 
-    </ScrollView>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-</LinearLayout>
+                <!-- Filtro "Todos": sin filtro activo, muestra todos los anuncios -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnFiltroTodos"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:text="@string/zona_todos"
+                    android:textSize="12sp"
+                    android:textColor="@color/verde_lima"
+                    app:strokeColor="@color/verde_lima"
+                    app:cornerRadius="18dp"
+                    android:layout_marginEnd="8dp" />
+
+                <!-- Filtro "Partida": rojo para distinguirse del verde corporativo.
+                     Es el tipo más importante de anuncio, por eso tiene color propio. -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnFiltroPartida"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:text="@string/zona_partida"
+                    android:textSize="12sp"
+                    android:textColor="#FF5252"
+                    app:strokeColor="#FF5252"
+                    app:cornerRadius="18dp"
+                    android:layout_marginEnd="8dp" />
+
+                <!-- Filtro "Pala": muestra solo anuncios de compra/venta de palas -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnFiltroPala"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:text="@string/zona_pala"
+                    android:textSize="12sp"
+                    android:textColor="#2196F3"
+                    app:strokeColor="#2196F3"
+                    app:cornerRadius="18dp"
+                    android:layout_marginEnd="8dp" />
+
+                <!-- Filtro "Dar Clases": solo anuncios de profesores ofreciendo clase -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnFiltroOfrecer"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:text="@string/zona_ofrecer"
+                    android:textSize="12sp"
+                    android:textColor="#FF9800"
+                    app:strokeColor="#FF9800"
+                    app:cornerRadius="18dp"
+                    android:layout_marginEnd="8dp" />
+
+                <!-- Filtro "Busco Clases": solo anuncios de alumnos buscando profesor -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnFiltroSolicitar"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:text="@string/zona_solicitar"
+                    android:textSize="12sp"
+                    android:textColor="#9C27B0"
+                    app:strokeColor="#9C27B0"
+                    app:cornerRadius="18dp" />
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+        <!-- ── Lista de anuncios ───────────────────────────────────────────────── -->
+        <!-- paddingBottom="88dp" para que el último anuncio no quede tapado por el FAB -->
+        <ScrollView
+            android:id="@+id/scrollAnuncios"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="88dp"
+            android:clipToPadding="false">
+
+            <!-- llAnuncios: LinearLayout donde ZonaActivity infla las tarjetas dinámicamente -->
+            <LinearLayout
+                android:id="@+id/llAnuncios"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="8dp" />
+
+        </ScrollView>
+
+    </LinearLayout>
+
+    <!-- ── FAB: botón flotante para publicar un nuevo anuncio ────────────────── -->
+    <!-- Posición: esquina inferior derecha con margen cómodo.
+         ExtendedFloatingActionButton muestra icono + texto para mayor claridad.
+         El color verde lima es el color corporativo de la app. -->
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fabNuevoAnuncio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="24dp"
+        android:text="@string/zona_nuevo_anuncio"
+        android:textColor="@color/fondo_oscuro"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        app:backgroundTint="@color/verde_lima"
+        app:icon="@android:drawable/ic_input_add"
+        app:iconTint="@color/fondo_oscuro"
+        app:iconSize="22dp"
+        app:elevation="8dp"
+        app:cornerRadius="28dp" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
