@@ -83,10 +83,10 @@
 
     <!-- ── Padel ── -->
     <string name="padel_titulo">Padel</string>
-    <string name="padel_chat_amigos">Friends chat</string>
-    <string name="padel_chat_desc">Talk to other players and arrange matches</string>
-    <string name="padel_zona">My Zone</string>
-    <string name="padel_zona_desc">Offers and searches in your province</string>
+    <string name="padel_chat_amigos">Locker Room</string>
+    <string name="padel_chat_desc">Talk to your teammates and arrange matches</string>
+    <string name="padel_zona">Board</string>
+    <string name="padel_zona_desc">Posts for matches, rackets and lessons in your province</string>
 
     <!-- ── Zone ── -->
     <string name="zona_nuevo_anuncio">Post</string>

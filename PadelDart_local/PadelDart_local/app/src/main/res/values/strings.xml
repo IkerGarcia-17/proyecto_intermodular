@@ -33,7 +33,7 @@
     <string name="main_bienvenido">¡Bienvenido!</string>
     <string name="main_que_hacer">¿Qué quieres hacer hoy?</string>
     <string name="main_padel">Pádel</string>
-    <string name="main_padel_desc">Chat, zona provincial y estadísticas</string>
+    <string name="main_padel_desc">Vestuario, Tablón provincial y estadísticas</string>
     <string name="main_dardos">Dardos</string>
     <string name="main_dardos_desc">Partidas locales PvP y PvE contra la IA</string>
 
@@ -83,10 +83,10 @@
 
     <!-- ── Pádel ── -->
     <string name="padel_titulo">Pádel</string>
-    <string name="padel_chat_amigos">Chat con amigos</string>
-    <string name="padel_chat_desc">Habla con otros jugadores y queda para partidas</string>
-    <string name="padel_zona">Mi Zona</string>
-    <string name="padel_zona_desc">Ofertas y búsquedas en tu provincia</string>
+    <string name="padel_chat_amigos">Vestuario</string>
+    <string name="padel_chat_desc">Habla con tus compañeros y queda para partidas</string>
+    <string name="padel_zona">Tablón</string>
+    <string name="padel_zona_desc">Anuncios de partidas, palas y clases en tu provincia</string>
 
     <!-- ── Zona provincial ── -->
     <string name="zona_nuevo_anuncio">Publicar</string>
@@ -159,7 +159,7 @@
 
     <!-- ── Amigos ── -->
     <string name="drawer_amigos">Amigos</string>
-    <string name="drawer_mensajes">Mensajes</string>
+    <string name="drawer_mensajes">Vestuario</string>
     <string name="friends_titulo">Amigos</string>
     <string name="friends_buscar_label">🔍 Buscar amigo por correo</string>
     <string name="friends_buscar_hint">Correo electrónico</string>

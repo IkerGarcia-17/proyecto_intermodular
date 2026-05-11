@@ -767,7 +767,7 @@ public class ZonaActivity extends BaseDrawerActivity {
     // ─────────────────────────────────────────────────────────────────────────
 
     private void actualizarTituloProvincia() {
-        String nombre = provinciaActual != null ? provinciaActual : "Mi Zona";
+        String nombre = provinciaActual != null ? provinciaActual : "Tablón";
         if (tvTituloZona != null) tvTituloZona.setText("📌  " + nombre);
         MaterialButton btnProv = findViewById(R.id.btnCambiarProvincia);
         if (btnProv != null) btnProv.setText("📍 " + nombre);
@@ -2551,39 +2551,67 @@ public class ZonaActivity extends BaseDrawerActivity {
         return nombre;
     }
 
-    // Busca instalaciones de pádel en la ciudad mediante la API Overpass (OpenStreetMap).
-    // IMPORTANTE: la declaración del área (->.a) debe ir ANTES del bloque unión ();
-    //             ponerla dentro del unión es un error de sintaxis de Overpass QL.
-    // Intenta primero buscar el área por nombre de ciudad; si no hay resultados,
-    // amplía la búsqueda con el tag place=city/town/village como filtro adicional.
+    // Busca instalaciones de pádel cerca de la ciudad usando Nominatim + Overpass.
+    // Flujo: Nominatim geocodifica la ciudad → obtiene lat/lon → Overpass busca
+    // por radio de 15 km alrededor del punto. Mucho más fiable que area["name"]
+    // porque no depende de que OSM tenga indexada el área del municipio español.
     private List<String> fetchPistasOverpass(String ciudad) {
-        List<String> pistas = new ArrayList<>();
-        String c = ciudad.replace("\"", "\\\"");
+        // Paso 1: Geocodificar la ciudad con Nominatim para obtener lat/lon
+        double[] coords = geocodificarNominatim(ciudad, provinciaActual);
+        if (coords == null) return new ArrayList<>();
 
-        // Query principal: area por nombre exacto → busca sport=padel y variantes
-        String q1 = "[out:json][timeout:25];" +
-                "area[\"name\"=\"" + c + "\"]->.a;" +
+        double lat = coords[0];
+        double lon = coords[1];
+
+        // Paso 2: buscar pistas de pádel en radio de 15 km alrededor del punto
+        String query = "[out:json][timeout:30];" +
                 "(" +
-                "nwr[\"sport\"=\"padel\"](area.a);" +
-                "nwr[\"sport\"~\"padel\",i](area.a);" +
-                "nwr[\"leisure\"=\"pitch\"][\"sport\"=\"padel\"](area.a);" +
-                "nwr[\"leisure\"=\"sports_centre\"][\"sport\"~\"padel\",i](area.a);" +
+                "nwr[\"sport\"=\"padel\"](around:15000," + lat + "," + lon + ");" +
+                "nwr[\"sport\"~\"padel\",i](around:15000," + lat + "," + lon + ");" +
+                "nwr[\"leisure\"=\"pitch\"][\"sport\"=\"padel\"](around:15000," + lat + "," + lon + ");" +
+                "nwr[\"leisure\"=\"sports_centre\"][\"sport\"~\"padel\",i](around:15000," + lat + "," + lon + ");" +
                 ");" +
                 "out center tags;";
-        pistas.addAll(ejecutarQueryOverpass(q1));
 
-        // Fallback si la query principal no encontró nada:
-        // busca el área filtrando también por tipo de lugar (ciudad/pueblo/municipio)
-        if (pistas.isEmpty()) {
-            String q2 = "[out:json][timeout:30];" +
-                    "area[\"name\"=\"" + c + "\"][\"place\"~\"city|town|village|municipality\"]->.a;" +
-                    "nwr[\"sport\"~\"padel\",i](area.a);" +
-                    "out center tags;";
-            pistas.addAll(ejecutarQueryOverpass(q2));
-        }
-
+        List<String> pistas = ejecutarQueryOverpass(query);
         Collections.sort(pistas, (a, b) -> a.compareToIgnoreCase(b));
         return pistas;
+    }
+
+    // Geocodifica un nombre de ciudad (con provincia como contexto) usando Nominatim.
+    // Devuelve {lat, lon} o null si no se encuentra o hay error de red.
+    private double[] geocodificarNominatim(String ciudad, String provincia) {
+        try {
+            String q = ciudad + (provincia != null && !provincia.isEmpty() ? ", " + provincia : "") + ", España";
+            String urlStr = "https://nominatim.openstreetmap.org/search?q="
+                    + URLEncoder.encode(q, "UTF-8")
+                    + "&countrycodes=es&limit=1&format=json";
+
+            HttpURLConnection conn = (HttpURLConnection) new URL(urlStr).openConnection();
+            conn.setConnectTimeout(10_000);
+            conn.setReadTimeout(15_000);
+            // Nominatim requiere un User-Agent identificativo para cumplir su política de uso
+            conn.setRequestProperty("User-Agent", "PadelDart-TFG/1.0 (tfg@padeldart.es)");
+            if (conn.getResponseCode() != 200) { conn.disconnect(); return null; }
+
+            StringBuilder sb = new StringBuilder();
+            try (BufferedReader r = new BufferedReader(
+                    new InputStreamReader(conn.getInputStream(), "UTF-8"))) {
+                String ln;
+                while ((ln = r.readLine()) != null) sb.append(ln);
+            }
+            conn.disconnect();
+
+            JSONArray arr = new JSONArray(sb.toString());
+            if (arr.length() == 0) return null;
+
+            JSONObject lugar = arr.getJSONObject(0);
+            double lat = lugar.getDouble("lat");
+            double lon = lugar.getDouble("lon");
+            return new double[]{lat, lon};
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     // Lanza una query Overpass contra la API pública y extrae los nombres de las instalaciones.
