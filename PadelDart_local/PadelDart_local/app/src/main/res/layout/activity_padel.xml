@@ -105,7 +105,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginStart="12dp"
-                            android:text="Chat con Amigos"
+                            android:text="Peloteo"
                             android:textColor="@color/verde_lima"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -168,7 +168,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginStart="12dp"
-                            android:text="Zona de mi Provincia"
+                            android:text="Mi Cancha"
                             android:textColor="@color/verde_lima"
                             android:textSize="20sp"
                             android:textStyle="bold" />

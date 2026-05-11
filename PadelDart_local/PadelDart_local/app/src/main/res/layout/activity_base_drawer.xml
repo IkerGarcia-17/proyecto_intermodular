@@ -13,15 +13,19 @@
     <!-- LinearLayout vertical: barra superior fija + contenido de la Activity.
          La barra ocupa altura fija y NO flota sobre el contenido, evitando
          que el botón "←" de cada pantalla quede tapado. -->
+    <!-- fitsSystemWindows aquí hace que este LinearLayout reciba los insets de la status bar
+         y aplique paddingTop = altura_status_bar, evitando que la barra superior quede tapada -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:fitsSystemWindows="true">
 
         <!-- BARRA SUPERIOR PERSISTENTE: visible en todas las pantallas.
              Contiene únicamente el botón hamburguesa alineado a la izquierda.
              Fondo oscuro con borde inferior sutil para separarse del contenido. -->
         <LinearLayout
+            android:id="@+id/barraDrawer"
             android:layout_width="match_parent"
             android:layout_height="54dp"
             android:orientation="horizontal"

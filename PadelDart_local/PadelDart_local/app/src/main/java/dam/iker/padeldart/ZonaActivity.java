@@ -694,6 +694,10 @@ public class ZonaActivity extends BaseDrawerActivity {
     private String provinciaActual;
     private String miProvinciaOriginal;
 
+    // SharedPreferences para persistir los nombres de pista introducidos manualmente
+    private static final String PREFS_PISTAS = "pistas_guardadas";
+    private static final String KEY_PISTAS   = "lista";
+
     private LinearLayout llAnuncios;
     private TextView     tvTituloZona;
     private String filtroActivo = null;
@@ -2357,8 +2361,24 @@ public class ZonaActivity extends BaseDrawerActivity {
         });
     }
 
+    // Devuelve una copia mutable del histórico de pistas escritas manualmente.
+    private java.util.Set<String> cargarPistasGuardadas() {
+        return new java.util.HashSet<>(
+                getSharedPreferences(PREFS_PISTAS, MODE_PRIVATE)
+                        .getStringSet(KEY_PISTAS, new java.util.HashSet<>()));
+    }
+
+    // Guarda el nombre de una pista en el histórico para futuras búsquedas.
+    private void guardarPista(String nombre) {
+        if (nombre == null || nombre.trim().isEmpty()) return;
+        java.util.Set<String> pistas = cargarPistasGuardadas();
+        pistas.add(nombre.trim());
+        getSharedPreferences(PREFS_PISTAS, MODE_PRIVATE)
+                .edit().putStringSet(KEY_PISTAS, pistas).apply();
+    }
+
     // Busca pistas de pádel en la ciudad/pueblo seleccionado usando la API Overpass (OpenStreetMap).
-    // Si no encuentra resultados ofrece entrada manual.
+    // Antepone el histórico de pistas guardadas manualmente para que siempre estén disponibles.
     private void mostrarSelectorPista(String ciudad, MaterialButton btn,
                                        OnItemSelected callback) {
         if (ciudad == null || ciudad.isEmpty()) {
@@ -2366,38 +2386,79 @@ public class ZonaActivity extends BaseDrawerActivity {
             return;
         }
         String textoOrig = btn.getText().toString();
-        btn.setText("⏳ Buscando pistas…"); btn.setEnabled(false);
 
+        // Cargamos las pistas guardadas antes de lanzar el hilo de red
+        List<String> guardadas = new ArrayList<>(cargarPistasGuardadas());
+        Collections.sort(guardadas, String::compareToIgnoreCase);
+
+        // Si ya hay pistas guardadas las mostramos sin esperar a la API
+        if (!guardadas.isEmpty()) {
+            List<String> lista = new ArrayList<>();
+            for (String g : guardadas) lista.add("⭐ " + g);
+            lista.add("🔍  Buscar en OpenStreetMap…");
+            lista.add("✏️  Escribir manualmente…");
+            mostrarDialogoListaBuscable("🏟️ Pistas en " + ciudad, lista, item -> {
+                if (item.startsWith("🔍")) {
+                    // Lanza búsqueda online desde este punto
+                    btn.setText("⏳ Buscando pistas…"); btn.setEnabled(false);
+                    new Thread(() -> {
+                        List<String> online = fetchPistasOverpass(ciudad);
+                        runOnUiThread(() -> {
+                            btn.setEnabled(true); btn.setText(textoOrig);
+                            mostrarResultadosPistasOnline(ciudad, online, btn, callback);
+                        });
+                    }).start();
+                } else if (item.startsWith("✏️")) {
+                    mostrarDialogoPistaManual(btn, callback);
+                } else {
+                    String nombre = item.startsWith("⭐ ") ? item.substring(2).trim() : item;
+                    btn.setText("🏟️ " + nombre);
+                    callback.onSelected(nombre);
+                }
+            });
+            return;
+        }
+
+        // Sin guardadas: buscamos directamente en OSM
+        btn.setText("⏳ Buscando pistas…"); btn.setEnabled(false);
         new Thread(() -> {
             List<String> pistas = fetchPistasOverpass(ciudad);
             runOnUiThread(() -> {
                 btn.setEnabled(true); btn.setText(textoOrig);
-                if (pistas.isEmpty()) {
-                    // Sin resultados de OSM: entrada manual en diálogo oscuro
-                    mostrarDialogoPistaManual(btn, callback);
-                } else {
-                    // Añadimos opción de escritura manual al final de la lista
-                    pistas.add("✏️  Escribir manualmente…");
-                    mostrarDialogoListaBuscable("🏟️ Pistas en " + ciudad, pistas, item -> {
-                        if (item.startsWith("✏️")) {
-                            mostrarDialogoPistaManual(btn, callback);
-                        } else {
-                            btn.setText("🏟️ " + item);
-                            callback.onSelected(item);
-                        }
-                    });
-                }
+                mostrarResultadosPistasOnline(ciudad, pistas, btn, callback);
             });
         }).start();
     }
 
-    // Diálogo oscuro de entrada manual de pista cuando OSM no devuelve resultados.
+    // Muestra el diálogo con los resultados de OSM (o entrada manual si está vacío).
+    private void mostrarResultadosPistasOnline(String ciudad, List<String> pistas,
+                                                MaterialButton btn, OnItemSelected callback) {
+        if (pistas.isEmpty()) {
+            mostrarDialogoPistaManual(btn, callback);
+        } else {
+            pistas.add("✏️  Escribir manualmente…");
+            mostrarDialogoListaBuscable("🏟️ Pistas en " + ciudad, pistas, item -> {
+                if (item.startsWith("✏️")) {
+                    mostrarDialogoPistaManual(btn, callback);
+                } else {
+                    btn.setText("🏟️ " + item);
+                    callback.onSelected(item);
+                }
+            });
+        }
+    }
+
+    // Diálogo de entrada manual. Guarda el nombre en el histórico al confirmar.
     private void mostrarDialogoPistaManual(MaterialButton btn, OnItemSelected callback) {
         mostrarDialogoInputOscuro(
-                "🏟️  Sin resultados en OSM",
+                "🏟️  Nombre de la pista",
                 "Escribe el nombre de la pista o club:",
                 "Ej: Club Pádel Central, Pistas Municipales…",
-                texto -> { btn.setText("🏟️ " + texto); callback.onSelected(texto); });
+                texto -> {
+                    guardarPista(texto);
+                    btn.setText("🏟️ " + texto);
+                    callback.onSelected(texto);
+                });
     }
 
     // Diálogo oscuro reutilizable para introducir texto libre.
