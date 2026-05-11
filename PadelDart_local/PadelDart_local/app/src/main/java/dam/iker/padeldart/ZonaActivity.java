@@ -53,6 +53,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.HashMap;
 import java.util.Map;
 
 // Tablón de anuncios de la zona provincial.
@@ -698,6 +699,10 @@ public class ZonaActivity extends BaseDrawerActivity {
     private static final String PREFS_PISTAS = "pistas_guardadas";
     private static final String KEY_PISTAS   = "lista";
 
+    // Clave que indica si la descarga nacional de pistas ya se completó alguna vez
+    private static final String PREFS_ZONA   = "zona_prefs";
+    private static final String KEY_PISTAS_OK = "pistas_espana_ok";
+
     private LinearLayout llAnuncios;
     private TextView     tvTituloZona;
     private String filtroActivo = null;
@@ -764,6 +769,10 @@ public class ZonaActivity extends BaseDrawerActivity {
 
         configurarFiltros();
         cargarAnuncios();
+
+        // Descarga en background todas las pistas de España la primera vez que se abre la pantalla.
+        // Posterior a la primera descarga, las consultas usan solo la BD local (sin red).
+        iniciarDescargaPistasEspana();
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -2377,8 +2386,8 @@ public class ZonaActivity extends BaseDrawerActivity {
                 .edit().putStringSet(KEY_PISTAS, pistas).apply();
     }
 
-    // Busca pistas de pádel en la ciudad/pueblo seleccionado usando la API Overpass (OpenStreetMap).
-    // Antepone el histórico de pistas guardadas manualmente para que siempre estén disponibles.
+    // Selector de pistas: primero consulta la BD local (caché OSM), luego historial
+    // manual (⭐) y por último ofrece búsqueda online como fallback.
     private void mostrarSelectorPista(String ciudad, MaterialButton btn,
                                        OnItemSelected callback) {
         if (ciudad == null || ciudad.isEmpty()) {
@@ -2387,19 +2396,26 @@ public class ZonaActivity extends BaseDrawerActivity {
         }
         String textoOrig = btn.getText().toString();
 
-        // Cargamos las pistas guardadas antes de lanzar el hilo de red
+        // Pistas del historial manual (guardadas por el usuario)
         List<String> guardadas = new ArrayList<>(cargarPistasGuardadas());
         Collections.sort(guardadas, String::compareToIgnoreCase);
 
-        // Si ya hay pistas guardadas las mostramos sin esperar a la API
-        if (!guardadas.isEmpty()) {
-            List<String> lista = new ArrayList<>();
-            for (String g : guardadas) lista.add("⭐ " + g);
+        // Pistas de la BD local (descargadas de OSM en background)
+        List<String> locales = db.buscarPistasPorMunicipio(ciudad);
+
+        // Construimos la lista unificada: ⭐ manuales → 📍 locales de OSM → opciones de acción
+        List<String> lista = new ArrayList<>();
+        for (String g : guardadas) lista.add("⭐ " + g);
+        for (String l : locales) {
+            // Evitamos duplicar pistas que el usuario ya guardó manualmente
+            if (!guardadas.contains(l)) lista.add("📍 " + l);
+        }
+
+        if (!lista.isEmpty()) {
             lista.add("🔍  Buscar en OpenStreetMap…");
             lista.add("✏️  Escribir manualmente…");
             mostrarDialogoListaBuscable("🏟️ Pistas en " + ciudad, lista, item -> {
                 if (item.startsWith("🔍")) {
-                    // Lanza búsqueda online desde este punto
                     btn.setText("⏳ Buscando pistas…"); btn.setEnabled(false);
                     new Thread(() -> {
                         List<String> online = fetchPistasOverpass(ciudad);
@@ -2411,7 +2427,8 @@ public class ZonaActivity extends BaseDrawerActivity {
                 } else if (item.startsWith("✏️")) {
                     mostrarDialogoPistaManual(btn, callback);
                 } else {
-                    String nombre = item.startsWith("⭐ ") ? item.substring(2).trim() : item;
+                    // Quita el prefijo de icono (⭐ / 📍 + espacio)
+                    String nombre = item.length() > 2 ? item.substring(2).trim() : item;
                     btn.setText("🏟️ " + nombre);
                     callback.onSelected(nombre);
                 }
@@ -2419,7 +2436,7 @@ public class ZonaActivity extends BaseDrawerActivity {
             return;
         }
 
-        // Sin guardadas: buscamos directamente en OSM
+        // Sin resultados locales: buscamos directamente en OSM
         btn.setText("⏳ Buscando pistas…"); btn.setEnabled(false);
         new Thread(() -> {
             List<String> pistas = fetchPistasOverpass(ciudad);
@@ -2616,6 +2633,106 @@ public class ZonaActivity extends BaseDrawerActivity {
     // Flujo: Nominatim geocodifica la ciudad → obtiene lat/lon → Overpass busca
     // por radio de 15 km alrededor del punto. Mucho más fiable que area["name"]
     // porque no depende de que OSM tenga indexada el área del municipio español.
+    // Lanza la descarga nacional de pistas solo si aún no se ha hecho.
+    // La bandera PREFS_ZONA/KEY_PISTAS_OK se activa al terminar con éxito.
+    private void iniciarDescargaPistasEspana() {
+        boolean yaCargadas = getSharedPreferences(PREFS_ZONA, MODE_PRIVATE)
+                .getBoolean(KEY_PISTAS_OK, false);
+        if (yaCargadas) return;
+
+        new Thread(() -> {
+            List<Map<String, Object>> pistas = fetchTodasPistasEspana();
+            if (!pistas.isEmpty()) {
+                db.insertarPistasBatch(pistas);
+                getSharedPreferences(PREFS_ZONA, MODE_PRIVATE)
+                        .edit().putBoolean(KEY_PISTAS_OK, true).apply();
+            }
+        }).start();
+    }
+
+    // Descarga todas las pistas de pádel de España vía Overpass en una sola consulta.
+    // Extrae nombre, municipio y coordenadas de cada elemento OSM.
+    // Tiempo de espera generoso (3 min) porque el dataset nacional es grande.
+    private List<Map<String, Object>> fetchTodasPistasEspana() {
+        List<Map<String, Object>> lista = new ArrayList<>();
+        try {
+            // Usamos area con ISO3166-1=ES para circunscribir la búsqueda a España.
+            // Buscamos nodos, ways y relaciones con sport=padel (exacto e insensible a mayúsculas).
+            String query =
+                "[out:json][timeout:180];" +
+                "area[\"ISO3166-1\"=\"ES\"][\"admin_level\"=\"2\"]->.spain;" +
+                "(" +
+                "nwr[\"sport\"=\"padel\"](area.spain);" +
+                "nwr[\"sport\"~\"padel\",i][\"leisure\"=\"pitch\"](area.spain);" +
+                "nwr[\"sport\"~\"padel\",i][\"leisure\"=\"sports_centre\"](area.spain);" +
+                ");" +
+                "out center tags;";
+
+            String urlStr = "https://overpass-api.de/api/interpreter?data=" +
+                    URLEncoder.encode(query, "UTF-8");
+            HttpURLConnection conn = (HttpURLConnection) new URL(urlStr).openConnection();
+            conn.setConnectTimeout(20_000);
+            conn.setReadTimeout(180_000);  // 3 min: la respuesta nacional puede pesar varios MB
+            conn.setRequestProperty("User-Agent", "PadelDart-TFG/1.0 (tfg@padeldart.es)");
+            if (conn.getResponseCode() != 200) { conn.disconnect(); return lista; }
+
+            StringBuilder sb = new StringBuilder();
+            try (BufferedReader r = new BufferedReader(
+                    new InputStreamReader(conn.getInputStream(), "UTF-8"))) {
+                String ln;
+                while ((ln = r.readLine()) != null) sb.append(ln);
+            }
+            conn.disconnect();
+
+            JSONArray elements = new JSONObject(sb.toString()).optJSONArray("elements");
+            if (elements == null) return lista;
+
+            for (int i = 0; i < elements.length(); i++) {
+                JSONObject el = elements.getJSONObject(i);
+                if (!el.has("tags")) continue;
+                JSONObject tags = el.getJSONObject("tags");
+
+                String nombre = tags.optString("name", "").trim();
+                if (nombre.isEmpty()) continue;  // sin nombre no tiene utilidad como pista
+
+                // Coordenadas: nodos tienen lat/lon directo; ways/relations tienen "center"
+                double lat = 0, lon = 0;
+                if (el.has("lat")) {
+                    lat = el.getDouble("lat");
+                    lon = el.getDouble("lon");
+                } else if (el.has("center")) {
+                    JSONObject center = el.getJSONObject("center");
+                    lat = center.getDouble("lat");
+                    lon = center.getDouble("lon");
+                }
+
+                // Municipio: intentamos varios campos OSM por orden de fiabilidad
+                String municipio = tags.optString("addr:city", "");
+                if (municipio.isEmpty()) municipio = tags.optString("addr:municipality", "");
+                if (municipio.isEmpty()) municipio = tags.optString("addr:town", "");
+                if (municipio.isEmpty()) municipio = tags.optString("addr:village", "");
+                if (municipio.isEmpty()) municipio = tags.optString("addr:hamlet", "");
+
+                // Provincia / comunidad autónoma como contexto adicional
+                String provincia = tags.optString("addr:province", "");
+                if (provincia.isEmpty()) provincia = tags.optString("addr:state", "");
+
+                String osmId = el.optString("type", "x") + "_" + el.optLong("id", 0);
+
+                Map<String, Object> p = new HashMap<>();
+                p.put("osm_id",        osmId);
+                p.put("nombre",        nombre);
+                p.put("municipio",     municipio);
+                p.put("municipio_norm", DatabaseHelper.normalizarTexto(municipio));
+                p.put("provincia",     provincia);
+                p.put("lat",           lat);
+                p.put("lon",           lon);
+                lista.add(p);
+            }
+        } catch (Exception ignored) {}
+        return lista;
+    }
+
     private List<String> fetchPistasOverpass(String ciudad) {
         // Paso 1: Geocodificar la ciudad con Nominatim para obtener lat/lon
         double[] coords = geocodificarNominatim(ciudad, provinciaActual);

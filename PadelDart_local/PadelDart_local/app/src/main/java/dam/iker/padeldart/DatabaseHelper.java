@@ -19,7 +19,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Nombre del archivo que se guardará en el almacenamiento interno del móvil.
     // Cada vez que subamos DATABASE_VERSION, Android llama a onUpgrade automáticamente.
     private static final String DATABASE_NAME    = "padeldart.db";
-    private static final int    DATABASE_VERSION = 4;  // v4: tabla de amigos/solicitudes
+    private static final int    DATABASE_VERSION = 5;  // v5: caché de pistas de pádel de España
 
     // Nombre de la tabla principal. Solo tenemos una por ahora, que agrupa
     // datos personales, perfil de pádel y perfil de dardos del usuario.
@@ -130,6 +130,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "timestamp      INTEGER NOT NULL" +
                     ");";
 
+    // --- Tabla de caché de pistas de pádel de España (OSM/Overpass) ---
+    // Se descarga en background la primera vez; las consultas posteriores son instantáneas.
+    // municipio normalizado (minúsculas sin tildes) para búsqueda insensible a acentos.
+    public static final String TABLE_PISTAS = "pistas_padel";
+    private static final String CREATE_TABLE_PISTAS =
+            "CREATE TABLE " + TABLE_PISTAS + " (" +
+                    "osm_id     TEXT PRIMARY KEY, " +
+                    "nombre     TEXT NOT NULL, " +
+                    "municipio  TEXT, " +         // nombre tal como viene de OSM
+                    "municipio_norm TEXT, " +      // lowercase sin tildes para búsquedas rápidas
+                    "provincia  TEXT, " +
+                    "lat        REAL, " +
+                    "lon        REAL" +
+                    ");";
+
     // Instancia única (Singleton): toda la app comparte la misma conexión a la BD
     // para evitar conflictos si varias Activities intentan escribir a la vez.
     private static DatabaseHelper instancia;
@@ -156,6 +171,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_MENSAJES);
         db.execSQL(CREATE_TABLE_ANUNCIOS);
         db.execSQL(CREATE_TABLE_AMIGOS);
+        db.execSQL(CREATE_TABLE_PISTAS);
     }
 
     // Se ejecuta cuando DATABASE_VERSION sube. Añadimos solo las tablas/columnas nuevas
@@ -175,6 +191,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (oldVersion < 4) {
             // v4: tabla de amistades para la nueva sección "Amigos" del menú lateral
             db.execSQL(CREATE_TABLE_AMIGOS);
+        }
+        if (oldVersion < 5) {
+            // v5: caché local de pistas de pádel de España (descargadas de OSM/Overpass)
+            db.execSQL(CREATE_TABLE_PISTAS);
         }
     }
 
@@ -608,5 +628,76 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         c.close();
         return lista;
+    }
+
+    // -----------------------------------------------------------------------
+    //  CRUD - PISTAS DE PÁDEL (caché OSM)
+    // -----------------------------------------------------------------------
+
+    // Inserta un lote de pistas en la tabla de caché, ignorando duplicados por osm_id.
+    // Se llama desde el hilo de descarga con las pistas de toda España.
+    public void insertarPistasBatch(List<Map<String, Object>> pistas) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
+        try {
+            for (Map<String, Object> p : pistas) {
+                ContentValues cv = new ContentValues();
+                cv.put("osm_id",        (String) p.get("osm_id"));
+                cv.put("nombre",        (String) p.get("nombre"));
+                cv.put("municipio",     (String) p.get("municipio"));
+                cv.put("municipio_norm",(String) p.get("municipio_norm"));
+                cv.put("provincia",     (String) p.get("provincia"));
+                cv.put("lat",           p.get("lat") instanceof Double ? (Double) p.get("lat") : 0.0);
+                cv.put("lon",           p.get("lon") instanceof Double ? (Double) p.get("lon") : 0.0);
+                // OR IGNORE: si ya existe la pista por osm_id no falla ni sobreescribe
+                db.insertWithOnConflict(TABLE_PISTAS, null, cv, SQLiteDatabase.CONFLICT_IGNORE);
+            }
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+    }
+
+    // Busca pistas en la caché local filtradas por municipio (búsqueda flexible sin tildes).
+    // Devuelve lista de nombres ordenados alfabéticamente.
+    public List<String> buscarPistasPorMunicipio(String municipio) {
+        if (municipio == null || municipio.trim().isEmpty()) return new ArrayList<>();
+        String norm = normalizarTexto(municipio);
+        SQLiteDatabase db = this.getReadableDatabase();
+        // LIKE con wildcard para capturar variantes: "San Sebastián de los Reyes" vs "San Sebastian"
+        Cursor c = db.query(TABLE_PISTAS,
+                new String[]{"nombre"},
+                "municipio_norm LIKE ?",
+                new String[]{"%" + norm + "%"},
+                null, null, "nombre ASC");
+        List<String> nombres = new ArrayList<>();
+        while (c.moveToNext()) {
+            String n = c.getString(0);
+            if (!n.isEmpty() && !nombres.contains(n)) nombres.add(n);
+        }
+        c.close();
+        return nombres;
+    }
+
+    // Total de pistas en la caché; 0 significa que la descarga aún no se ha hecho.
+    public int contarPistas() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_PISTAS, null);
+        int count = 0;
+        if (c.moveToFirst()) count = c.getInt(0);
+        c.close();
+        return count;
+    }
+
+    // Normaliza texto para búsquedas insensibles a tildes y mayúsculas.
+    public static String normalizarTexto(String texto) {
+        if (texto == null) return "";
+        // Quita tildes usando la tabla de reemplazos más comunes en español
+        String s = texto.toLowerCase(java.util.Locale.forLanguageTag("es"));
+        s = s.replace("á","a").replace("é","e").replace("í","i")
+             .replace("ó","o").replace("ú","u").replace("ü","u")
+             .replace("à","a").replace("è","e").replace("ï","i")
+             .replace("ò","o").replace("ñ","n").replace("ç","c");
+        return s.trim();
     }
 }

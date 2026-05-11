@@ -105,7 +105,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginStart="12dp"
-                            android:text="Peloteo"
+                            android:text="@string/padel_chat_amigos"
                             android:textColor="@color/verde_lima"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -168,7 +168,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginStart="12dp"
-                            android:text="Mi Cancha"
+                            android:text="@string/padel_zona"
                             android:textColor="@color/verde_lima"
                             android:textSize="20sp"
                             android:textStyle="bold" />

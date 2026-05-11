@@ -33,7 +33,7 @@
     <string name="main_bienvenido">¡Bienvenido!</string>
     <string name="main_que_hacer">¿Qué quieres hacer hoy?</string>
     <string name="main_padel">Pádel</string>
-    <string name="main_padel_desc">Peloteo, Tablón provincial y estadísticas</string>
+    <string name="main_padel_desc">La Red, La Pared y estadísticas</string>
     <string name="main_dardos">Dardos</string>
     <string name="main_dardos_desc">Partidas locales PvP y PvE contra la IA</string>
 
@@ -83,9 +83,9 @@
 
     <!-- ── Pádel ── -->
     <string name="padel_titulo">Pádel</string>
-    <string name="padel_chat_amigos">Peloteo</string>
+    <string name="padel_chat_amigos">La Red</string>
     <string name="padel_chat_desc">Habla con tus compañeros y queda para partidas</string>
-    <string name="padel_zona">Mi Cancha</string>
+    <string name="padel_zona">La Pared</string>
     <string name="padel_zona_desc">Anuncios de partidas, palas y clases en tu provincia</string>
 
     <!-- ── Zona provincial ── -->
