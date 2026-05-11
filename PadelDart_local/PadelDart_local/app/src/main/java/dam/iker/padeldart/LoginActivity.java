@@ -24,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String KEY_EMAIL     = "email_recordado";
 
     private FirebaseHelper fb;
+    private DatabaseHelper db;
     private SessionManager session;
 
     @Override
@@ -34,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         fb      = FirebaseHelper.getInstance();
+        db      = DatabaseHelper.getInstance(this);
         session = SessionManager.getInstance(this);
 
         // Si hay sesión activa (Firebase Auth la persiste), saltamos al menú principal
@@ -93,9 +95,19 @@ public class LoginActivity extends AppCompatActivity {
             btnLogin.setEnabled(false);
             Log.d(TAG, "Intentando login con: " + correo);
 
-            fb.iniciarSesion(correo, password, userId -> {
+            fb.iniciarSesion(correo, password, uid -> {
                 btnLogin.setEnabled(true);
-                if (userId != null) {
+                if (uid != null) {
+                    // Firebase OK: buscamos el registro SQLite por email para obtener el long ID
+                    java.util.Map<String, Object> usuario = db.buscarUsuarioPorEmail(correo);
+                    if (usuario == null) {
+                        // Primera vez tras la migración a Firebase: no hay registro local
+                        Toast.makeText(this, getString(R.string.login_error_credenciales),
+                                Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    long sqliteId = (long) usuario.get(DatabaseHelper.COL_ID);
+
                     // Guardamos el email si "Recordar usuario" está marcado
                     boolean marcar = cbRecordar != null && cbRecordar.isChecked();
                     loginPrefs.edit()
@@ -103,7 +115,7 @@ public class LoginActivity extends AppCompatActivity {
                             .putString(KEY_EMAIL, marcar ? correo : "")
                             .apply();
 
-                    session.iniciarSesion(userId);
+                    session.iniciarSesion(sqliteId);
                     Toast.makeText(this, getString(R.string.login_bienvenido), Toast.LENGTH_SHORT).show();
                     irAMainActivity();
                 } else {

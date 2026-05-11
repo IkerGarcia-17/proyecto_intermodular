@@ -1,43 +1,49 @@
 package dam.iker.padeldart;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 // Controla si hay un usuario logueado y quién es.
-// Antes usaba SharedPreferences para guardar el ID de SQLite; ahora delega en
-// FirebaseAuth, que persiste la sesión automáticamente entre reinicios de la app.
+// Firebase Auth persiste las credenciales; SharedPreferences almacena el ID SQLite local
+// para que las Activities puedan consultar la BD sin hacer una query asíncrona.
 public class SessionManager {
 
-    // Singleton: una sola instancia para toda la app (Context ya no es necesario)
+    private static final String PREFS  = "padeldart_session";
+    private static final String KEY_ID = "user_id";
+
+    private final SharedPreferences prefs;
     private static SessionManager instancia;
 
     public static synchronized SessionManager getInstance(Context context) {
-        if (instancia == null) instancia = new SessionManager();
+        if (instancia == null) instancia = new SessionManager(context.getApplicationContext());
         return instancia;
     }
 
-    private SessionManager() {}
+    private SessionManager(Context ctx) {
+        prefs = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+    }
 
-    // Firebase ya persiste la sesión internamente; este método solo existe
-    // para mantener la misma API que antes y no romper los Activity que lo llaman
-    public void iniciarSesion(String userId) { /* Firebase gestiona la persistencia */ }
+    // Guarda el ID SQLite del usuario tras el login; Firebase Auth ya persistió sus credenciales
+    public void iniciarSesion(long userId) {
+        prefs.edit().putLong(KEY_ID, userId).apply();
+    }
 
-    // Cierra sesión limpiando el token de Firebase Auth en el dispositivo
+    // Cierra sesión: elimina el token de Firebase y el ID local de SharedPreferences
     public void cerrarSesion() {
         FirebaseAuth.getInstance().signOut();
+        prefs.edit().remove(KEY_ID).apply();
     }
 
-    // Devuelve true si Firebase tiene un usuario autenticado actualmente
+    // Sesión válida si Firebase tiene usuario autenticado Y tenemos el ID SQLite guardado
     public boolean haySesionActiva() {
-        return FirebaseAuth.getInstance().getCurrentUser() != null;
+        return FirebaseAuth.getInstance().getCurrentUser() != null
+                && prefs.getLong(KEY_ID, -1) != -1;
     }
 
-    // Devuelve el UID del usuario activo, o "" si no hay sesión.
-    // Antes devolvía long (-1 si sin sesión); ahora es String ("" si sin sesión).
-    public String getUsuarioActualId() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        return user != null ? user.getUid() : "";
+    // Devuelve el ID SQLite del usuario activo, o -1 si no hay sesión
+    public long getUsuarioActualId() {
+        return prefs.getLong(KEY_ID, -1);
     }
 }

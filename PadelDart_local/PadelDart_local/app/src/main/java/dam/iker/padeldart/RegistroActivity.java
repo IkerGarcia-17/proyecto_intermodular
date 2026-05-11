@@ -43,6 +43,7 @@ import java.util.Map;
 public class RegistroActivity extends AppCompatActivity {
 
     private FirebaseHelper fb;
+    private DatabaseHelper db;
     // Objeto central donde vamos metiendo todo lo que el usuario rellena
     private UsuarioRegistro usuario = new UsuarioRegistro();
 
@@ -75,8 +76,9 @@ public class RegistroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro);
 
-        // Obtenemos el helper de Firebase nada más empezar
+        // Obtenemos los helpers nada más empezar
         fb = FirebaseHelper.getInstance();
+        db = DatabaseHelper.getInstance(this);
 
         // Enlazamos las vistas principales que actúan de "pantallas"
         layoutPaso1 = findViewById(R.id.layoutPaso1);
@@ -604,10 +606,12 @@ public class RegistroActivity extends AppCompatActivity {
             // Desactivamos el botón para evitar doble pulsación mientras Firebase responde
             btnCrearCuenta.setEnabled(false);
 
-            // Firebase Auth crea la cuenta y Firestore guarda el perfil en la nube
-            fb.registrarUsuario(datos, userId -> {
+            // Firebase Auth crea la cuenta y Firestore guarda el perfil en la nube.
+            // Luego escribimos también en SQLite local para que las Activities lo puedan leer.
+            fb.registrarUsuario(datos, uid -> {
                 btnCrearCuenta.setEnabled(true);
-                if (userId != null) {
+                if (uid != null) {
+                    db.registrarUsuario(datos);
                     Toast.makeText(this, getString(R.string.reg_exito), Toast.LENGTH_LONG).show();
                     finish();
                 } else {
