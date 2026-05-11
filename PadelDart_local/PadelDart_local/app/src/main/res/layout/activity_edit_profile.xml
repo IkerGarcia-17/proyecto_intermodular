@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Edición de perfil: solo se permiten cambiar campos no sensibles.
+     Email, DNI y método de pago son solo de lectura (ver nota en la pantalla). -->
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo_oscuro"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Cabecera con atrás y título -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="8dp"
+            android:paddingEnd="16dp"
+            android:background="@color/fondo_tarjeta">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAtrasEdit"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                app:icon="@android:drawable/ic_media_previous"
+                app:iconTint="@color/verde_lima"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:cornerRadius="24dp"
+                android:backgroundTint="@android:color/transparent"
+                android:contentDescription="@string/btn_atras" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/edit_titulo"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <!-- Foto de perfil (editable) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="20dp"
+            android:background="@color/fondo_oscuro_medio">
+
+            <!-- Círculo de foto: muestra la foto o la inicial -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardFotoEdit"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_marginBottom="10dp"
+                app:cardCornerRadius="45dp"
+                app:cardElevation="4dp"
+                app:strokeColor="@color/verde_lima"
+                app:strokeWidth="2dp">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/fondo_tarjeta_claro">
+
+                    <ImageView
+                        android:id="@+id/imgFotoEdit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone"
+                        android:contentDescription="@string/edit_foto" />
+
+                    <TextView
+                        android:id="@+id/tvInicialEdit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="?"
+                        android:textColor="@color/verde_lima"
+                        android:textSize="34sp"
+                        android:textStyle="bold" />
+                </FrameLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Botón para elegir foto de galería -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCambiarFoto"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/edit_foto"
+                android:textColor="@color/verde_lima"
+                app:strokeColor="@color/verde_lima"
+                app:cornerRadius="8dp" />
+        </LinearLayout>
+
+        <!-- Campos editables con padding -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Nombre -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilNombreEdit"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:hint="@string/edit_nombre"
+                app:boxStrokeColor="@color/verde_lima"
+                app:hintTextColor="@color/verde_lima">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etNombreEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:inputType="textPersonName" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Apellidos -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilApellidosEdit"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:hint="@string/edit_apellidos"
+                app:boxStrokeColor="@color/verde_lima"
+                app:hintTextColor="@color/verde_lima">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etApellidosEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:inputType="textPersonName" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Edad -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilEdadEdit"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:hint="@string/edit_edad"
+                app:boxStrokeColor="@color/verde_lima"
+                app:hintTextColor="@color/verde_lima">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etEdadEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Posición -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPosicionEdit"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:hint="@string/edit_posicion"
+                app:boxStrokeColor="@color/verde_lima"
+                app:hintTextColor="@color/verde_lima">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPosicionEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Provincia -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilProvinciaEdit"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:hint="@string/edit_provincia"
+                app:boxStrokeColor="@color/verde_lima"
+                app:hintTextColor="@color/verde_lima">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etProvinciaEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Pista favorita -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPistaEdit"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:hint="@string/edit_pista"
+                app:boxStrokeColor="@color/verde_lima"
+                app:hintTextColor="@color/verde_lima">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPistaEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Nota informativa sobre campos bloqueados -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:text="@string/edit_nota_bloqueados"
+                android:textColor="@color/texto_gris"
+                android:textSize="12sp"
+                android:drawablePadding="6dp"
+                android:paddingStart="4dp" />
+
+            <!-- Botón guardar -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnGuardarEdit"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:text="@string/edit_guardar"
+                android:textColor="@color/fondo_oscuro"
+                android:textStyle="bold"
+                app:backgroundTint="@color/verde_lima"
+                app:cornerRadius="10dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

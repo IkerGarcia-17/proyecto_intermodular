@@ -269,6 +269,82 @@
                             android:textColor="#FFFFFF" />
                     </com.google.android.material.textfield.TextInputLayout>
 
+                    <!-- Campo de edad: obligatorio, se muestra en el menú lateral -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:hint="@string/reg_edad"
+                        android:textColorHint="#EDFFAC"
+                        app:boxStrokeColor="@color/borde_padel"
+                        app:hintTextColor="#94D500">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etEdadRegistro"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:textColor="#FFFFFF" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Sección de foto de perfil opcional: se verá en el menú lateral -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="@string/reg_foto_hint"
+                        android:textColor="#94D500"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <!-- Previsualización circular de la foto elegida -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            app:cardCornerRadius="32dp"
+                            app:cardBackgroundColor="#2A2A2A"
+                            app:cardElevation="0dp"
+                            app:strokeColor="#94D500"
+                            app:strokeWidth="2dp">
+                            <ImageView
+                                android:id="@+id/imgFotoRegistro"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                android:visibility="gone"
+                                android:contentDescription="@string/reg_foto_titulo" />
+                            <TextView
+                                android:id="@+id/tvInicialRegistro"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="?"
+                                android:textColor="#94D500"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- Botón para abrir la galería y elegir foto -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnSeleccionarFoto"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:text="@string/reg_foto_seleccionar"
+                            android:textColor="#EDFFAC"
+                            app:cornerRadius="8dp"
+                            app:strokeColor="#94D500" />
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -981,18 +1057,54 @@
                     </RadioGroup>
                 </LinearLayout>
 
+                <!-- Bloque de aceptación de políticas de privacidad (RGPD) -->
+                <LinearLayout
+                    android:id="@+id/llPrivacidad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@id/llOpciones4"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <CheckBox
+                        android:id="@+id/cbPrivacidad"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/reg_privacidad_acepto"
+                        android:textColor="#ECFBB5"
+                        android:textSize="13sp"
+                        android:buttonTint="#94D500" />
+
+                    <!-- Enlace para ver el texto completo de las políticas -->
+                    <TextView
+                        android:id="@+id/tvVerPrivacidad"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/reg_privacidad_ver"
+                        android:textColor="#94D500"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground" />
+
+                </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/llBotones4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:weightSum="2"
-                    android:layout_marginTop="48dp"
+                    android:layout_marginTop="24dp"
                     android:layout_marginBottom="32dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/llOpciones4"
+                    app:layout_constraintTop_toBottomOf="@id/llPrivacidad"
                     app:layout_constraintVertical_bias="1.0">
 
                     <com.google.android.material.button.MaterialButton

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pantalla de conversación privada entre dos usuarios -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/fondo_oscuro">
+
+    <!-- Cabecera con nombre del interlocutor -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingTop="20dp"
+        android:paddingBottom="16dp"
+        android:paddingHorizontal="16dp"
+        android:background="@color/fondo_superficie">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAtras"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="←"
+            android:textColor="@color/verde_lima"
+            android:textSize="22sp"
+            android:minWidth="0dp"
+            android:paddingHorizontal="4dp" />
+
+        <!-- Avatar circular con la inicial del interlocutor -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="4dp"
+            app:cardCornerRadius="18dp"
+            app:cardBackgroundColor="@color/verde_lima"
+            app:cardElevation="0dp">
+
+            <TextView
+                android:id="@+id/tvAvatarHeader"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="@color/fondo_oscuro"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Nombre e info del interlocutor -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="10dp">
+
+            <TextView
+                android:id="@+id/tvNombreInterlocutor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvCategoriaInterlocutor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/texto_gris"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/fondo_tarjeta" />
+
+    <!-- Área de mensajes con scroll. Los mensajes se añaden programáticamente -->
+    <ScrollView
+        android:id="@+id/scrollMensajes"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="12dp"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:id="@+id/llMensajes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+    </ScrollView>
+
+    <!-- Barra de escritura en la parte inferior -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="12dp"
+        android:background="@color/fondo_superficie">
+
+        <!-- Campo de texto para escribir el mensaje -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilMensaje"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Escribe un mensaje..."
+            android:textColorHint="@color/texto_gris"
+            app:hintTextColor="@color/verde_lima"
+            app:boxStrokeColor="@color/borde_padel"
+            app:boxStrokeWidth="1dp"
+            app:boxStrokeWidthFocused="2dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etMensaje"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine|textCapSentences"
+                android:maxLines="4"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Botón de enviar, redondo con el verde lima -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEnviar"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="8dp"
+            android:text="➤"
+            android:textSize="16sp"
+            android:textColor="@color/fondo_oscuro"
+            android:padding="0dp"
+            app:backgroundTint="@color/verde_lima"
+            app:cornerRadius="26dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

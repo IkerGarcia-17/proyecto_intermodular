@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fondo de la splash screen: icono centrado sobre el fondo oscuro corporativo -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Capa 1: fondo negro de la app -->
+    <item android:drawable="@color/fondo_oscuro" />
+
+    <!-- Capa 2: icono de la app centrado con tamaño razonable -->
+    <item
+        android:width="120dp"
+        android:height="120dp"
+        android:gravity="center">
+        <bitmap
+            android:gravity="fill"
+            android:src="@mipmap/ic_launcher" />
+    </item>
+
+</layer-list>

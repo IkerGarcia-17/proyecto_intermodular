@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Diana de dardos decorativa de 8 capas para la pantalla hub.
+     Diseñada para verse bien a 140×140dp con la paleta corporativa. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Sombra exterior / borde negro -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#0A0A0A" />
+        </shape>
+    </item>
+
+    <!-- Anillo exterior negro mate -->
+    <item android:top="4dp" android:bottom="4dp" android:left="4dp" android:right="4dp">
+        <shape android:shape="oval">
+            <solid android:color="#1C1C1C" />
+        </shape>
+    </item>
+
+    <!-- Banda roja exterior (zona de puntuación baja) -->
+    <item android:top="10dp" android:bottom="10dp" android:left="10dp" android:right="10dp">
+        <shape android:shape="oval">
+            <solid android:color="#B71C1C" />
+        </shape>
+    </item>
+
+    <!-- Banda verde oscura (zona media) -->
+    <item android:top="22dp" android:bottom="22dp" android:left="22dp" android:right="22dp">
+        <shape android:shape="oval">
+            <solid android:color="#1B5E20" />
+        </shape>
+    </item>
+
+    <!-- Anillo negro interior (separador) -->
+    <item android:top="36dp" android:bottom="36dp" android:left="36dp" android:right="36dp">
+        <shape android:shape="oval">
+            <solid android:color="#0D0D0D" />
+        </shape>
+    </item>
+
+    <!-- Banda roja interior (zona triple) -->
+    <item android:top="46dp" android:bottom="46dp" android:left="46dp" android:right="46dp">
+        <shape android:shape="oval">
+            <solid android:color="#C62828" />
+        </shape>
+    </item>
+
+    <!-- Outer bull verde (25 pts) -->
+    <item android:top="60dp" android:bottom="60dp" android:left="60dp" android:right="60dp">
+        <shape android:shape="oval">
+            <solid android:color="#2E7D32" />
+        </shape>
+    </item>
+
+    <!-- Bullseye verde lima corporativo (50 pts) — brilla en la paleta -->
+    <item android:top="76dp" android:bottom="76dp" android:left="76dp" android:right="76dp">
+        <shape android:shape="oval">
+            <solid android:color="#94D500" />
+        </shape>
+    </item>
+
+</layer-list>

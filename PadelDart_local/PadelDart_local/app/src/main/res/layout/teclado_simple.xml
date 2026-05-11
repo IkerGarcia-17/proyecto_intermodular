@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Teclado de dardos para puntuaciones simples (valor base del sector).
+     Se incluye en activity_partida_dardos.xml y se muestra u oculta según el modo. -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="4dp">
+
+    <!-- Fila 1: sectores 1 al 5 -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_s1"  style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="1"  android:textColor="@color/white" android:textSize="15sp" android:textStyle="bold" app:strokeColor="@color/fondo_tarjeta_claro" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_s2"  style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="2"  android:textColor="@color/white" android:textSize="15sp" android:textStyle="bold" app:strokeColor="@color/fondo_tarjeta_claro" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_s3"  style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="3"  android:textColor="@color/white" android:textSize="15sp" android:textStyle="bold" app:strokeColor="@color/fondo_tarjeta_claro" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_s4"  style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="4"  android:textColor="@color/white" android:textSize="15sp" android:textStyle="bold" app:strokeColor="@color/fondo_tarjeta_claro" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_s5"  style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="5"  android:textColor="@color/white" android:textSize="15sp" android:textStyle="bold" app:strokeColor="@color/fondo_tarjeta_claro" />
+    </LinearLayout>
+
+    <!-- Fila 2: sectores 6 al 10 -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_s6"  style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="6"  android:textColor="@color/white" android:textSize="15sp" android:textStyle="bold" app:strokeColor="@color/fondo_tarjeta_claro" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_s7"  style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="7"  android:textColor="@color/white" android:textSize="15sp" android:textStyle="bold" app:strokeColor="@color/fondo_tarjeta_claro" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_s8"  style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="8"  android:textColor="@color/white" android:textSize="15sp" android:textStyle="bold" app:strokeColor="@color/fondo_tarjeta_claro" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_s9"  style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="9"  android:textColor="@color/white" android:textSize="15sp" android:textStyle="bold" app:strokeColor="@color/fondo_tarjeta_claro" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_s10" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="10" android:textColor="@color/white" android:textSize="15sp" android:textStyle="bold" app:strokeColor="@color/fondo_tarjeta_claro" />
+    </LinearLayout>
+
+    <!-- Fila 3: sectores 11 al 15 -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_s11" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="11" android:textColor="@color/white" android:textSize="15sp" android:textStyle="bold" app:strokeColor="@color/fondo_tarjeta_claro" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_s12" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="12" android:textColor="@color/white" android:textSize="15sp" android:textStyle="bold" app:strokeColor="@color/fondo_tarjeta_claro" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_s13" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="13" android:textColor="@color/white" android:textSize="15sp" android:textStyle="bold" app:strokeColor="@color/fondo_tarjeta_claro" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_s14" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="14" android:textColor="@color/white" android:textSize="15sp" android:textStyle="bold" app:strokeColor="@color/fondo_tarjeta_claro" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_s15" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="15" android:textColor="@color/white" android:textSize="15sp" android:textStyle="bold" app:strokeColor="@color/fondo_tarjeta_claro" />
+    </LinearLayout>
+
+    <!-- Fila 4: sectores 16 al 20 -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_s16" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="16" android:textColor="@color/white" android:textSize="15sp" android:textStyle="bold" app:strokeColor="@color/fondo_tarjeta_claro" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_s17" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="17" android:textColor="@color/white" android:textSize="15sp" android:textStyle="bold" app:strokeColor="@color/fondo_tarjeta_claro" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_s18" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="18" android:textColor="@color/white" android:textSize="15sp" android:textStyle="bold" app:strokeColor="@color/fondo_tarjeta_claro" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_s19" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="19" android:textColor="@color/white" android:textSize="15sp" android:textStyle="bold" app:strokeColor="@color/fondo_tarjeta_claro" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_s20" style="@style/Widget.MaterialComponents.Button.OutlinedButton" android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1" android:layout_margin="2dp" android:text="20" android:textColor="@color/white" android:textSize="15sp" android:textStyle="bold" app:strokeColor="@color/fondo_tarjeta_claro" />
+    </LinearLayout>
+
+    <!-- Fila 5: zonas especiales Bull (50), 25 (outer bull) y Miss (fallo) -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_bull"
+            android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1"
+            android:layout_margin="2dp"
+            android:text="Bull\n50"
+            android:textColor="@color/fondo_oscuro"
+            android:textSize="12sp" android:textStyle="bold"
+            app:backgroundTint="@color/verde_lima"
+            app:cornerRadius="6dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_25"
+            android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1"
+            android:layout_margin="2dp"
+            android:text="25"
+            android:textColor="@color/fondo_oscuro"
+            android:textSize="15sp" android:textStyle="bold"
+            app:backgroundTint="#5CB85C"
+            app:cornerRadius="6dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_miss"
+            android:layout_width="0dp" android:layout_height="52dp" android:layout_weight="1"
+            android:layout_margin="2dp"
+            android:text="Miss\n0"
+            android:textColor="@color/white"
+            android:textSize="12sp" android:textStyle="bold"
+            app:backgroundTint="@color/texto_gris"
+            app:cornerRadius="6dp" />
+
+        <!-- Espacio vacío para equilibrar la fila visualmente -->
+        <View android:layout_width="0dp" android:layout_height="0dp" android:layout_weight="2" />
+    </LinearLayout>
+
+</LinearLayout>

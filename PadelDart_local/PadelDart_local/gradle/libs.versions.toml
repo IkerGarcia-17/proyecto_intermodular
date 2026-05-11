@@ -7,6 +7,10 @@ appcompat = "1.7.1"
 material = "1.13.0"
 activity = "1.12.2"
 constraintlayout = "2.2.1"
+# Firebase: el BOM (Bill of Materials) sincroniza las versiones de todos los módulos
+firebaseBom      = "33.7.0"
+# Plugin de Google Services que lee el google-services.json y conecta la app con Firebase
+googleServices   = "4.4.2"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -16,7 +20,12 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+# BOM de Firebase: con esto solo ponemos la versión aquí y el resto de módulos la heredan
+firebase-bom       = { group = "com.google.firebase", name = "firebase-bom",       version.ref = "firebaseBom" }
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore"  }
+firebase-auth      = { group = "com.google.firebase", name = "firebase-auth"       }
 
 [plugins]
-android-application = { id = "com.android.application", version.ref = "agp" }
+android-application = { id = "com.android.application",        version.ref = "agp"            }
+google-services     = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 

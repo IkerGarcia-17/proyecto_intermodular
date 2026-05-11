@@ -29,4 +29,8 @@ public class UsuarioRegistro implements Serializable {
 
     // --- Paso 4: Pago ---
     public String metodoPago;
+
+    // --- Datos añadidos en v3 ---
+    public int    edad      = 0;   // Edad en años, preguntada en paso 1
+    public String fotoPerfil = ""; // URI de la foto seleccionada en galería (opcional)
 }

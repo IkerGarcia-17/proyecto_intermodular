@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "774642781365",
+    "project_id": "padeldart-74268",
+    "storage_bucket": "padeldart-74268.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:774642781365:android:acb4fa927086657d8902fc",
+        "android_client_info": {
+          "package_name": "dam.iker.padeldart"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZ7cfvTO9uvfKCQlBMnlSXHWAqmixedV8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

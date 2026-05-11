@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Idiomas soportados por la app. Android 13+ lo usa para el selector de idioma
+     por aplicación en los ajustes del sistema. AppCompatDelegate lo usa en versiones anteriores. -->
+<locale-config xmlns:android="http://schemas.android.com/apk/res/android">
+    <locale android:name="es" />
+    <locale android:name="en" />
+</locale-config>
